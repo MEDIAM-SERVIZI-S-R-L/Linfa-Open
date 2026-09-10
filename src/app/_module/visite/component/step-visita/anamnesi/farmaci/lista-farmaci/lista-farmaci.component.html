@@ -1,0 +1,67 @@
+<ng-container *ngIf="farmaciDataSource.data.length <= 0 && isRiepilogoVisita">
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <h3 class="title">Nessun dato presente</h3>
+    </div>
+</ng-container>
+<mat-card class="linfaCard" [class]="farmaciDataSource.data.length <= 0 ? 'hideBox': ''">
+    <div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column"
+        fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after"
+            (click)="nuovoFarmaco()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Aggiungi
+        </button>
+
+    </div>
+    <ng-container *ngIf="farmaciDataSource.data.length > 0">
+
+        <mat-card-content>
+
+            <mat-table id="table" [dataSource]="farmaciDataSource">
+
+                <ng-container matColumnDef="farmaco">
+                    <mat-header-cell *matHeaderCellDef>Farmaco</mat-header-cell>
+                    <mat-cell *matCellDef="let farmaco" data-label="Farmaco">
+                        <span class="truncate-text">{{farmaco.farmaco == '' ?
+                            '-':farmaco.farmaco }}</span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="posologia">
+                    <mat-header-cell *matHeaderCellDef>Posologia</mat-header-cell>
+                    <mat-cell *matCellDef="let farmaco" data-label="Quantità">
+
+                        <span class="truncate-text">{{farmaco.posologia == '' ?
+                            '-':farmaco.posologia }}</span>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="periodo">
+                    <mat-header-cell *matHeaderCellDef>Dal Al</mat-header-cell>
+                    <mat-cell *matCellDef="let farmaco" data-label="Dal Al">{{farmaco.dal | date: 'dd/MM/yyyy'}} -
+                        {{farmaco.al| date: 'dd/MM/yyyy'}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let farmaco" style="justify-content:flex-end">
+
+                        <mat-icon class="material-icons-outlined" *ngIf="!isRiepilogoVisita"
+                            matTooltip="Visualizza / Modifica terapia" (click)="dettaglioFarmaco(farmaco.id)"
+                            color="primary">edit
+                        </mat-icon>
+                        <mat-icon *ngIf="!isRiepilogoVisita" matTooltip="Elimina farmaco" (click)="delete(farmaco.id)"
+                            color="warn">
+                            delete
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="farmaciViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:farmaciViewsColumns"></mat-row>
+            </mat-table>
+
+        </mat-card-content>
+    </ng-container>
+</mat-card>

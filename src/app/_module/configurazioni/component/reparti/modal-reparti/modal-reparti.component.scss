@@ -1,0 +1,43 @@
+.exit-button{
+  position: relative;
+  top: 0;
+  left: 96%;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: center;
+  align-self: center;
+  text-align: left;
+}
+
+span{
+  margin: 4px;
+}
+
+.save-button{
+  position: relative;
+  bottom: 0;
+  left: 70%;
+  box-shadow: none;
+}
+
+.title {
+  font-weight: bold;
+  color: #00afa6;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.note-span{
+width: 100%;
+}
+
+.note-input{
+width: 100%;
+}
+

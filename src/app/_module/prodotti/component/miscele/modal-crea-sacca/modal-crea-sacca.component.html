@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>
+  Composizione sacca
+</h1>
+
+<div mat-dialog-content>
+
+  <div class="container">
+    <app-form-sacca [fromModal]="fromModal" [saccaEsistente]="saccaEsistente" (modalSaccaEmit)="return($event)">
+    </app-form-sacca>
+  </div>
+</div>
+
+<div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+  fxLayoutGap.lt-md="10px">
+  <button mat-raised-button color="warn" (click)="onDismiss()">Annulla</button>
+
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    <mat-icon>save</mat-icon>
+    Salva
+  </button>
+</div>

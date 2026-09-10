@@ -1,0 +1,49 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            Categorie configurazioni
+        </h3>
+    </mat-card-title>
+
+    <mat-card-content>
+        <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+            <button mat-raised-button color="primary" matTooltipPosition="after" class="btnTopCard" 
+            (click)="openModalCategoriaConfig()">
+                <mat-icon>add_circle_outline</mat-icon>
+                Aggiungi categoria
+            </button>
+        </div>
+
+        <mat-table id="table" [dataSource]="dataSource" multiTemplateDataRows>
+
+            <ng-container matColumnDef="categoria">
+                <mat-header-cell *matHeaderCellDef>Categoria configurazione</mat-header-cell>
+                <mat-cell *matCellDef="let item" >
+                  {{item.categoriaConfigurazione}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="abilitato">
+                <mat-header-cell *matHeaderCellDef>Abilitato</mat-header-cell>
+                <mat-cell *matCellDef="let item" >
+                  <mat-icon [ngStyle]="{'color': '#00afa6'}" *ngIf="item.abilitato">done</mat-icon>
+                  <mat-icon [ngStyle]="{'color': '#d33'}" *ngIf="!item.abilitato">close</mat-icon>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="button">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let item" >
+                  <mat-icon color="primary" (click)="openModalCategoriaConfig(item)">edit</mat-icon>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSize]="10" showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 50]">
+        </mat-paginator>
+
+    </mat-card-content>
+
+</mat-card>

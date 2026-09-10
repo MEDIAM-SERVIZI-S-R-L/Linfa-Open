@@ -1,0 +1,98 @@
+<h1 mat-dialog-title>
+    Nuova analisi per paziente
+</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="formAnalisi">
+
+
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" style="margin-bottom:15px">
+
+            <mat-form-field class="full-width" fxFlex="45">
+                <mat-label>Descrizione</mat-label>
+                <textarea cdkTextareaAutosize style="resize: vertical;" matInput #input formControlName="descrizione" class="noteInput"></textarea>
+            </mat-form-field>
+            <mat-form-field class="full-width" fxFlex="45">
+                <mat-label>Data</mat-label>
+                <input matInput readonly [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="dataAnalisi">
+
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+
+            <!-- <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Categoria valori</mat-label>
+                <mat-select (selectionChange)="getValori($event)" class="selector">
+                    <mat-option [value]="0">Tutte le categorie</mat-option>
+                    <mat-option *ngFor="let categoria of categorie" [value]="categoria">
+                        {{categoria.categoriaEsame}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> -->
+        </div>
+        <!-- #region form proprieta analisi-->
+
+
+        <ng-container formArrayName="listaProprieta">
+
+            <mat-table [dataSource]="getListaProprieta.controls" *ngIf="dataSourceAnalisi.data.length>0">
+                <ng-container matColumnDef="nome">
+                    <mat-header-cell *matHeaderCellDef> Nome proprieta analisi </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.get('nome').value}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="valore">
+                    <mat-header-cell *matHeaderCellDef> Valore </mat-header-cell>
+                    <mat-cell *matCellDef="let element;" [formGroup]="element">
+                        <ng-container [ngSwitch]="element.get('tipoCampo').value">
+                            <ng-container *ngSwitchCase="TipoCampo.Number">
+                                <mat-form-field floatLabel="never">
+                                    <input matInput placeholder="Valore" formControlName="valore" type="text" maxlength="5" digitOnly>
+                                </mat-form-field> &nbsp;&nbsp; {{element.get('unitaMisura').value}}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="TipoCampo.String">
+                                <mat-form-field floatLabel="never">
+                                    <input matInput placeholder="Valore" formControlName="valore" type="text">
+                                </mat-form-field> &nbsp;&nbsp; {{element.get('unitaMisura').value}}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="TipoCampo.Boolean">
+
+                                <mat-checkbox style="margin-top:20px;" formControlName="valore" labelPosition="after" fxFlex="45">{{element.get('unitaMisura').value}}
+                                </mat-checkbox>
+
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                                Controllare la configurazione
+                            </ng-container>
+
+                        </ng-container>
+
+
+
+
+
+
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </ng-container>
+        <!-- #endregion form proprieta analisi-->
+
+
+
+
+    </form>
+
+
+
+</div>
+
+<div mat-dialog-actions id="btnModal" *ngIf="formAnalisi.controls.listaProprieta">
+
+    <button mat-raised-button color="primary" (click)="saveAnalisi()" [disabled]="!formAnalisi.controls.listaProprieta.dirty">
+    <mat-icon>save</mat-icon> Salva
+  </button>
+</div>

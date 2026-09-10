@@ -1,0 +1,71 @@
+.title {
+    span {
+        color: #00afa6;
+        font-weight: 600;
+        font-size: larger;
+    }
+
+    strong {
+        font-size: 16px;
+    }
+}
+.matProgress {
+    margin: 10px 0;
+}
+
+.valoriTotali {
+    text-align: center;
+    span {
+        text-align: center;
+        font-weight: bold;
+        font-size: medium;
+        margin-bottom: 10px;
+    }
+}
+
+.over {
+    color: red;
+}
+
+.basic {
+    color: rgb(0 0 0 / 54%);
+}
+
+.hide {
+    display: none;
+}
+// .mat-row:hover:not(.show) {
+//     background-color: #e7e7e7;
+// }
+
+mat-row,
+mat-header-row,
+mat-footer-row {
+    border-bottom-width: 2px;
+}
+
+.hideDivider {
+    border-bottom: unset;
+}
+
+.mat-progress-bar {
+    height: 6px;
+    border-radius: 50px;
+}
+@media screen and (min-width: 1101px) {
+    .mat-column-quantita {
+        padding-right: 80px;
+        width: 80px;
+    }
+
+    .mat-column-confezionamenti {
+        padding-right: 80px;
+    }
+}
+
+@import "/src/theme/table-responsive.scss";
+
+
+.multiline-tooltip{
+    white-space: pre-line;
+  }

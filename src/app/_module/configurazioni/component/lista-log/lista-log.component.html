@@ -1,0 +1,122 @@
+<mat-card class="linfaCard">
+  <h3 class="title">
+    Log di sistema
+  </h3>
+
+  <mat-card-content>
+
+
+
+    <mat-accordion>
+      <mat-expansion-panel class="accordionFiltri">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="accordionFiltriTitle">
+            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+            Filtri ricerca
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filtri">
+          <form [formGroup]="formFiltri" autocomplete="off">
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Data</mat-label>
+                <input matInput type="text" [matDatepicker]="dataPicker" readonly (focus)="dataPicker.open()"
+                  [max]="appGen.today" formControlName="data" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="dataPicker"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #dataPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field class="full-width" fxFlex="30">
+
+                <mat-label>Tipo</mat-label>
+                <mat-select matNativeControl formControlName="logLevel">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let item of appGen.LogLevel" [value]="item.id">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+
+
+            <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+              <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                <mat-icon>search</mat-icon>
+                Cerca
+              </button>
+              <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                <mat-icon>remove_circle_outline</mat-icon>
+                Resetta
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
+
+
+    <mat-table id="table" [dataSource]="dataSource" matSortActive="date" [matSortDirection]="sortDirection"
+      (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Data">
+          {{item.date | date: 'dd/MM/yyyy HH:mm' }}</mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="logLevel">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Tipo">
+          {{item.logLevel}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="utente">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Utente</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Utente">
+          {{item.utente}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Action">{{item.action}}</mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="message">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Messaggio</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Messaggio" [matTooltip]="item.message">
+          <span class="truncate-text">{{item.message}}</span>
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="pulsanti">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let item" class="pulsantiTab" style="justify-content:flex-end">
+
+          <mat-icon class="material-icons-outlined" *ngIf="!appGen.isNullOrUndefined(item.exception)"
+            matTooltip="vedi exception" color="warn" (click)="openDetailException(item.exception)">feedback
+          </mat-icon>
+
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+    </mat-table>
+    <mat-paginator [length]="totalElements" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage"
+      (page)="onChangePage($event)" [pageSizeOptions]="[5, 10, 25, 50]">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

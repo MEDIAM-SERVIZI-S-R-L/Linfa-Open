@@ -1,0 +1,103 @@
+.mat-dialog-container {
+  overflow-y: hidden;
+}
+
+.mat-dialog-content {
+  display: block;
+  margin: 0 -24px;
+  padding: 0 24px;
+  max-height: 92vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+  width: 23px !important;
+  height: 23px !important;
+}
+
+.filter-table-container{
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+}
+
+.upper-container{
+  position: sticky;
+  top: 0;
+  z-index: +2;
+}
+
+.container{
+  overflow: hidden;
+}
+
+.table-container{
+  height: 80%;
+  overflow: auto;
+  mat-table{
+      overflow-y: auto;
+      max-height: 42vh;
+  }
+  
+  .mat-paginator-sticky {
+    bottom: 0px;
+    position: sticky;
+    z-index: 10;
+  }
+}
+
+
+
+.exit-button{
+    position: relative;
+    top: 0;
+    left: 96%;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .form{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    align-self: center;
+    text-align: left;
+  }
+
+  .button-ctn{
+    position: -webkit-sticky;
+    top: 0;
+  }
+
+  span{
+    margin: 4px;
+  }
+
+  .save-button{
+    position: relative;
+    bottom: 0;
+    left: 84%;
+    box-shadow: none;
+  }
+
+  .title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.note-span{
+  width: 100%;
+}
+
+.note-input{
+  width: 100%;
+}
+
+.header-row{
+  background-color: rgb(231 231 231);
+}

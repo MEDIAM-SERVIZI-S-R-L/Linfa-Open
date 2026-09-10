@@ -1,0 +1,290 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova richiesta</ng-container>
+            <ng-container *ngIf="isRiepilogo">Richiesta</ng-container>
+        </h3>
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+
+            <div class="container" fxflexfill>
+                <ng-container *ngIf="!isRiepilogo">
+                    <form [formGroup]="formFiltriPaziente" autocomplete="off">
+                        <h4 class="">Cerca un paziente esistente</h4>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Nome</mat-label>
+                                <input type="text" matInput formControlName="nome" autocomplete="off">
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Cognome</mat-label>
+                                <input type="text" matInput formControlName="cognome" autocomplete="off">
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Codice Fiscale</mat-label>
+                                <input type="text" matInput id="cf" formControlName="cf" autocomplete="off">
+
+
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                            <button mat-raised-button color="primary" (click)="searchPaziente()">
+                                <mat-icon>search</mat-icon>
+                                Cerca
+                            </button>
+                        </div>
+                    </form>
+                </ng-container>
+
+                <form [formGroup]="formRichiesta" autocomplete="off" id="form">
+                    <ng-container *ngIf="!isRiepilogo">
+                        <div fxLayout="row wrap" class="selectPaziente" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field class="full-width" fxFlex="55">
+                                <mat-label>Paziente</mat-label>
+                                <mat-select matNativeControl formControlName="paziente" #pazienteSelect (selectionChange)="selectedPaziente($event.value)">
+                                    <mat-option *ngFor="let paziente of listaPazienti" [value]="paziente">
+                                        {{ paziente.nome }} {{paziente.cognome}} - {{paziente.cf}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <h4>Oppure inserisci i suoi dati manualmente</h4>
+
+                    </ng-container>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Nome</mat-label>
+                            <input type="text" matInput formControlName="nome" autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Cognome</mat-label>
+                            <input type="text" matInput formControlName="cognome" autocomplete="off" oninput="this.value = this.value.toCapitalize()">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30" provideReadonly>
+                            <mat-label>Codice Fiscale</mat-label>
+                            <input type="text" matInput id="cf" required formControlName="cf" autocomplete="off" oninput="this.value = this.value.toUpperCase()">
+                            <mat-error *ngIf="!formRichiestaControls['cf'].hasError('required') && formRichiestaControls['cf'].hasError('pattern')">
+                                <strong>Codice Fiscale</strong> non valido
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Sesso</mat-label>
+                            <mat-select matNativeControl required formControlName="sesso">
+                                <mat-option *ngFor="let gender of appGen.GenderType" [value]="gender.abbrev">
+                                    {{ gender.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Data di nascita</mat-label>
+                            <input matInput type="text" [matDatepicker]="DataNascitaPicker" readonly [max]="appGen.today" (focus)="DataNascitaPicker.open()" required formControlName="dataNascita" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="DataNascitaPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DataNascitaPicker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="formRichiesta.get('tipoRichiesta').value === tipoRichiesta.Cup">
+                            <mat-label>Numero impegnativa CUP</mat-label>
+                            <input type="text" matInput formControlName="numeroImpegnativaCup" autocomplete="off">
+                        </mat-form-field>       
+                    </div>
+
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Tipo richiesta</mat-label>
+                            <mat-select matNativeControl required formControlName="tipoRichiesta" (selectionChange)="tipoRichiestaSelezionato($event.value)">
+                                <mat-option *ngFor="let tipo of listaTipiRichieste" [value]="tipo.id">
+                                    {{ tipo.tipoRichiesta }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Tipo prestazione</mat-label>
+                            <mat-select matNativeControl formControlName="tipoPrestazione" required (selectionChange)="selectedTipoPrestazione($event.value)">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let tipoprestazione of listaTipoPrestazione" [value]="tipoprestazione.id">
+                                    {{ tipoprestazione.tipoPrestazione }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="!isVisitaDomicilio && !isInterna">
+                            <mat-label>Priorità</mat-label>
+                            <mat-select matNativeControl formControlName="priorita">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let priorita of listaUrgenze" [value]="priorita.id">
+                                    {{ priorita.priorita }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Data e ora prestazione</mat-label>
+                            <input matInput [ngxMatDatetimePicker]="picker" readonly (focus)="picker.open()" [required]="!this.isVisitaDomicilio" formControlName="dataPrestazione">
+                            <mat-datepicker-toggle matSuffix [for]="$any(picker)">
+                            </mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker #picker color="primary" [stepMinute]="appGen.stepMinute">
+                            </ngx-mat-datetime-picker>
+                        </mat-form-field>
+
+
+                        <!-- <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Quesito diagnostico</mat-label>
+                            <input type="text" matInput formControlName="motivoRichiesta" [required]="!authGuard.canRole(appGen.ruolo.SAPIOext)" autocomplete="off">
+                        </mat-form-field> -->
+
+
+                        <ng-container *ngIf="isVisitaDomicilio">
+                            <mat-form-field class="full-width" fxFlex="30">
+
+                                <mat-label>Durata visita</mat-label>
+                                <mat-select matNativeControl formControlName="durataPrestazione" [required]="isVisitaDomicilio">
+                                    <mat-option *ngFor="let item of orariDurata" [value]="item *60">
+                                        {{ item }} ore
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ng-container>
+
+                        <!--
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px"> -->
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="!authGuard.canRole(appGen.ruolo.SAPIOext)">
+                            <mat-label>Medico</mat-label>
+                            <mat-select matNativeControl formControlName="idMedicoPrincipale" [required]="!authGuard.canRole(appGen.ruolo.SAPIOext)">
+                                <mat-option *ngFor="let medico of listaMedici" [value]="medico.idUtente">
+                                    {{ medico.nome }} {{ medico.cognome }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="!authGuard.canRole(appGen.ruolo.SAPIOext)">
+                            <mat-label>Dietista</mat-label>
+                            <mat-select matNativeControl formControlName="idMedicoSecondario">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let specialista of listaDietisti" [value]="specialista.idUtente">
+                                    {{ specialista.nome }} {{ specialista.cognome }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <ng-container *ngIf="!isVisitaDomicilio">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Sede</mat-label>
+                                <mat-select matNativeControl [required]="!isVisitaDomicilio" formControlName="ambulatorio" [disabled]="isRiepilogo && !this.editRichiesta && (!authGuard.canRole(appGen.ruolo.SAPIOext) || isAccettata)">
+                                    <!-- <ng-container > -->
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let ambulatorio of listaAmbulatori" [value]="ambulatorio.id">
+                                        <!-- PRESSO RIPARTO RICHIEDENTE-->
+                                        {{ ambulatorio.descr }}
+                                    </mat-option>
+
+                                </mat-select>
+                            </mat-form-field>
+
+
+                            <mat-form-field class="full-width" fxFlex="30" *ngIf="isCup">
+                                <mat-label>Reparto</mat-label>
+                                <input type="text" matInput formControlName="repartoRichiedente" autocomplete="off">
+                            </mat-form-field>
+                        </ng-container>
+
+                        <ng-container *ngIf="isVisitaDomicilio">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Infermiere</mat-label>
+                                <input type="text" matInput formControlName="infermiere" autocomplete="off">
+                            </mat-form-field>
+                        </ng-container>
+
+                        <mat-form-field class="full-width"
+                        [fxFlex]="100">
+                        <mat-label>Quesito diagnostico</mat-label>
+                        <input type="text" matInput formControlName="motivoRichiesta"
+                          [required]="!authGuard.canRole(appGen.ruolo.SAPIOext) && !authGuard.canRole(appGen.ruolo.Distretto)"
+                          autocomplete="off">
+                      </mat-form-field>
+
+                    </div>
+
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                        <ng-container *ngIf="editRichiesta && !daCompletare">
+
+                            <mat-form-field class="full-width" fxFlex="65">
+                                <mat-label>Motivo cambiamento</mat-label>
+                                <textarea matInput formControlName="motivoCambiamento" [required]="editRichiesta" cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                            </mat-form-field>
+                        </ng-container>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </mat-card-content>
+
+    <div *ngIf="!isCancellataTerminata && !authGuard.canRole(appGen.ruolo.Reparto) && !authGuard.canRole(appGen.ruolo.Distretto)" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+
+        <button mat-raised-button color="warn" class="btnFooterCard" (click)="annullaVisita()" *ngIf="isRiepilogo && isAccettata && !editRichiesta">
+            <mat-icon>remove</mat-icon>
+            Annulla richiesta
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" *ngIf="isAccettata && !editRichiesta  && authGuard.canAccess(this.appGen.permesso.ModuloVisite)" (click)="compilaVisita()">
+            <mat-icon class="material-icons-outlined">reply</mat-icon>
+            Inizia visita
+        </button>
+        <ng-container *ngIf="!isAccettata">
+            <button mat-raised-button color="warn" class="btnFooterCard" (click)="annullaVisita()" *ngIf="isRiepilogo">
+                <mat-icon>remove</mat-icon>
+                Annulla richiesta
+            </button>
+
+            <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!daCompletare">
+                <mat-icon>save</mat-icon>
+                <ng-container *ngIf="isRiepilogo"> Accetta </ng-container>
+                <ng-container *ngIf="!isRiepilogo"> Salva </ng-container>
+            </button>
+
+        </ng-container>
+        <button mat-raised-button color="primary" class="btnFooterCard" *ngIf="editRichiesta" (click)="updateRichiesta()">
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+    </div>
+
+
+    <ng-container *ngIf=" (authGuard.canRole(appGen.ruolo.Reparto) || authGuard.canRole(appGen.ruolo.Distretto) )&& statoRichiesta===idStatoRichiestaRichiesta.DaAccettare">
+      <!-- visibile solo al utente reparto e distretto: se la richiesta nel stato DaAccettare possono anullare la richiesta -->
+      <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column"
+        fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+       <button mat-raised-button color="warn" class="btnFooterCard"
+          (click)="annullaVisita()" *ngIf="isRiepilogo">
+          <mat-icon>remove</mat-icon>
+          Annulla richiesta esterna
+        </button>
+      </div>
+
+    </ng-container>
+</mat-card>
+<ng-container *ngIf="!isRiepilogo">
+    <div class="boxArea">
+        <mat-divider></mat-divider>
+
+        <div class="cntrCalendar">
+            <app-calendario-disponibilita [calendarioRichieste]="calendarioRichieste" (dataRichiesta)="setDataRichiesta($event)"></app-calendario-disponibilita>
+        </div>
+    </div>
+</ng-container>

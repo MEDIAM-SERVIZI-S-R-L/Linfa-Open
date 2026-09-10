@@ -1,0 +1,86 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">Profilo</h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formProfilo" autocomplete="off">
+
+                <div class="boxArea">
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Nome</mat-label>
+                            <input type="text" matInput formControlName="nome">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Cognome</mat-label>
+                            <input type="text" matInput formControlName="cognome">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Email</mat-label>
+                            <input type="text" matInput formControlName="email">
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Matricola</mat-label>
+                            <input type="text" matInput formControlName="matricola">
+
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Username</mat-label>
+                            <input type="text" matInput formControlName="username">
+
+                        </mat-form-field>
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Ruolo</mat-label>
+                            <input type="text" matInput formControlName="ruolo">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Data password</mat-label>
+                            <input type="text" matInput formControlName="dataPassword">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </form>
+
+        </div>
+
+    </mat-card-content>
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px"
+        fxLayoutGap="2%">
+
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="provaFirmaDigitale()"
+            *ngIf="authGuard.canAccess(appGen.permesso.FirmaDigitale)">
+            <mat-icon>drive_file_rename_outline</mat-icon>
+            Prova firma digitale
+        </button>
+
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="cambiaPassword()"
+            *ngIf="authGuard.canAccess(appGen.permesso.CambioPasswordProfilo)">
+            <mat-icon>update</mat-icon>
+            Cambia password
+        </button>
+
+
+    </div>
+</mat-card>

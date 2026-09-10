@@ -1,0 +1,175 @@
+<div class="main">
+    <h1 mat-dialog-title>
+        {{title}}
+    </h1>
+
+    <div class="body">
+        <div [hidden]="isUploadFile">
+            <mat-accordion>
+                <mat-expansion-panel class="accordionFiltri">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="accordionFiltriTitle">
+                            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                            Filtri ricerca
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div class="filtri">
+                        <form [formGroup]="formFiltri" autocomplete="off">
+
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Data documento</mat-label>
+                                    <input matInput type="text" [matDatepicker]="dataVisitaDocumentoPicker" clear
+                                        [max]="appGen.today" formControlName="dataVisita" autocomplete="off">
+                                    <mat-datepicker-toggle matSuffix [for]="dataVisitaDocumentoPicker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker touchUi #dataVisitaDocumentoPicker>
+                                    </mat-datepicker>
+                                </mat-form-field>
+
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Nome file</mat-label>
+                                    <input type="text" matInput formControlName="nomeFile" autocomplete="off">
+                                </mat-form-field>
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Tipo documento</mat-label>
+                                    <mat-select matNativeControl formControlName="idTipoDocumento">
+                                        <mat-option *ngFor="let tipo of listaTipiDocumento" [value]="tipo.id">
+                                            {{ tipo.tipoDocumento }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="btnFiltri">
+                                <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                                    <mat-icon>search</mat-icon>
+                                    Cerca
+                                </button>
+                                <button mat-raised-button color="warn" matTooltipPosition="after"
+                                    (click)="clearSearch()">
+                                    <mat-icon>remove_circle_outline</mat-icon>
+                                    Resetta
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <mat-table id="table" [dataSource]="documentiDataSource">
+
+
+
+                <ng-container matColumnDef="select" *ngIf="!isFromPaziente">
+                    <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let documento">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(documento) : null"
+                            [checked]="selection.isSelected(documento)">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="nome">
+                    <mat-header-cell *matHeaderCellDef>Nome</mat-header-cell>
+                    <mat-cell *matCellDef="let documento" data-label="Nome">
+                        {{documento.name }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipoDocumento">
+                    <mat-header-cell *matHeaderCellDef>Tipo doc.</mat-header-cell>
+                    <mat-cell *matCellDef="let documento" data-label="Tipo documento">{{documento.tipoDocumento}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dataPrestazione">
+                    <mat-header-cell *matHeaderCellDef>Visita</mat-header-cell>
+                    <mat-cell *matCellDef="let documento" data-label="Data prestazione">{{documento.dataPrestazione}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dataDocumento">
+                    <mat-header-cell *matHeaderCellDef>Data doc.</mat-header-cell>
+
+                    <mat-cell *matCellDef="let documento" data-label="Data documento">{{documento.dataDocumento}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let documento" class="pulsantiTab" style="justify-content:flex-end">
+
+                        <mat-icon class="material-icons-outlined" matTooltip="Scarica documento"
+                            (click)="downloadFile(documento)" color="primary">assignment
+                        </mat-icon>
+                        <!-- <mat-icon *ngIf="documento.typeDoc !==1" matTooltip="Elimina documento" (click)="deletedocument(documento)" color="warn">delete
+                </mat-icon> -->
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="documentiViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:documentiViewsColumns"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+
+        </div>
+
+        <div class="body">
+
+            <ng-container *ngIf="documentiDataSource.data.length <=0 && !isUploadFile">
+                <h3 class="title">Nessun documento presente</h3>
+            </ng-container>
+
+
+            <ng-container *ngIf="isUploadFile && !isFromPaziente">
+                <div class="uploadContent" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                    fxLayoutGap.lt-md="0px">
+
+                    <app-upload-file (uploadDone)="uploadDone()"></app-upload-file>
+
+                </div>
+            </ng-container>
+        </div>
+
+    </div>
+
+</div>
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.gt-sm="end center" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+
+    <!-- <div mat-dialog-actions> -->
+
+    <button mat-raised-button color="warn" style="float:right!important" *ngIf="!isUploadFile"
+        (click)="onNoClick()">Chiudi</button>
+
+    <button mat-raised-button color="warn" style="float:right!important" *ngIf="isUploadFile &&  !isFromPaziente"
+        (click)="uploadFile()">Annulla</button>
+
+    <button mat-raised-button color="accent" *ngIf="!isFromPaziente && selection.selected.length>0 && !isUploadFile"
+        style="float:left!important" (click)="downloadFileSelected()">Download file
+        selezionati</button>
+
+
+    <button mat-raised-button color="primary" style="float:right!important" *ngIf="!isUploadFile &&  !isFromPaziente"
+        (click)="uploadFile()">Upload
+        file</button>
+    <button mat-raised-button color="primary" matTooltipPosition="after" style="float:right!important"
+        *ngIf="isUploadFile &&  !isFromPaziente" (click)="onSubmit()">
+        Upload
+    </button>
+
+
+
+
+
+</div>

@@ -1,0 +1,84 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova allergia o intolleranza</ng-container>
+            <ng-container *ngIf="isRiepilogo">Allergia o Intolleranza</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <mat-label>Che cosa vuoi inserire?</mat-label>
+
+            <mat-radio-group color="primary" class="radioGroup" [(ngModel)]="selezionato"
+                (change)="radioChange($event)">
+                <mat-radio-button [value]="1">Allergia</mat-radio-button>
+                <mat-radio-button [value]="2">Intolleranza</mat-radio-button>
+            </mat-radio-group>
+
+            <form [formGroup]="formAllergia" autocomplete="off">
+                <div class="container" fxflexfill>
+
+                    <ng-container *ngIf="isAllergia">
+                        <mat-divider></mat-divider>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Allergia</mat-label>
+                                <mat-select matNativeControl required formControlName="tipoAllergia">
+                                    <mat-option *ngFor="let tipo of listaTipoAllergie" [value]="tipo.id">
+                                        {{ tipo.allergia }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="65">
+                                <mat-label>Descrizione</mat-label>
+                                <input matInput type="text" formControlName="descrizione" maxlength="200"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="isIntolleranza">
+                        <mat-divider></mat-divider>
+
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Intolleranza</mat-label>
+                                <mat-select matNativeControl required formControlName="intolleranza">
+                                    <mat-option *ngFor="let intolleranza of listaIntolleranze"
+                                        [value]="intolleranza.id">
+                                        {{ intolleranza.intolleranza }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="65">
+                                <mat-label>Descrizione</mat-label>
+                                <input matInput type="text" maxlength="200" formControlName="descrizione"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </ng-container>
+
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div *ngIf="isAllergia || isIntolleranza" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end"
+        fxLayout.lt-sm="column" fxLayoutGap="25px" fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

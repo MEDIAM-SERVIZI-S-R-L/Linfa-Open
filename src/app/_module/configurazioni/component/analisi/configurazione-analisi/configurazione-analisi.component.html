@@ -1,0 +1,148 @@
+<mat-card>
+  <mat-card-content>
+    <h3 class="title">Configurazione analisi</h3>
+
+    <mat-form-field>
+      <mat-label>Categoria</mat-label>
+      <mat-select (selectionChange)="getValori($event)" [value]="0">
+        <mat-option [value]="0">Tutte le proprietà</mat-option>
+        <mat-option *ngFor="let categoria of categorie" [value]="categoria">
+          {{categoria.descrizioneAnalisi}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+
+      <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after"
+      (click)="addNewProprieta()">
+        <mat-icon>add_circle_outline</mat-icon>
+        Nuova proprietà
+      </button>
+    </div>
+
+    <div class="filtri">
+      <mat-form-field class="full-width" fxFlex="99.9">
+        <mat-label>Cerca</mat-label>
+        <input matInput type="text" (keyup)="applyFilter($event)" #input>
+      </mat-form-field>
+    </div>
+
+    <mat-table [dataSource]="dataSource" multiTemplateDataRows>
+
+      <ng-container matColumnDef="descrizione">
+        <mat-header-cell *matHeaderCellDef>Valore</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.descrizione}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="expand">
+        <mat-header-cell *matHeaderCellDef aria-label="row-actions">&nbsp;</mat-header-cell>
+        <mat-cell *matCellDef="let element" class="buttons">
+
+          <mat-icon class="material-icons-outlined" matTooltip="Modifica" color="black" style="margin: 4px;"
+          (click)="editProprieta(element, $event)">
+            edit
+          </mat-icon>
+
+          <mat-icon class="material-icons-outlined" matTooltip="Elimina" color="warn"
+          (click)="deleteProprieta(element, $event)">
+            delete
+          </mat-icon>
+
+          <span [hidden]="element.tipoCampo !== tipoCampo.Number"> 
+            <mat-icon>{{element.expanded?'keyboard_arrow_up':'keyboard_arrow_down'}}</mat-icon>
+          </span>
+
+          <span [hidden]="element.tipoCampo == tipoCampo.Number"> 
+            <mat-icon></mat-icon>
+          </span>
+
+        </mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length" class="valori-container">
+          <div [@detailExpand]="element === expandedElement?'expanded':'collapsed'" class="tabella-interna-container"
+          *ngIf="element.tipoCampo == tipoCampo.Number">
+            <div>
+              <div class="cntrBtnRow button-interno-tabella" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+                <button (click)="addNewRange(element)" mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after">
+                  <mat-icon>add_circle_outline</mat-icon>
+                  Nuovo range
+                </button>
+
+              </div>
+            
+              <div *ngIf="range === null || range.length <= 0" class="subtitle">
+                Nessun range presente al momento
+              </div>
+
+              <div [hidden]="range === null|| range.length <= 0">
+              <mat-table *ngIf="range" [dataSource]="range" class="tabella-interna">
+                <ng-container matColumnDef="descrizione">
+                  <mat-header-cell *matHeaderCellDef>Descrizione</mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.descrizione}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="min">
+                  <mat-header-cell *matHeaderCellDef>Valore minnimo</mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.min}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="max">
+                  <mat-header-cell *matHeaderCellDef>Valore massimo</mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.max}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="rangeEta">
+                  <mat-header-cell *matHeaderCellDef>Range delle età</mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.etaMin}} - {{element.etaMax}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="sesso">
+                  <mat-header-cell *matHeaderCellDef>Genere</mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.sesso}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="unitaMisura">
+                  <mat-header-cell *matHeaderCellDef>Unità di misura</mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.unitaMisura}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="button">
+                  <mat-header-cell *matHeaderCellDef aria-label="row-actions">&nbsp;</mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="buttons">
+
+                    <mat-icon class="material-icons-outlined" matTooltip="Modifica" color="black" style="margin: 4px;"
+                      (click)="editRange(element)">
+                      edit
+                    </mat-icon>
+                    <mat-icon class="material-icons-outlined" matTooltip="Elimina" color="warn" style="margin: 4px;"
+                    (click)="deleteRange(element)">
+                      delete_outline</mat-icon>
+                  </mat-cell>
+
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+            </div>
+            </div>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></mat-header-row>
+      <mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element" (click)="expandedElement = expandedElement === element ? null : element;
+             getRangeEsami(element)">
+      </mat-row>
+      <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons [pageSize]="10">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

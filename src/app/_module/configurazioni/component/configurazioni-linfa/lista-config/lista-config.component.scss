@@ -1,0 +1,43 @@
+//Add this to your css
+mat-cell > span.truncate-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+// ::ng-deep .mat-sort-header-arrow {
+//     transform: none !important;
+//     opacity: 1 !important;
+// }
+
+@media screen and (min-width: 1101px) {
+    .mat-column-valore,
+    .mat-column-descrizione {
+        padding-right: 30px;
+    }
+}
+
+.separator {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 3px;
+}
+
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.mat-column-abilitato{
+    display: flex;
+    justify-content: center;
+}
+
+.mat-column-categoriaConfigurazione{
+    flex: 0 0 10%
+}
+
+@import "/src/theme/table-responsive.scss";

@@ -1,0 +1,49 @@
+<app-stepper [stepCorrente]="step"></app-stepper>
+
+
+<div class="backBtn">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+<mat-accordion>
+    <mat-expansion-panel>
+        <!--expanded-->
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Riepilogo anagrafica
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <app-anagrafica [isRiepilogoVisita]="isRiepilogo"></app-anagrafica>
+        </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="appGen.configLinfa.PrivacyAbilitata">
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Riepilogo consenso informato
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <app-privacy [isRiepilogoVisita]="isRiepilogo"></app-privacy>
+        </ng-template>
+    </mat-expansion-panel>
+
+</mat-accordion>
+
+
+<mat-divider></mat-divider>
+
+<div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="10px" fxLayoutGap="2%">
+    <button mat-raised-button color="accent" (click)="esci()">
+        <mat-icon>exit_to_app</mat-icon>
+        Esci
+    </button>
+    <button mat-raised-button color="primary" *ngIf="isFromVisita" (click)="goToVisita()">
+        Procedi con la visita
+        <mat-icon>navigate_next</mat-icon>
+    </button>
+</div>

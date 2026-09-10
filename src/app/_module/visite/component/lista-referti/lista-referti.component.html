@@ -1,0 +1,243 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title">
+            <span *ngIf="queryId === '11'">
+                Referti firmati
+            </span>
+            <span *ngIf="queryId === '9'">
+                Referti da inviare
+            </span>
+            <span *ngIf="queryId === '18'">
+                Referti inviati con errori
+            </span>
+        </h3>
+    </mat-card-title>
+    <mat-card-content>
+
+        <mat-accordion>
+            <mat-expansion-panel class="accordionFiltri">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="accordionFiltriTitle">
+                        <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                        Filtri ricerca
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="filtri">
+                    <form [formGroup]="formFiltrivisita" autocomplete="off">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Data visita</mat-label>
+                                <input matInput type="text" [matDatepicker]="dataVisitaPicker" formControlName="dataVisita" autocomplete="off">
+                                <mat-datepicker-toggle matSuffix [for]="dataVisitaPicker"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi #dataVisitaPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Tipo visita</mat-label>
+                                <mat-select matNativeControl formControlName="tipoVisita">
+                                    <mat-option *ngFor="let tipo of listaTipiVisite" [value]="tipo.id">
+                                        {{ tipo.tipoRichiesta }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field fxFlex>
+                                <mat-label>Codice fiscale</mat-label>
+                                <input matInput type="text" formControlName="cf">
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex>
+                                <mat-label>Cognome</mat-label>
+                                <input matInput type="text" formControlName="cognome">
+                            </mat-form-field>
+                            <mat-form-field fxFlex>
+                                <mat-label>Nome</mat-label>
+                                <input matInput type="text" formControlName="nome">
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="authGuard.canRole(appGen.ruolo.Administrator) || authGuard.canRole(appGen.ruolo.Amministrativo)">
+
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Medico</mat-label>
+                                <mat-select matNativeControl formControlName="medico">
+                                    <mat-option *ngFor="let medico of listaMedici" [value]="medico.idUtente">
+                                        {{ medico.nome }} {{ medico.cognome }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Ambulatorio</mat-label>
+                                <mat-select matNativeControl formControlName="ambulatorio">
+                                    <mat-option *ngFor="let ambulatorio of listaAmbulatori" [value]="ambulatorio.id">
+                                        {{ ambulatorio.descr }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+
+
+                        <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+                            <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                <mat-icon>search</mat-icon>
+                Cerca
+              </button>
+                            <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                <mat-icon>remove_circle_outline</mat-icon>
+                Resetta
+              </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+
+        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="1%" fxLayoutGap.lt-md="10px" style="min-height: 500px;">
+            <div fxFlex>
+                <mat-table id="table" [dataSource]="dataSource" matSortActive="data" matSortDirection="desc" (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+                    <!-- <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container> -->
+
+
+
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                            <!-- <mat-checkbox color="primary" [checked]="isAllSelect" (change)="isAllSelected($event.checked)">
+              </mat-checkbox> -->
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <mat-checkbox color="primary" (change)="check($event.checked,row)" [checked]="row.selezionato">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="data">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Data visita</mat-header-cell>
+                        <mat-cell *matCellDef="let visita" data-label="Data visita">{{visita.dataPrestazione == null ? '-':visita.dataPrestazione| date: 'dd/MM/yyyy HH:mm' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="paziente">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente</mat-header-cell>
+                        <mat-cell *matCellDef="let visita" data-label="Paziente" [matTooltip]="'CF: '+visita.cf+'\n Prestazione: '+visita.tipoPrestazione + '\n Medico: '+visita.medico" matTooltipClass="mat-tooltip-custom">
+                            {{visita.paziente}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container *ngIf="rowChecked.length <= 0">
+                        <ng-container matColumnDef="cf">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Codice fiscale</mat-header-cell>
+                            <mat-cell *matCellDef="let visita" data-label="Codice fiscale">{{visita.cf}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipoPrestazione">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Prestazione</mat-header-cell>
+                            <mat-cell *matCellDef="let visita" data-label="Prestazione">{{visita.tipoPrestazione}}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="medico">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Medico</mat-header-cell>
+
+                            <mat-cell *matCellDef="let visita" data-label="Medico">{{visita.medico}}
+                            </mat-cell>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pulsanti">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let visita" class="pulsantiTab" style="justify-content:flex-end">
+
+
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon color="primary">more_vert</mat-icon>
+              </button>
+                            <mat-menu #menu="matMenu">
+
+                                <button mat-menu-item (click)="scaricaReferto(visita)">
+                                  <mat-icon class="material-icons-outlined" color="primary">download
+                                  </mat-icon> Scarica
+                                </button>
+                                <button mat-menu-item (click)="stampaReferto2(visita)">
+                                  <mat-icon class="material-icons-outlined" color="primary">print
+                                  </mat-icon> Stampa
+                                </button>
+                                <button mat-menu-item (click)="storicoInvii(visita)"
+                                *ngIf="refertiFirmati">
+                                    <mat-icon class="material-icons-outlined" color="primary">summarize
+                                    </mat-icon> Storico invii
+                                  </button>
+
+                            </mat-menu>
+
+
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row;columns:viewsColumns" [ngClass]="{'highlight': row.selezionato}">
+                    </mat-row>
+
+
+                </mat-table>
+            </div>
+
+            <div fxFlex="65" *ngIf="rowChecked.length>0 &&pdfFile">
+
+                <app-pdf-viewer [pdfFile]="pdfFile" [isBase64]="true"></app-pdf-viewer>
+            </div>
+        </div>
+
+        <ng-container>
+
+            <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage" (page)="onChangePage($event)">
+            </mat-paginator>
+        </ng-container>
+
+
+
+    </mat-card-content>
+    <mat-card-footer>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="!refertiFirmati && !conErrore" >
+
+        <button mat-raised-button color="primary" (click)="firmaSelezionati()"
+            [disabled]="!(rowChecked.length>0) || rowChecked.length> (appGen.configLinfa.ConfigDigitalSign.multiple== true?appGen.configLinfa.ConfigDigitalSign.maxfilenumber: 1)">
+            Firma digitalmente i selezionati {{rowChecked.length>0?'('+rowChecked.length+')':''}}
+        </button>
+        </div>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="refertiFirmati && conErrore">
+            <button mat-raised-button color="primary" (click)="reInviaRefertiMirth()"
+            [disabled]="!(rowChecked.length>0) || rowChecked.length> (appGen.configLinfa.ConfigDigitalSign.multiple == true?appGen.configLinfa.ConfigDigitalSign.maxfilenumber: 1)"
+            color="accent">
+            Invia nuovamente i selezionati {{rowChecked.length>0?'('+rowChecked.length+')':''}}
+            </button>
+        </div>
+
+
+
+    </mat-card-footer>
+</mat-card>

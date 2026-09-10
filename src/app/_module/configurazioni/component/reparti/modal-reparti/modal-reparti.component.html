@@ -1,0 +1,42 @@
+<div mat-dialog-content>
+
+    <mat-icon (click)="closeDialog()" class="exit-button" color="warn">close</mat-icon>
+
+
+    <h3 class="title">{{title}}</h3>
+
+    <form [formGroup]="formReparto" class="form">
+
+        <span class="note-span">
+            <mat-form-field class="full-width" fxFlex>
+                <mat-label>Descrizione</mat-label>
+                <input required matInput #input formControlName="descrizione"
+                (keyup.enter)="saveReparto($event)"
+                 class="note-input"/>
+                <mat-error>Il campo non può essere vuoto</mat-error>
+            </mat-form-field>
+        </span>
+
+        
+        <span class="note-span">
+            <mat-form-field class="full-width" fxFlex>
+                <mat-label>Centro di costo</mat-label>
+                <input required matInput #input formControlName="centroCosto"
+                (keyup.enter)="saveReparto($event)"
+                class="note-input"/>
+                <mat-error>Il campo non può essere vuoto</mat-error>
+            </mat-form-field>
+        </span>
+
+    </form>
+
+    <div>
+        <button mat-raised-button class="save-button" color="primary"
+        (click)="saveReparto($event)"
+        [disabled]="!formReparto.valid"
+        >
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+    </div>
+</div>

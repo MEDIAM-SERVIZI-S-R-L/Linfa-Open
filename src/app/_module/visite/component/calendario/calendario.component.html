@@ -1,0 +1,148 @@
+<div class="backBtn" *ngIf="isFromDashboard">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+
+
+
+<app-lista-visite (calendario)="showVisite()" *ngIf="showListaVisite"> </app-lista-visite>
+
+<mat-card *ngIf="!showListaVisite">
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnTopCard" (click)="showVisite()">
+            <mat-icon>list</mat-icon>
+            Elenco visite
+        </button>
+    </div>
+
+    <div class="subContainer">
+
+        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+            <h3 class="subTitle">Legenda:</h3>
+        </div>
+        <div fxLayout="row wrap" class="btnLegend" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="0px">
+
+
+            <div><button mat-raised-button type="button" class="cancellata"></button><span> Cancellata</span></div>
+            <div> <button mat-raised-button type="button" class="daEffettuare"></button><span> Da iniziare</span>
+            </div>
+            <div> <button mat-raised-button type="button" class="iniziata"></button><span> Da completare</span></div>
+            <div> <button mat-raised-button type="button" class="daRefertare"></button><span> Da refertare</span>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="filtri">
+            <mat-hint>Calendario filtrato di default con le proprie visite
+            </mat-hint>
+            <form [formGroup]="formFiltroCalendario" autocomplete="off">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%">
+                    <mat-form-field class="full-width" fxFlex="30" *ngIf="authGuard.canRole(appGen.ruolo.Administrator) || authGuard.canRole(appGen.ruolo.Amministrativo) ">
+                        <mat-label>Medico</mat-label>
+                        <mat-select matNativeControl formControlName="medico">
+                            <mat-option *ngFor="let medico of listaMedici" [value]="medico.idUtente">
+                                {{ medico.nome }} {{ medico.cognome }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Ambulatorio</mat-label>
+                        <mat-select matNativeControl formControlName="ambulatorio">
+                            <mat-option *ngFor="let ambulatorio of listaAmbulatori" [value]="ambulatorio.id">
+                                {{ ambulatorio.descr }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                        <mat-icon>search</mat-icon>
+                        Filtra
+                    </button>
+
+                    <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                        <mat-icon>remove_circle_outline</mat-icon>
+                        Resetta
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <mat-card-content>
+        <div class="input-row headerCalendar" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+            <div class="btn-group">
+
+
+                <button mat-raised-button color="primary" mwlCalendarToday [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay($event)">
+                    <mat-icon>today</mat-icon>
+                    Oggi
+                </button>
+                <mat-icon mwlCalendarPreviousView id="prevNextBtn" [view]="view" [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay($event)">keyboard_arrow_left</mat-icon>
+
+
+                <mat-icon mwlCalendarNextView [view]="view" id="prevNextBtn" [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay($event)">keyboard_arrow_right</mat-icon>
+            </div>
+
+            <div class="divTitle">
+
+                <h2 class="title">{{ viewDate | calendarDate:(view + 'ViewTitle'):'it':1}}</h2>
+
+            </div>
+
+
+            <mat-button-toggle-group class="btn-group">
+                <mat-button-toggle (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">
+                    Mese
+                </mat-button-toggle>
+                <mat-button-toggle (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
+                    Settimana
+                </mat-button-toggle>
+                <mat-button-toggle (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">Giorno
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+
+        </div>
+
+        <br />
+
+
+        <ng-template #customCellTemplate let-day="day" let-locale="locale">
+            <div class="cal-cell-top">
+                <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+                <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+            </div>
+            <div class="cell-totals">
+                <span *ngFor="let group of day.eventGroups" class="badge badge-{{ group[0] }}">
+                    <span>{{ group[1].length }}</span>
+                </span>
+            </div>
+        </ng-template>
+
+
+
+        <div [ngSwitch]="view">
+            <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [weekStartsOn]="weekStartsOn"
+                [viewDate]="viewDate" (eventClicked)="handleEvent($event.event,view,viewDate)"
+                (dayClicked)="dayClicked($event.day)" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+                [refresh]="refresh" (beforeViewRender)="beforeMonthViewRender($event)"
+                [cellTemplate]="customCellTemplate">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [hourSegments]="4" [hourSegmentHeight]="35"
+                [weekStartsOn]="weekStartsOn" (eventClicked)="handleEvent($event.event,view,viewDate)"
+                [dayStartHour]="7" [dayEndHour]="18" [viewDate]="viewDate" [events]="events" [refresh]="refresh">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [hourSegments]="4" [hourSegmentHeight]="40"
+                [dayStartHour]="7" [dayEndHour]="18" (eventClicked)="handleEvent($event.event,view,viewDate)"
+                [viewDate]="viewDate" [events]="events" [refresh]="refresh">
+            </mwl-calendar-day-view>
+        </div>
+    </mat-card-content>
+</mat-card>

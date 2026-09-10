@@ -1,0 +1,231 @@
+<!-- <app-cruscotto-paziente *ngIf="!isRiepilogoVisita"></app-cruscotto-paziente>
+ -->
+
+<app-stepper [stepCorrente]="step" *ngIf="!isRiepilogoVisita"></app-stepper>
+
+
+<div class="backBtn">
+
+    <button (click)="backToPrevious()" *ngIf="!isRiepilogoVisita">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Dati del paziente</span>
+    </button>
+
+    <button (click)="expandCollapseAll()" class="expandCollpaseBtn" *ngIf="!isRiepilogoVisita">
+
+        <ng-container *ngIf="!isExpanded">
+            <span *ngIf="!appGen.isMobile">Espandi tutto</span>
+            <mat-icon>add</mat-icon>
+
+        </ng-container>
+        <ng-container *ngIf="isExpanded">
+            <mat-icon>remove</mat-icon>
+            <span *ngIf="!appGen.isMobile">Chiudi tutto</span>
+        </ng-container>
+
+    </button>
+</div>
+
+
+
+
+
+<div class="ctnrList">
+
+    <mat-accordion multi>
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Quesito diagnostico</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="quesitoDiagnostico">
+
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <textarea matInput [(ngModel)]="quesito" [disabled]="isRiepilogoVisita" cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px" fxLayoutAlign="end" *ngIf="!isRiepilogoVisita ">
+                        <button mat-raised-button color="primary" matTooltipPosition="after" (click)="onSubmit()">
+                            <mat-icon>save</mat-icon>
+                            Salva
+                        </button>
+                    </div>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="familiare">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Anamnesi familiare</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="anamnesiFamiliare">
+
+                    <app-lista-anamnesi-familiare [isRiepilogoVisita]="isRiepilogoVisita">
+                    </app-lista-anamnesi-familiare>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="fisiologica">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Anamnesi fisiologica</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="anamnesiFisiologica">
+
+                    <app-lista-anamnesi-fisiologica [isRiepilogoVisita]="isRiepilogoVisita">
+                    </app-lista-anamnesi-fisiologica>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="prossima">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Anamnesi patologica prossima</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="anamnesiPatologicaProssima">
+
+                    <app-lista-anamnesi-patologica-prossima [isRiepilogoVisita]="isRiepilogoVisita">
+                    </app-lista-anamnesi-patologica-prossima>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="remota">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Anamnesi patologica remota</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="anamnesiPatologicaRemota">
+
+                    <app-lista-anamnesi-patologica-remota [isRiepilogoVisita]="isRiepilogoVisita">
+                    </app-lista-anamnesi-patologica-remota>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="terapie">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Terapie in atto</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="terapie">
+
+                    <app-lista-farmaci [isRiepilogoVisita]="isRiepilogoVisita"></app-lista-farmaci>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="allergie">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Allergie e Intolleranze</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="allergie">
+
+                    <app-lista-allergie [isRiepilogoVisita]="isRiepilogoVisita"></app-lista-allergie>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="motorie">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Attività motorie</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="attivita">
+
+                    <app-lista-sport [isRiepilogoVisita]="isRiepilogoVisita"></app-lista-sport>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="interventi">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Interventi chirurgici</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="interventi">
+
+                    <app-lista-interventi [isRiepilogoVisita]="isRiepilogoVisita"></app-lista-interventi>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel [expanded]="!isRiepilogoVisita" name="dipendenze">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <ng-container>Dipendenze</ng-container>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <div class="boxArea" id="dipendenze">
+                    <app-lista-dipendenze [isRiepilogoVisita]="isRiepilogoVisita"></app-lista-dipendenze>
+                </div>
+
+            </ng-template>
+        </mat-expansion-panel>
+
+    </mat-accordion>
+</div>
+
+<mat-divider *ngIf="!isRiepilogoVisita"></mat-divider>
+
+
+<div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+    <button mat-raised-button color="primary" *ngIf="!isRiepilogoVisita" (click)="goForward()">
+        Prosegui
+        <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+    </button>
+
+</div>

@@ -1,0 +1,46 @@
+<mat-card class="linfaCard">
+  <h3 class="title">Conclusioni predefinite</h3>
+  
+  <form [formGroup]="formConclusioni" autocomplete="off">
+
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+      <mat-form-field class="full-width" fxFlex="65">
+        <mat-label>Lista conclusioni predefinite</mat-label>
+        <mat-select matNativeControl formControlName="id"
+          (selectionChange)="selectedConclusionePredefinita($event.value)">
+          <mat-option></mat-option>
+          <mat-option *ngFor="let conclusione of listaConclusioniPredefinite" [value]="conclusione.id">
+            {{conclusione.conclusione}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-divider></mat-divider>
+      <mat-form-field class="full-width" fxFlex>
+        <mat-label>Conclusione</mat-label>
+        <textarea matInput formControlName="conclusione" cdkTextareaAutosize cdkAutosizeMinRows="3" required
+          cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%"
+      fxLayoutGap.lt-sm="10px">
+      <button mat-raised-button color="warn" (click)="delete()"
+        *ngIf="!this.appGen.isNullOrUndefined(this.formConclusioni.get('id').value)">
+        <mat-icon>delete</mat-icon>
+        Elimina
+      </button>
+
+
+
+
+      <button mat-raised-button color="primary" (click)="onSubmit(false)"
+        *ngIf="!this.appGen.isNullOrUndefined(this.formConclusioni.get('id').value)">
+        <mat-icon>save</mat-icon>
+        Aggiorna
+      </button>
+      <button mat-raised-button color="primary" (click)="onSubmit(true)">
+        <mat-icon>save</mat-icon>
+        Inserisci nuova
+      </button>
+    </div>
+  </form>
+</mat-card>

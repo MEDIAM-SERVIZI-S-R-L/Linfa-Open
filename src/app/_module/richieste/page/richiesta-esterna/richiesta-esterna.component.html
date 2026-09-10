@@ -1,0 +1,24 @@
+<div class="backBtn">
+  <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Indietro</span>
+  </button>
+</div>
+
+
+<mat-card class="linfaCard">
+
+
+  <mat-card-title>
+    <h3 class="title">
+      Nuova richiesta
+    </h3>
+
+
+
+  </mat-card-title>
+  <mat-card-content>
+    <app-modal-prenota-richiesta [tipoRichiestaRoute]="tipoRichiestaRoute" >
+    </app-modal-prenota-richiesta>
+  </mat-card-content>
+</mat-card>

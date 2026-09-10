@@ -1,0 +1,46 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title nomePaziente">Trend
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+
+        <p class="filter">
+            <span id="slider">
+      <span>Peso</span>
+            <mat-slide-toggle [(ngModel)]="isBmi" (change)="this.selectedPeriod()"></mat-slide-toggle><span>BMI</span>
+
+            </span>
+            <mat-form-field appearance="fill" class="selectPeriod">
+                <mat-label>Periodo selezionato</mat-label>
+                <mat-select (selectionChange)="selectedPeriod()" [(value)]="selected">
+
+                    <mat-option value="any">Dalla prima visita</mat-option>
+                    <mat-option value="thismonth">Questo mese</mat-option>
+                    <mat-option value="lastmonth">Ultimo mese</mat-option>
+                    <mat-option value="30">Ultimi 30 gg</mat-option>
+                    <mat-option value="60">Ultimi 60 gg</mat-option>
+                    <mat-option value="90">Ultimi 90 gg</mat-option>
+                    <mat-option value="180">Ultimi 180 gg</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+
+
+        </p>
+        <h2 *ngIf="!chartData">
+            Dati non disponibili
+        </h2>
+        <div style="height: 300px;width: 100%;" *ngIf="chartData">
+
+            <canvas baseChart class="chart" [data]="chartData" [type]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins">
+
+    </canvas>
+
+        </div>
+    </mat-card-content>
+</mat-card>

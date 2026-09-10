@@ -1,0 +1,46 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova anamnesi familiare</ng-container>
+            <ng-container *ngIf="isRiepilogo">Dettaglio anamnesi familiare</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formAnamnesiFamiliare" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Familiare</mat-label>
+                            <mat-select matNativeControl required formControlName="gradoParentela">
+                                <mat-option *ngFor="let familiare of listaGradiParentela" [value]="familiare.id">
+                                    {{ familiare.gradoParentela }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Patologia</mat-label>
+                            <input matInput type="text" formControlName="patologia" required autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px"
+        fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

@@ -1,0 +1,41 @@
+.boxArea,
+.divider {
+    margin-top: 25px;
+}
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+.checkPrivacy {
+    margin-top: 10px;
+}
+
+.checkboxDiv {
+    margin: 8px 0 8px 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#cfInput {
+    text-transform: uppercase;
+}
+
+#dividerCustom {
+    margin: 40px 0 !important;
+}
+
+.check-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    height: 36px;
+    width: 100%;
+    margin-right: 0px !important;    
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    transform: scale(0.55);
+    vertical-align: middle;
+}

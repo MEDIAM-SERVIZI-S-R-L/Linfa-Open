@@ -1,0 +1,12 @@
+.boxArea{
+    padding-bottom:5px;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+button mat-icon{
+    margin-right: unset !important;
+}

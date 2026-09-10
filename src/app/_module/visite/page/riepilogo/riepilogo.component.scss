@@ -1,0 +1,75 @@
+.btnSave {
+    float: right;
+    margin-left: 10px;
+    // padding: 10px 0;
+}
+
+.btnStampDocuments {
+    mat-icon {
+        margin: unset !important;
+    }
+    background: white !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+    border: 1px solid #cfcfcf !important;
+}
+
+mat-divider {
+    margin: 25px 0;
+}
+
+#proseguiTitle {
+    font-weight: 600;
+    padding: 5px 30px;
+}
+
+.panelAccordion1 {
+    border-radius: 10px 10px 0 0;
+}
+
+.panelAccordion2 {
+    border-radius: 0 0 10px 10px;
+}
+
+.divCruscotto {
+    margin-bottom: 20px;
+}
+
+.cntrCalendar {
+    padding: 10px 0;
+}
+
+.mat-accordion .mat-expansion-panel:first-of-type {
+    border-top-right-radius: 12px !important;
+    border-top-left-radius: 12px !important;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type {
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    border-radius: 12px !important;
+}
+
+.cntrBtnRow {
+    display: flex;
+    flex-direction: row;
+    //justify-content: space-between !important;
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+
+.left-button-div{
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between !important;
+}
+
+.checkbox{
+    padding-left: 1%;
+    margin-bottom: 8px;
+}

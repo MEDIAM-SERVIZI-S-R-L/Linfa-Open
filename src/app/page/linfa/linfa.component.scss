@@ -1,0 +1,125 @@
+.sidenav-app {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.noteBtn {
+    cursor: pointer;
+}
+
+.noteMobileBtn {
+    padding-left: 15px;
+    margin-right: unset !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.sidenav-is-mobile .sidenav-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+}
+
+h1.sidenav-app-name {
+    margin-left: 8px;
+}
+
+.sidenav-container {
+    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+    flex: 1;
+}
+
+.sidenav-is-mobile .sidenav-container {
+    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+    flex: 1 0 auto;
+}
+
+.logoMobile {
+    margin: 0 auto;
+    width: 45px;
+    outline: none;
+    cursor: pointer;
+}
+
+#iconMenuMobile {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    margin-left: 0px;
+    z-index: 111111111111111111111111;
+    background: #00afa6;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 45px;
+    color: white;
+}
+
+.avatar {
+    height: 33px;
+    width: 33px;
+    cursor: pointer;
+}
+
+// @media screen and (max-width: 980px) {
+//     .mat-sidenav-content {
+//         margin-left: unset !important;
+//     }
+// }
+.userBox {
+    line-height: 35px;
+
+    p,
+    span,
+    small {
+        float: left;
+        margin: 2px;
+    }
+    p,
+    small {
+        margin-right: 10px;
+    }
+    p {
+        mat-icon {
+            position: relative;
+            top: 7px;
+        }
+    }
+    small {
+        font-size: 15px;
+        padding: 0px 5px;
+        font-weight: bold;
+    }
+}
+.ctnrMain {
+    // padding: 1.5% 3% 5% 3%;
+    padding: 1.5% 2% 4% 2%;
+}
+
+@media screen and (max-width: 600px) {
+    .ctnrMain {
+        padding: 7% 3.5% 3% 3.5%;
+    }
+}
+
+.footer{
+    position: absolute;
+    bottom: 0;
+    z-index: 99;
+    text-align: center;
+    background-color: white;
+    vertical-align: middle;
+    width: 100%;
+    mat-icon{
+        vertical-align: middle;
+    }
+}

@@ -1,0 +1,225 @@
+<mat-card class="linfaCard">
+
+    <mat-card-title>
+        <h3 class="title">Piani nutrizionali</h3>
+    </mat-card-title>
+
+    <mat-card-content>
+        <mat-accordion>
+            <mat-expansion-panel class="accordionFiltri">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="accordionFiltriTitle">
+                        <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                        Filtri ricerca
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="filtri">
+                    <form [formGroup]="formFiltri" autocomplete="off">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field fxFlex>
+                                <mat-label>Codice fiscale</mat-label>
+                                <input matInput type="text" formControlName="cf">
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex>
+                                <mat-label>Cognome</mat-label>
+                                <input matInput type="text" formControlName="cognome">
+                            </mat-form-field>
+                            <mat-form-field fxFlex>
+                                <mat-label>Nome</mat-label>
+                                <input matInput type="text" formControlName="nome">
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Tipo alimentazione</mat-label>
+                                <mat-select matNativeControl formControlName="tipoAlimentazione">
+                                    <mat-option *ngFor="let tipo of appGen.TipoAlimentazione" [value]="tipo.id">
+                                        {{ tipo.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Data inizio</mat-label>
+                                <input matInput type="text" [matDatepicker]="dataInizioPicker" readonly
+                                    (focus)="dataInizioPicker.open()" formControlName="dataInizio" autocomplete="off">
+                                <mat-datepicker-toggle matSuffix [for]="dataInizioPicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker touchUi #dataInizioPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Data fine</mat-label>
+                                <input matInput type="text" [matDatepicker]="dataFinePicker" readonly
+                                    (focus)="dataFinePicker.open()" formControlName="dataFine" autocomplete="off">
+                                <mat-datepicker-toggle matSuffix [for]="dataFinePicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker touchUi #dataFinePicker></mat-datepicker>
+                            </mat-form-field>
+
+                        </div>
+
+
+                        <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%"
+                            fxLayoutGap.lt-md="10px">
+                            <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                                <mat-icon>search</mat-icon>
+                                Cerca
+                            </button>
+                            <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                                <mat-icon>remove_circle_outline</mat-icon>
+                                Resetta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+
+
+        <mat-table id="table" [dataSource]="dataSource" matSortActive="attivo" matSortDirection="desc"
+            (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+            <ng-container matColumnDef="paziente">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente</mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Paziente">{{data.paziente}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="cf">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Codice fiscale
+                </mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Codice fiscale">
+                    {{data.cf |uppercase}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="durata">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Durata</mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Durata">
+                    {{data.durata >0 ?data.durata + ' giorni':'-'}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataInizioValidita">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Data inizio </mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Data inizio validità ">
+                    {{data.dataInizioValidita | date: 'dd/MM/yyyy'}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="dataFineValidita">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Data fine </mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Data fine validità">
+                    {{!data.dataFineValidita ?'-': data.dataFineValidita | date: 'dd/MM/yyyy'}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="tipoAlimentazione">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Nutrizione </mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Tipo alimentazione">
+                    {{data.tipoAlimentazione}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="attivo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Attivo</mat-header-cell>
+                <mat-cell *matCellDef="let data" data-label="Attivo">
+
+
+                    <mat-icon color="primary" *ngIf="data.attivo">check</mat-icon>
+                    <mat-icon color="warn" *ngIf="!data.attivo">close</mat-icon>
+
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="pulsanti">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let data" class="pulsantiTab" style="justify-content:flex-end">
+
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon color="primary">more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+
+
+                        <button mat-menu-item (click)="dettaglio(data)"
+                        *ngIf="!isUtenteFarmacista">
+                            <mat-icon class="editIco" color="primary">
+                                remove_red_eye
+                            </mat-icon>
+                            <span> Visualizza piano </span>
+                        </button>
+
+
+                        <button mat-menu-item (click)="rinnovaPiano(data)"
+                            *ngIf="data.idTipoAlimentazione == tipoAlimentazione.Artificiale && !isUtenteFarmacista">
+                            <mat-icon class="material-icons" color="primary">repeat</mat-icon>
+                            <span> Rinnova piano </span>
+                        </button>
+                        <div matTooltip="Il piano nutrizionale non puo essere modificato per la visita terminata"
+                            [matTooltipDisabled]="!(data.statoVisita == statoVisita.Terminata || data.statoVisita==statoVisita.Cancellata || data.statoVisita== statoVisita.Firmata)">
+                            <button mat-menu-item (click)="modificaPiano(data)" *ngIf="data.attivo && !isUtenteFarmacista"
+                                [disabled]="data.statoVisita == statoVisita.Terminata || data.statoVisita == statoVisita.Cancellata || data.statoVisita== statoVisita.Firmata">
+                                <mat-icon class="material-icons-outlined" color="primary">edit</mat-icon>
+                                <span> Modifica piano</span>
+                            </button>
+
+                        </div>
+
+                        <button mat-menu-item [matMenuTriggerFor]="pianiNutrizionali">
+                                <mat-icon class="material-icons-outlined" color="primary">receipt_long
+                                </mat-icon>
+                                Stampa piano
+                            </button>
+
+                    <mat-menu #pianiNutrizionali="matMenu">
+                        <button mat-menu-item (click)="pianoNutrizionale(data)">
+                            <mat-icon class="material-icons-outlined" color="primary">receipt_long
+                            </mat-icon>
+                            <span> Stampa piano </span>
+                        </button>
+
+                        <button mat-menu-item (click)="pianoNutrizionaleConCalorieNascoste(data)">
+                            <mat-icon class="material-icons-outlined" color="accent">receipt_long
+                            </mat-icon>
+                            <span> Stampa piano kcal nascoste </span>
+                        </button>
+                    </mat-menu>
+
+                    <button mat-menu-item [matMenuTriggerFor]="invioPianiNutrizionali" 
+                    *ngIf="appGen.configLinfa.invioPianoNutrizionaleTramiteMail && !isUtenteFarmacista">
+                        <mat-icon class="material-icons-outlined" color="accent">receipt_long
+                        </mat-icon>
+                        Invia piano
+                    </button>
+
+                    <mat-menu #invioPianiNutrizionali="matMenu">
+                        <button mat-menu-item (click)="pianoNutrizionale(data, true)">
+                            <mat-icon class="material-icons-outlined" color="primary">receipt_long
+                            </mat-icon>
+                            <span> Invia piano tramite mail </span>
+                        </button>
+
+                        <button mat-menu-item (click)="pianoNutrizionaleConCalorieNascoste(data, true)" 
+                        matTooltip="Invia piano tramite mail con kcal nascoste">
+                            <mat-icon class="material-icons-outlined" color="accent">receipt_long
+                            </mat-icon>
+                            <span> Invia piano tramite mail con kcal nascoste </span>
+                        </button>
+                    </mat-menu>
+
+                    </mat-menu>
+
+                </mat-cell>
+            </ng-container>
+
+
+
+
+            <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+        </mat-table>
+        <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected" showFirstLastButtons
+            [pageSize]="itemsForPage" [pageSizeOptions]="[5, 10, 25, 50]" [pageSize]="10" (page)="onChangePage($event)">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

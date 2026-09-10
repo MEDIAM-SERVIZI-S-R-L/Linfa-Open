@@ -1,0 +1,15 @@
+<h1 mat-dialog-title [ngClass]="class">
+   {{message}}
+  </h1>
+
+<div mat-dialog-content>
+
+<!-- !mettere container div scroll -->
+<app-new-form-dieta [isAnteprima]="isAnteprima" [fromAnamnesi]="fromAnamnesi" [fromListaDiete]="fromListaDiete" [fromPianoAlimentare]="fromPianoAlimentare" [idPazienteAnteprima]="idPaziente">
+</app-new-form-dieta>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+  <button mat-raised-button color="warn" [mat-dialog-close]="false">Chiudi</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true">Importa</button>
+</div>

@@ -1,0 +1,174 @@
+<mat-card class="linfaCard">
+    <mat-card-content>
+        <div class="container">
+
+
+            <div class="container" fxflexfill>
+                <h3 class="subTitle" style="margin-bottom: 16px;">
+                    Valutazione globale del rischio di malnutrizione
+                </h3>
+
+                <mat-accordion style="width: 100%;">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Calcola BMI e decremento ponderale
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-hint>I dati non verranno salvati, verranno utilizzati solamente per calcolare il BMI e decremento ponderale</mat-hint>
+                        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%"
+                            fxLayoutGap.lt-sm="15px" *ngIf="!isRiepilogoVisita">
+                        </div>
+                        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%"
+                            fxLayoutGap.lt-sm="15px" *ngIf="!isRiepilogoVisita">
+                            <mat-form-field class="full-width" fxFlex="25">
+                                <mat-label>Altezza</mat-label>
+                                <input type="text" matInput [(ngModel)]="altezza" OnlyNumber="true" autocomplete="off"
+                                    maxlength="3">
+                                <span matSuffix class="suffix">cm</span>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="25">
+                                <mat-label>Peso rilevato</mat-label>
+                                <input type="text" matInput [(ngModel)]="pesoAttuale" maxlength="10" [OnlyNumber]="true"
+                                    autocomplete="off">
+                                <span class="suffix" matSuffix>kg</span>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="25">
+                                <mat-label>Peso ultimi 3 mesi</mat-label>
+                                <input type="text" matInput [(ngModel)]="pesoAbituale" maxlength="10"
+                                    [OnlyNumber]="true" autocomplete="off">
+                                <span class="suffix" matSuffix>kg</span>
+                            </mat-form-field>
+
+                            <button mat-raised-button type="button" color="primary" title="Calcola" matTooltip="Calcola"
+                                (click)="calcola()">
+                                <mat-icon>calculate</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%"
+                            fxLayoutGap.lt-sm="15px" *ngIf="!isRiepilogoVisita" style="margin-top: 16px">
+                            <div>
+                                <h3 *ngIf="!appGen.isNullOrUndefined(bmi)">Bmi attuale:
+                                    <span class="resValutazioni"> {{bmi}} </span>
+                                </h3>
+                            </div>
+                            <div>
+                                <h3 *ngIf="!appGen.isNullOrUndefined(decremento)">
+                                    <ng-container *ngIf="decremento == 0">Stabilità
+                                    </ng-container>
+                                    <ng-container *ngIf="decremento <0">Aumento </ng-container>
+                                    <ng-container *ngIf="decremento > 0">Calo</ng-container>
+                                    ponderale ultimi 3 mesi:
+                                    <span class="resValutazioni"> {{ decrementoPonderaleVal}}%
+
+                                        <mat-icon color="warn" *ngIf="decremento > 0">
+                                            arrow_downward</mat-icon>
+                                        <mat-icon color="primary" *ngIf="decremento< 0">
+                                            arrow_upward</mat-icon>
+                                    </span>
+                                </h3>
+
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <!-- <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="15px"
+                    *ngIf="!isRiepilogoVisita">
+                    <mat-hint>Calcola BMI e decremento ponderale</mat-hint>
+                </div>
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="15px"
+                    *ngIf="!isRiepilogoVisita">
+                    <mat-form-field class="full-width" fxFlex="25">
+                        <mat-label>Altezza</mat-label>
+                        <input type="text" matInput [(ngModel)]="altezza" OnlyNumber="true" autocomplete="off" maxlength="3">
+                        <span matSuffix class="suffix">cm</span>
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="25">
+                        <mat-label>Peso rilevato</mat-label>
+                        <input type="text" matInput [(ngModel)]="pesoAttuale" maxlength="10" [OnlyNumber]="true" autocomplete="off">
+                        <span class="suffix" matSuffix>kg</span>
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="25">
+                        <mat-label>Peso ultimi 3 mesi</mat-label>
+                        <input type="text" matInput [(ngModel)]="pesoAbituale" maxlength="10" [OnlyNumber]="true" autocomplete="off">
+                        <span class="suffix" matSuffix>kg</span>
+                    </mat-form-field>
+                
+                    <button mat-raised-button type="button" color="primary" title="Calcola" matTooltip="Calcola" (click)="calcola()">
+                        <mat-icon>calculate</mat-icon>
+                    </button>
+                </div> -->
+
+                <mat-divider></mat-divider>
+
+
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%"
+                    fxLayoutGap.lt-sm="15px"
+                    *ngIf="!isRiepilogoVisita && (!appGen.isNullOrUndefined(decremento) || !appGen.isNullOrUndefined(bmi)) ">
+
+                    <mat-hint
+                    style="font-weight: bold;"  
+                    >Risposte selezionate automaticamente in base al calcolo effettuato</mat-hint>
+                </div>
+
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-sm="15px">
+                    <ng-container *ngFor="let domanda of listaDomande; let i = index;">
+                        <mat-form-field class="full-width" fxFlex class="formSelect" [matTooltip]="domanda.domanda">
+                            <mat-label>{{domanda.domanda}}</mat-label>
+                            <mat-select matNativeControl required (selectionChange)="selectRispostaScreening(i,$event)"
+                                [disabled]="isRiepilogoVisita" [value]="domanda.idRispostaSelezionata">
+                                <mat-option>-</mat-option>
+                                <mat-option [value]="risposta.id" *ngFor="let risposta of domanda.xRisposte">
+                                    {{ risposta.risposta }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint style="color: red;font-size: smaller;" *ngIf="arrayErroriScreening[i]">Nessuna
+                                risposta selezionata
+                            </mat-hint>
+
+                        </mat-form-field>
+                    </ng-container>
+                    <mat-hint>Per malattia acuta si intende un quadro clinico infiammatorio e non per il quale si
+                        prevede un aumentato fabbisogno nutrizionale</mat-hint>
+                </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div id="valutazioniDiv" *ngIf="showValutazioni">
+                <mat-card fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-sm="15px"
+                    class="mat-elevation-z8 boxValutazioni">
+
+                    <div>
+
+                        <h3>Rischio di malnutrizione:
+                        </h3>
+
+
+                        <span class="resValutazioni"> {{valutazioneTotale}} </span>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <h3>Descrizione valutazione:
+                            <span class="DescrVal"> {{rischioMalnutrizione}} </span>
+
+                        </h3>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="primary" class="btnFooterCard" *ngIf="!isRiepilogoVisita" (click)="onSubmit()">
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+
+    </div>
+</mat-card>

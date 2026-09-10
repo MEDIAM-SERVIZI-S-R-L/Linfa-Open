@@ -1,0 +1,15 @@
+@import "/src/theme/table-responsive.scss";
+
+.mat-column-prodotto {
+    cursor: pointer;
+}
+
+@media screen and (min-width: 1101px) {
+    .mat-column-prodotto {
+        padding-right: 30px;
+    }
+}
+
+.mat-column-artificiale {
+    flex: 0 0 12% !important;
+}

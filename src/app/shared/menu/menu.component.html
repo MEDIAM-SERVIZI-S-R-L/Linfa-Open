@@ -1,0 +1,199 @@
+<mat-nav-list role="navigation" [ngClass]="data?'opened':''">
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="authGuard.canAccess(appGen.permesso.ModuloDashboard)" (click)="closeMenuOnClick()" routerLink="dashboard">
+        <a matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">dashboard</mat-icon>
+            <span>Dashboard</span>
+        </a>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="active" (click)="closeMenuOnClick()" routerLink="richieste" [routerLinkActiveOptions]="{exact: true}" *ngIf="authGuard.canAccess(appGen.permesso.ModuloRichieste)">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">contact_support</mat-icon> <span>Richieste</span>
+        </a>
+
+    </mat-list-item>
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+    (click)="closeMenuOnClick()" routerLink="visite"
+    *ngIf="authGuard.canAccess(appGen.permesso.ModuloVisite) && !authGuard.canRole(appGen.ruolo.FarmaciaOspedaliera)">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">event</mat-icon> <span>Calendario visite</span>
+        </a>
+
+    </mat-list-item>
+
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenuOnClick()" routerLink="pazienti" *ngIf="authGuard.canAccess(appGen.permesso.ModuloPazienti)">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">people</mat-icon> <span>Pazienti</span>
+        </a>
+
+    </mat-list-item>
+
+    <mat-expansion-panel class="customPanel" *ngIf="authGuard.canAccess(appGen.permesso.ModuloProdotti)">
+        <mat-expansion-panel-header>
+
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">medication</mat-icon> <span>Prodotti</span>
+            </a>
+        </mat-expansion-panel-header>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="subMenu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="prodotti/miscele">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">science</mat-icon> <span>AFMS</span>
+            </a>
+        </mat-list-item>
+        <mat-list-item (click)="closeMenuOnClick()" class="subMenu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="prodotti/alimenti">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">local_dining</mat-icon> <span>Alimenti</span>
+            </a>
+        </mat-list-item>
+    </mat-expansion-panel>
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenuOnClick()" *ngIf="authGuard.canAccess(appGen.permesso.MostraPianiNutrizionali) && authGuard.canAccess(appGen.permesso.ModuloVisite)" routerLink="visite/piani-nutrizionali/lista">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">assignment</mat-icon> <span>Piani nutrizionali</span>
+        </a>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="authGuard.canAccess(appGen.permesso.MostraDiete) && authGuard.canAccess(appGen.permesso.ModuloVisite)" (click)="closeMenuOnClick()" routerLink="visite/piani-alimentari/lista">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">format_list_bulleted</mat-icon> <span>Diete predefinite</span>
+        </a>
+    </mat-list-item>
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenuOnClick()" routerLink="statistiche" *ngIf="authGuard.canAccess(appGen.permesso.ModuloStatistiche)">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined">insert_chart</mat-icon> <span>Statistiche</span>
+        </a>
+
+    </mat-list-item>
+
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenuOnClick()" routerLink="profilo" *ngIf="authGuard.canAccess(appGen.permesso.ModuloProfilo)">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined  mat-primary">person_pin</mat-icon> <span>Profilo</span>
+        </a>
+
+    </mat-list-item>
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="authGuard.canAccess(appGen.permesso.ModuloSupporto)" (click)="closeMenuOnClick()" routerLink="contatti">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined  mat-primary">contact_mail</mat-icon> <span>Supporto</span>
+        </a>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="appGen.isMobile">
+        <a matLine matLine matTooltipPosition="after" (click)="appGen.logout()">
+            <mat-icon class="material-icons-outlined mat-primary logout" color="warn">power_settings_new</mat-icon>
+            <span>Logout</span>
+        </a>
+
+    </mat-list-item>
+
+    <mat-divider *ngIf="authGuard.canAccess(appGen.permesso.ModuloGestionePermessi)"></mat-divider>
+
+
+    <!-- <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="authGuard.canAccess(appGen.permesso.ModuloGestionePermessi)" (click)="closeMenuOnClick()" routerLink="configurazioni">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined  mat-primary">settings</mat-icon> <span>Configurazione Linfa</span>
+        </a>
+
+    </mat-list-item> -->
+
+
+    <mat-expansion-panel class="customPanel" *ngIf="authGuard.canAccess(appGen.permesso.ModuloGestionePermessi)">
+        <mat-expansion-panel-header>
+
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">settings</mat-icon> <span>Configurazione Linfa</span>
+            </a>
+        </mat-expansion-panel-header>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/categorie">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">handyman</mat-icon> <span class="testo-lungo" matTooltip="Categorie configurazioni">Categorie configurazioni</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/configurazioni">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">settings_applications</mat-icon> <span>Configurazioni</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/permessi">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">lock</mat-icon> <span>Permessi</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/conclusioni-predefinite">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">assignment</mat-icon> <span class="testo-lungo" matTooltip="Conclusioni predefinite">Conclusioni predefinite</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/metodi-assunzione">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">medication_liquid</mat-icon> <span class="testo-lungo" matTooltip="Metodi assunzione integratori">Metodi assunzione integratori</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/note-nutrizionali">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">notes</mat-icon> <span class="testo-lungo" matTooltip="Note nutrizionali">Note nutrzionali predefinite</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/kcal-base">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">rule</mat-icon> <span class="testo-lungo" matTooltip="Proprietà kcal-base">Proprietà kcal-base</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/prodotti-gare">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">inventory_2</mat-icon> <span>Prodotti-Gare</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/distretti">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">location_city</mat-icon> <span>Distretti</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/ospedali">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">local_hospital</mat-icon> <span>Ospedali</span>
+            </a>
+        </mat-list-item>
+
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/analisi">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">water_drop</mat-icon> <span class="testo-lungo" matTooltip="Configurazione analisi">Configurazione analisi</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/log-sistema">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">report</mat-icon> <span>Log sistema</span>
+            </a>
+        </mat-list-item>
+
+        <mat-list-item (click)="closeMenuOnClick()" class="sotto-menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="configurazioni/import-dati">
+            <a matLine matLine matTooltipPosition="after">
+                <mat-icon class="material-icons-outlined">import_export</mat-icon> <span>Import dati</span>
+            </a>
+        </mat-list-item>
+
+    </mat-expansion-panel>
+
+    <mat-list-item routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="authGuard.canAccess(appGen.permesso.ModuloGestionePermessi)" (click)="closeMenuOnClick()" routerLink="utenti">
+        <a matLine matLine matTooltipPosition="after">
+            <mat-icon class="material-icons-outlined  mat-primary">account_circle</mat-icon> <span>Utenti</span>
+        </a>
+
+    </mat-list-item>
+</mat-nav-list>
+

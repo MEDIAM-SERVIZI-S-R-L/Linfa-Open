@@ -1,0 +1,115 @@
+<div class="backBtn">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+
+
+<ng-container *ngIf="isLoaded">
+
+    <form [formGroup]="formPrecompiledFollowup" autocomplete="off">
+
+
+        <app-cruscotto-paziente [fromFollowUp]="true"></app-cruscotto-paziente>
+
+
+        <mat-card>
+            <mat-card-title>
+                <h3 class="title">Follow up</h3>
+            </mat-card-title>
+            <mat-card-content>
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Data registrazione</mat-label>
+                        <input matInput type="text" [matDatepicker]="dataFollowupPicker" readonly (focus)="dataFollowupPicker.open()" [max]="appGen.today" formControlName="dataFollowup" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="dataFollowupPicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker touchUi #dataFollowupPicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Kcal</mat-label>
+                        <input type="text" matInput formControlName="kcal" autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Proteine</mat-label>
+                        <input type="text" matInput formControlName="proteine" autocomplete="off">
+                        <span matSuffix class="suffix">g/die</span>
+
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Azoto</mat-label>
+                        <input type="text" matInput formControlName="azoto" autocomplete="off">
+                        <span matSuffix class="suffix">g/die</span>
+
+                    </mat-form-field>
+                </div>
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Apporto idrico</mat-label>
+                        <input type="text" matInput formControlName="apportoIdrico" maxlength="4" autocomplete="off">
+                        <span matSuffix class="suffix">ml</span>
+
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Peso attuale</mat-label>
+                        <input type="text" matInput required formControlName="peso" [OnlyNumber]="true" maxlength="3" autocomplete="off">
+                        <span matSuffix class="suffix">kg</span>
+                    </mat-form-field>
+                </div>
+
+
+                <div>
+
+                    <div *ngFor="let prodotto of t.controls; let i = index" class="form" style="margin-bottom: 10px;">
+
+                        <div [formGroup]="prodotto">
+
+                            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Prodotto</mat-label>
+                                    <mat-select matNativeControl formControlName="IdProdotto" disabled>
+                                        <mat-option *ngFor="let prodotto of listaProdotti" [value]="prodotto.id">
+                                            {{ prodotto.prodotto }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="full-width" fxFlex="20">
+                                    <mat-label>Quantità</mat-label>
+                                    <input type="text" matInput formControlName="Quantita" required [OnlyNumber]="true" maxlength="4" autocomplete="off">
+                                    <span matSuffix class="suffix">ml</span>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+                    <ng-container *ngIf="prodottiDataSource.length >0">
+                        <app-tabella-prodotti [prodotti]="prodottiDataSource" [fromFollowUp]="fromFollowUp" [kcal]="kcalProdotti" [apportoIdrico]="apportoIdricoTot" [proteine]="proteineTot" [azoto]="azotoTot"></app-tabella-prodotti>
+                    </ng-container>
+
+
+                </div>
+
+            </mat-card-content>
+
+            <mat-card-footer>
+                <button mat-raised-button color="primary" (click)="InsertFollowUp()" style="float:right;margin-left: 30px;">
+                    <mat-icon>save</mat-icon>
+                    Inserisci
+                </button>
+            </mat-card-footer>
+        </mat-card>
+
+    </form>
+
+
+    <app-chart-followup [idVisita]="idVisita"></app-chart-followup>
+</ng-container>

@@ -1,0 +1,62 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuovo intervento</ng-container>
+            <ng-container *ngIf="isRiepilogo">Intervento</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formIntervento" autocomplete="off">
+                <div class="container" fxflexfill>
+
+
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Anno</mat-label>
+                            <input matInput type="text" formControlName="anno" maxlength="4" digitOnly autocomplete="off">
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>ICD9</mat-label>
+                            <mat-select formControlName="icd9" (selectionChange)="setinterventoDaICD9($event.value)">
+                                <mat-option>
+                                <ngx-mat-select-search [formControl]="filtroIcd9" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                              <mat-option *ngFor="let intervento of listaTipoInterventiFiltrata | async" [value]="intervento">
+                                {{intervento.icd9}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-hint>Digitare almeno 2 caratteri per selezionare il tipo di intervento</mat-hint>
+                          </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" style="padding-top: 16px;">
+                        <mat-form-field class="full-width" fxFlex="65">
+                            <mat-label>Intervento</mat-label>
+                            <textarea matInput formControlName="intervento" required cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+                    </div>
+         
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px" fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

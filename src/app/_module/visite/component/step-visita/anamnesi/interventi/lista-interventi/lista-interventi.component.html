@@ -1,0 +1,56 @@
+<ng-container *ngIf="interventiDataSource.data.length <= 0 && isRiepilogoVisita">
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <h3 class="title">Nessun dato presente</h3>
+    </div>
+</ng-container>
+<mat-card class="linfaCard" [class]="interventiDataSource.data.length <= 0 ? 'hideBox': ''">
+    <div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column"
+        fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after"
+            (click)="nuovoIntervento()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Aggiungi
+        </button>
+
+    </div>
+    <ng-container *ngIf="interventiDataSource.data.length > 0">
+
+        <mat-card-content>
+
+            <mat-table id="table" [dataSource]="interventiDataSource">
+
+                <ng-container matColumnDef="intervento">
+                    <mat-header-cell *matHeaderCellDef>Intervento</mat-header-cell>
+                    <mat-cell *matCellDef="let intervento" data-label="Intervento">
+                        <span class="truncate-text" style="padding-right: 16px;" (click)="dettaglioIntervento(intervento.id)">
+                            {{intervento.intervento == '' ? '-' : intervento.intervento}}</span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="anno">
+                    <mat-header-cell *matHeaderCellDef>Anno</mat-header-cell>
+                    <mat-cell *matCellDef="let intervento" data-label="Anno">{{intervento.anno}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let intervento" style="justify-content:flex-end">
+                        <mat-icon class="material-icons-outlined" *ngIf="!isRiepilogoVisita"
+                            matTooltip="Visualizza / Modifica intervento" (click)="dettaglioIntervento(intervento.id)"
+                            color="primary">edit
+                        </mat-icon>
+                        <mat-icon *ngIf="!isRiepilogoVisita" matTooltip="Elimina intervento"
+                            (click)="delete(intervento.id)" color="warn">
+                            delete
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="interventiViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:interventiViewsColumns"></mat-row>
+            </mat-table>
+
+        </mat-card-content>
+    </ng-container>
+</mat-card>

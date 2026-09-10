@@ -1,0 +1,212 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title" *ngIf="!isDettaglio">Nuovo utente</h3>
+        <h3 class="title" *ngIf="isDettaglio">Dettaglio {{anagrafica}}</h3>
+
+    </mat-card-title>
+
+    <div class="container" fxflexFill>
+        <mat-tab-group mat-align-tabs="start" animationDuration="1000ms" md-stretch-tabs [(selectedIndex)]="selectedTab">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="material-icons-outlined">person</mat-icon>
+                    Info personali
+                </ng-template>
+                <ng-template matTabContent>
+                    <div class="containerTab">
+                        <form [formGroup]="formUtente" autocomplete="off">
+                            <div class="anagraficaArea">
+
+                                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                                    fxLayoutGap.lt-md="0px">
+
+                                    <mat-form-field class="full-width" fxFlex="30">
+                                        <mat-label>Nome</mat-label>
+                                        <input type="text" matInput required formControlName="nome" autocomplete="off">
+
+                                    </mat-form-field>
+
+                                    <mat-form-field class="full-width" fxFlex="30">
+                                        <mat-label>Cognome</mat-label>
+                                        <input type="text" matInput formControlName="cognome" autocomplete="off">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="full-width" fxFlex="30">
+                                        <mat-label>Codice fiscale</mat-label>
+                                        <input type="text" matInput autocomplete="off" formControlName="cf" [required]="digitalSingLocale === true? true : false">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="full-width" fxFlex="30">
+                                        <mat-label>Email</mat-label>
+                                        <input type="text" matInput formControlName="email" maxlength="100"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="input-row"  fxLayout.lt-sm="column" fxLayoutGap="5%"
+                                    fxLayoutGap.lt-md="0px">
+
+                                    <mat-form-field class="full-width" fxFlex="25">
+                                        <mat-label>Matricola</mat-label>
+                                        <input type="text" matInput required formControlName="matricola" autocomplete="off">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="full-width" fxFlex="25">
+                                        <mat-label>Username</mat-label>
+                                        <input type="text" matInput required formControlName="username"
+                                            autocomplete="off">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="full-width" fxFlex="25">
+                                        <mat-label>Utente LDAP</mat-label>
+                                        <input type="text" matInput [required]="LDAPAbilitato === true? true : false" formControlName="utenteLdap"
+                                            autocomplete="off">
+                                    </mat-form-field>
+
+
+                                    <div style="width: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <mat-form-field class="full-width" fxFlex="25">
+                                            <mat-label>Utente firma digitale remota</mat-label>
+                                            <input type="text" matInput [required]="firmaDigitaleAbilitata === true? true : false" formControlName="utenteRemoto"
+                                                autocomplete="off">
+                                        </mat-form-field>
+
+                                        <mat-checkbox *ngIf="OTPManuale"
+                                        formControlName="otpManuale">
+                                            OTP manuale
+                                        </mat-checkbox>
+                                    </div>
+
+
+
+                                    <!-- <mat-form-field class="full-width" fxFlex="30">
+                                        <mat-label>Ruolo</mat-label>
+                                        <mat-select matNativeControl formControlName="ruolo">
+                                            <mat-option *ngFor="let tipo of listaRuoli" [value]="tipo.id">
+                                                {{ tipo.tipoUtente }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field> -->
+
+
+                                </div>
+
+                                <!-- <div class="input-row"  fxLayout.lt-sm="column" fxLayoutGap="5%"
+                                fxLayoutGap.lt-md="0px">
+
+                                <mat-form-field class="full-width" fxFlex="30" *ngIf="!isDettaglio">
+                                    <mat-label>Password</mat-label>
+                                    <input matInput [type]="hide ? 'password' : 'text'"  formControlName="password" matTooltip="La password sarà visibile dopo la creazione del profilo">
+                                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div> -->
+                                
+                            </div>
+                        </form>
+                    </div>
+                </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="material-icons-outlined">badge</mat-icon>
+                    Ruoli
+                </ng-template>
+                <ng-template matTabContent>
+                    <div class="containerTab">
+                        <mat-card-content>
+                            <div class="container">
+
+                                <div class="mainTipiUtente">
+
+                                    <div class="example-container">
+                                        <h2>Tipi utente disponibili</h2>
+
+                                        <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="listaRuoli"
+                                            [cdkDropListConnectedTo]="[doneList]" class="example-list"
+                                            (cdkDropListDropped)="drop($event)">
+                                            <div class="example-box" *ngFor="let item of listaRuoli" cdkDrag
+                                                [cdkDragDisabled]="authGuard.canAccess(appGen.permesso.GestioneRuoli) && authGuard.canAccess(appGen.permesso.ModificaUtente) ? item.disabled:''">
+                                                {{item.tipoUtente}}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="example-container">
+                                        <h2>Tipi utente assegnato</h2>
+
+                                        <div cdkDropList #doneList="cdkDropList"
+                                            [cdkDropListData]="tipiUtenteSelezionati"
+                                            [cdkDropListConnectedTo]="[todoList]" class="example-list"
+                                            (cdkDropListDropped)="drop($event)">
+                                            <div class="example-box" *ngFor="let item of tipiUtenteSelezionati" cdkDrag
+                                                [cdkDragDisabled]="authGuard.canAccess(appGen.permesso.GestioneRuoli) && authGuard.canAccess(appGen.permesso.ModificaUtente) ? item.disabled:''">
+                                                {{item.tipoUtente}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </mat-card-content>
+                    </div>
+                </ng-template>
+
+            </mat-tab>
+
+            <mat-tab [disabled]="!ospedaleCliccabile" > 
+                <ng-template mat-tab-label >
+                        <mat-icon class="material-icons-outlined">local_hospital</mat-icon>
+                        Ospedale
+                </ng-template>
+                <ng-template matTabContent>
+                    <div class="containerTab">
+                        <app-associazione-enti [tabEnte]="ruoli.Reparto"></app-associazione-enti>
+                    </div>
+                </ng-template>
+
+            </mat-tab>
+
+            <mat-tab [disabled]="!distrettoCliccabile"> 
+                <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">location_city</mat-icon>
+                        Distretti  
+                </ng-template>
+                <ng-template matTabContent>
+                    <div class="containerTab">
+                        <app-associazione-enti [tabEnte]="ruoli.Distretto"></app-associazione-enti>
+                    </div>
+                </ng-template>
+
+            </mat-tab>
+
+            <mat-tab [disabled]="!farmaciaCliccabile"> 
+                <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">store</mat-icon>
+                        Farmacia ospedaliera
+                </ng-template>
+                <ng-template matTabContent>
+                    <div class="containerTab">
+                        <app-associazione-enti [tabEnte]="ruoli.FarmaciaOspedaliera"></app-associazione-enti>
+
+                    </div>
+                </ng-template>
+
+            </mat-tab>
+
+        </mat-tab-group>
+    </div>
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px"
+        *ngIf="authGuard.canAccess(appGen.permesso.ModificaUtente)">
+
+
+
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit()" *ngIf="!isSaved">
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+
+    </div>
+</mat-card>

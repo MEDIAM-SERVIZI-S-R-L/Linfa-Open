@@ -1,0 +1,112 @@
+.numberPeople {
+    font-size: medium;
+    font-weight: 700;
+}
+
+.updateBtn {
+    float: right;
+    // width: 55px !important;
+    // min-width: 45px !important;
+    height: 30px !important;
+   // padding: unset !important;
+    line-height: 10px !important;
+    mat-icon {
+        margin: unset !important;
+    }
+    padding: 0 10px !important;
+    margin: 0 3px;
+}
+
+.keyTitle {
+    text-transform: capitalize;
+    color: #00afa6;
+    font-weight: 600;
+    font-size: large;
+    margin: 5px 0;
+}
+
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+mat-divider {
+    margin: unset !important;
+}
+
+.mainContainer {
+    margin: 0 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.iconBox {
+    mat-icon {
+        top: 60px;
+        right: 80px;
+        position: absolute;
+        font-size: 55px !important;
+        color: #dadada;
+    }
+}
+
+mat-card-title {
+    z-index: 1;
+    position: relative;
+    margin-bottom: unset !important;
+}
+
+.mat-card-content {
+    padding: 0px !important;
+}
+
+.mat-icon-people {
+    font-size: 43px !important;
+    vertical-align: middle !important;
+}
+
+.mat-content-position {
+    margin-left: 65px !important;
+    color: #00aed6;
+}
+.externalContent {
+    margin-left: 15px;
+}
+
+.box_bianco {
+    background: #ffffff 0% 0% no-repeat padding-box !important;
+    box-shadow: 0px 10px 20px #006a8141 !important;
+    border-radius: 20px !important;
+    opacity: 1 !important;
+    padding: 20px !important;
+    width: 275px;
+    // height: 120px;
+}
+
+.box_bianco_numero {
+    font-size: 35px !important;
+    color: #00afa6 !important;
+    font-weight: bold;
+}
+
+.box_bianco_titolo {
+    font-size: 19px !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+    white-space: pre-wrap;
+    width: 100%;
+    overflow-wrap: break-word;
+    min-height: 50px;
+}
+
+.btnAction button {
+    float: right;
+    background-color: #272f33;
+    cursor: pointer;
+}
+
+mat-card-content {
+    margin: 0px 5px;
+}

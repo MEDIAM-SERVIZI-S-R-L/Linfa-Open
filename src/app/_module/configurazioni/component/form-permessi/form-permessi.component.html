@@ -1,0 +1,85 @@
+<mat-card class="linfaCard">
+  <h3 class="title">Permessi</h3>
+
+  <mat-form-field>
+    <mat-label>Tipo permessi</mat-label>
+    <mat-select (selectionChange)="displaySelected($event)">
+      <mat-option [value]="0">
+        Permessi per ruoli
+      </mat-option>
+      <mat-option [value]="1">
+        Permessi per utenti
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <form [formGroup]="form" autocomplete="off">
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+      <mat-form-field class="full-width" fxFlex="30" *ngIf="tabPermessi == 0">
+        <mat-label>Tipo utente</mat-label>
+        <mat-select matNativeControl required formControlName="tipoUtente"
+          (selectionChange)="selectedRuolo($event.value)">
+          <mat-option>
+            <ngx-mat-select-search [formControl]="filtroRuolo" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+            </ngx-mat-select-search>
+        </mat-option>
+          <mat-option *ngFor="let tipo of listaRuoliFiltrata | async" [value]="tipo.id">
+            {{ tipo.tipoUtente }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" fxFlex="30" *ngIf="tabPermessi == 1">
+        <mat-label>Utente</mat-label>
+        <mat-select matNativeControl required formControlName="utente" (selectionChange)="selectedUtente($event.value)">
+          <mat-option>
+            <ngx-mat-select-search [formControl]="filtroUtenti" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+            </ngx-mat-select-search>
+        </mat-option>
+          <mat-option *ngFor="let utente of listaUtentiFiltrata | async" [value]="utente.idUtente">
+            {{ utente.nomeUtente }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-card>
+
+<mat-card class="linfaCard" *ngIf="listaPermessi.length > 0">
+  <ng-container *ngIf="listaPermessi.length >0">
+
+    <div *ngFor="let gruppo of listaPermessi; let i = index;" class="mainContainer">
+
+      <h3 class="keyTitle">{{gruppo.tipo}}</h3>
+      <mat-divider></mat-divider>
+      <div class="container" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" stretch="fill">
+        <div *ngFor="let item of gruppo.value; let j = index;" fxFlex="30" class="divcheckbox">
+          <mat-checkbox class="checkboxCust" [checked]="item.abilitato" [disabled]="item.disabled"
+            (change)="setValueCheck($event.checked,i,j)">
+            {{item.permesso}}
+          </mat-checkbox>
+
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngIf="listaPermessi.length>0">
+
+    <mat-divider id="dividerBtn"></mat-divider>
+    <div class="input-row" fxLayout="row-reverse" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px">
+
+
+      <button mat-raised-button color="primary" (click)="onSubmit()">
+        <mat-icon>save</mat-icon>
+        Salva
+      </button>
+
+    </div>
+
+  </ng-container>
+
+</mat-card>
+

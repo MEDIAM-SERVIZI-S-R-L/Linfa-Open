@@ -1,0 +1,84 @@
+<app-stepper [stepCorrente]="step" *ngIf="!isDettaglio && !stepRiepilogo  && !isRiepilogoVisita"></app-stepper>
+
+
+<div class="backBtn" *ngIf="!isRiepilogoVisita">
+    <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Indietro</span>
+  </button>
+</div>
+
+
+<ng-container *ngIf="!isMaggiorenne">
+
+    <div class="boxArea">
+        <app-tutore-minorenne (showPrivacyEmit)="showPrivacyEmit()" [isRiepilogoVisita]="isRiepilogoVisita">
+        </app-tutore-minorenne>
+    </div>
+</ng-container>
+
+<mat-card *ngIf="showPrivacy" id="privacy">
+    <mat-card-title>
+        <h3 class="title">Consenso informato
+
+            <div class="input-row checkboxDiv" *ngIf="!isRiepilogoVisita" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="20px">
+                <mat-hint>Selezionare il livello di consenso informato, dopodichè scaricare il modulo</mat-hint>
+            </div>
+        </h3>
+    </mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="formPrivacy" autocomplete="off">
+
+            <div class="boxArea">
+
+
+                <div class="input-row checkboxDiv" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="20px">
+                    <!-- <div > -->
+                    <!-- <mat-checkbox color="primary" class="checkPrivacy" #privacy (change)="checkedPrivacy($event.checked)"
+            formControlName="PrivacyFirmata">Documento
+            privacy firmato</mat-checkbox> -->
+
+
+                    <mat-form-field class="full-width" fxFlex>
+                        <mat-label>Consenso informato</mat-label>
+                        <mat-select matNativeControl required #privacy formControlName="Privacy" (selectionChange)="selectedPrivacy($event.value)">
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let livello of livelliPrivacy" [value]="livello.id">
+                                {{ livello.livelloPrivacy }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" (click)="moduloPrivacy()" *ngIf="!isRiepilogoVisita || !privacyFirmata">
+            Modulo consenso informato
+          </button>
+
+                    <mat-form-field class="full-width" fxFlex>
+                        <mat-label>Data firma consenso informato</mat-label>
+                        <input matInput type="text" [matDatepicker]="DataFirmaPrivacyPicker" readonly (focus)="DataFirmaPrivacyPicker.open()" [max]="appGen.today" required formControlName="DataFirmaPrivacy" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="DataFirmaPrivacyPicker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #DataFirmaPrivacyPicker></mat-datepicker>
+                        <mat-hint *ngIf="!isRiepilogoVisita && privacyFirmata && !appGen.isNullOrUndefined(validitaPrivacy)">Valido fino al {{this.validitaPrivacy}}</mat-hint>
+
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+<div class="cntrBtnRow" *ngIf="!privacyFirmata && showPrivacy" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="20px">
+    <mat-hint>Per proseguire è necessario compilare il consenso informato</mat-hint>
+</div>
+
+
+
+<!-- <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px"
+  *ngIf="privacyFirmata && showPrivacy && !isRiepilogoVisita"> -->
+
+<div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px" *ngIf="!isRiepilogoVisita">
+    <button mat-raised-button color="primary" style="float:right" (click)="goFoward()">
+    Prosegui
+    <mat-icon>navigate_next</mat-icon>
+
+  </button>
+
+</div>

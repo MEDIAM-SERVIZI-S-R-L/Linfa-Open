@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>
+    {{title}}
+</h1>
+
+<div mat-dialog-content>
+    <p [innerHTML]="message"></p>
+
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <mat-form-field class="full-width" fxFlex>
+            <mat-label>Motivo annullamento</mat-label>
+            <mat-select matNativeControl #TipiProdotto required (selectionChange)="setMotivoCancellazione($event.value)">
+                <mat-option *ngFor="let motivo of listaMotiviCancellazione" [value]="motivo.id">
+                    {{ motivo.motivoCancellazione }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button color="warn" (click)="onDismiss()">Annulla</button>
+    <button mat-raised-button color="primary" *ngIf="showConfirm" [mat-dialog-close]="true">Conferma</button>
+</div>

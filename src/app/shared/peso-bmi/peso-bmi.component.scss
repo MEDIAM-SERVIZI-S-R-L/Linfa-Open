@@ -1,0 +1,17 @@
+#slider {
+    margin-top: 20px !important;
+    margin-left: 20px;
+    span {
+        margin: 20px 10px
+    }
+}
+
+.selectPeriod {
+    margin: 5px !important
+}
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

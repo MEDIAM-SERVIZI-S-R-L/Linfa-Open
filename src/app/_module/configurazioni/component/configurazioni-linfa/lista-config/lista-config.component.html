@@ -1,0 +1,87 @@
+<mat-card class="linfaCard">
+  <h3 class="title">
+    Configurazioni
+  </h3>
+
+
+  <mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+      <button mat-raised-button color="primary" matTooltipPosition="after" class="btnTopCard" (click)="editProprieta()">
+        <mat-icon>add_circle_outline</mat-icon>
+        Aggiungi
+      </button>
+    </div>
+
+
+      <mat-form-field style="width: 100%; padding: 4px;">
+        <mat-label>Cerca</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+      </mat-form-field>
+
+    <mat-table id="table" [dataSource]="dataSource" matSortActive="proprieta" matSort>
+
+
+      <ng-container matColumnDef="proprieta">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Proprietà</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Proprietà" matTooltip="Modifica" style="cursor: pointer;"
+          (click)="editProprieta(item)">
+          {{item.proprieta}}
+        </mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="descrizione">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Descrizione</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Descrizione" [matTooltip]="item.descrizione">
+          <span class="truncate-text"> {{item.descrizione}}</span>
+        </mat-cell>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="valore">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Valore</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Valore" [matTooltip]="item.valore">
+          <span class="truncate-text"> {{item.valore}}</span>
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="abilitato">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Abilitato</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Abilitato">
+          <mat-icon color="primary" *ngIf="item.abilitato">done</mat-icon>
+          <mat-icon color="warn" *ngIf="!item.abilitato">close</mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="categoriaConfigurazione">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Categoria" [matTooltip]="item.valore">
+          <span class="truncate-text"> {{item.categoriaConfigurazione}}</span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pulsanti">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let item" class="pulsantiTab" style="justify-content:flex-end">
+
+          <mat-icon class="material-icons-outlined" matTooltip="Mostra anteprima referto" color="primary"
+            (click)="anteprimaReferto()" *ngIf="item.proprieta === appGen.proprietaConfig.Intestazione">
+            assignment
+          </mat-icon>
+          <mat-icon class="material-icons-outlined" matTooltip="Modifica" color="primary" (click)="editProprieta(item)">
+            edit
+          </mat-icon>
+
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="10" showFirstLastButtons
+      [pageSizeOptions]="[5, 10, 25, 50]">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

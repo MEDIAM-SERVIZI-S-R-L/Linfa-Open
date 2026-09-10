@@ -1,0 +1,20 @@
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+@import "/src/theme/table-responsive.scss";
+
+.mat-column-attivo {
+    flex: 0 0 6% !important;
+    mat-icon {
+        cursor: default;
+    }
+}
+
+.mat-column-pulsanti {
+    flex: 0 0 6% !important;
+}
+
+.mat-column-paziente {
+    flex: 0 0 16% !important;
+}
+.mat-column-cf {
+    flex: 0 0 18% !important;
+}

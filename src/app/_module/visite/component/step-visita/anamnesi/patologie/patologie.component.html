@@ -1,0 +1,20 @@
+<app-stepper [stepCorrente]="step" *ngIf="!isRiepilogoVisita"></app-stepper>
+
+<div class="backBtn" *ngIf="!isRiepilogoVisita">
+    <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Step precedente</span>
+  </button>
+</div>
+
+<app-lista-patologie [isRiepilogoVisita]="isRiepilogoVisita" (showBtnProsegui)="showBtnProseguiResult()"></app-lista-patologie>
+
+<mat-divider *ngIf="!isRiepilogoVisita && showBtnProsegui"></mat-divider>
+
+
+<div class="btnProsegui" *ngIf="!isRiepilogoVisita">
+    <button mat-raised-button color="primary" (click)="prosegui()" style="float:right;margin-left: 30px;">
+    Prosegui
+    <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+  </button>
+</div>

@@ -1,0 +1,36 @@
+
+<mat-card *ngIf="authGuard.canRole(appGen.ruolo.Medico) || authGuard.canRole(appGen.ruolo.Dietista)">
+  <mat-card-title>
+
+    <h3 class="title" *ngIf="authGuard.canAccess(appGen.permesso.AccessoConclusioni)">
+     Conclusioni</h3>
+  </mat-card-title>
+  <mat-card-content>
+
+
+      <angular-editor [(ngModel)]="diagnosiModel"
+        (ngModelChange)="modificabileForm && autoSaveEnabled? autoSave($event):null" [config]="editorConfig"
+        #editor required>
+        <ng-template #customButtons let-executeCommandFn="executeCommandFn">
+          <ae-toolbar-set>
+            <ae-button iconClass="fa fa-comments" title="Conclusioni Predefinite"
+              (buttonClick)="selectConclusioniPredefinite()">
+            </ae-button>
+
+
+          </ae-toolbar-set>
+          <ae-toolbar-set *ngIf="modificabileForm">
+
+
+            <ae-button [iconClass]="autoSaveEnabled?'fa fa-play-circle':'fa fa-pause-circle-o '" [title]="autoSaveEnabled?'Autosave attivo, fai click per disabilitarlo':'Autosave disabilitato, fai click per attivarlo'"
+            (buttonClick)="enableDisableAutoSave()">
+            </ae-button>
+          </ae-toolbar-set>
+
+        </ng-template>
+      </angular-editor>
+
+
+
+  </mat-card-content>
+</mat-card>

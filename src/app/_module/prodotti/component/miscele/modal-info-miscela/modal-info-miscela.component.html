@@ -1,0 +1,123 @@
+<h1 mat-dialog-title>
+    {{miscela.prodotto.prodotto}}
+</h1>
+
+<div mat-dialog-content>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="20px"
+        fxLayoutAlign="space-around start" fxLayoutAlign.lt-sm="none">
+
+        <div class="tableOverflow" fxFlex="100">
+            <table aria-label="tableSacca">
+                <tr>
+                    <th scope="header">Tipo prodotto</th>
+                    <td>{{miscela.prodotto.idTipoProdottoNavigation.tipoProdotto === null ? '-' :
+                        miscela.prodotto.idTipoProdottoNavigation.tipoProdotto}}</td>
+                </tr>
+                <tr>
+                    <th scope="header">Quantità base</th>
+                    <td>{{miscela.prodotto.quantita}} {{miscela.prodotto.unitaMisura}}</td>
+                </tr>
+                <tr>
+                    <th class="title" scope="title">Macroelementi</th>
+                </tr>
+                <tr>
+                    <th scope="title">Kcal</th>
+                    <td>{{miscela.prodotto.kcal}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Glucosio</th>
+                    <td>{{miscela.proprieta.glucosio === null ? '-': miscela.proprieta.glucosio + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Lipidi</th>
+                    <td>{{miscela.proprieta.lipidi === null ? '-': miscela.proprieta.lipidi + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Acqua</th>
+                    <td>{{miscela.proprieta.acqua === null ? '-': miscela.prodotto.acqua + ' ml'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Amminoacidi</th>
+                    <td>{{miscela.proprieta.amminoacidi=== null ? '-':miscela.proprieta.amminoacidi + ' g'}} </td>
+                </tr>
+
+                <tr>
+                    <th scope="title">Tipo amminoacidi</th>
+                    <td>{{miscela.proprieta.tipoAmminoacidi=== null ? '-':
+                        returnVal(miscela.proprieta.tipoAmminoacidi)}}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="title">Glutamina</th>
+                    <td>{{miscela.proprieta.acGlutamina=== null ? '-':miscela.proprieta.acGlutamina + ' %'}} </td>
+                </tr>
+                <tr>
+                    <th scope="title">AA Ramificati</th>
+                    <td>{{miscela.proprieta.acRamificati=== null ? '-':miscela.proprieta.acRamificati + ' %'}} </td>
+                </tr>
+                <tr>
+                    <th class="title" scope="title">Microelementi</th>
+                </tr>
+                <tr>
+                    <th scope="title">Sodio (Na)</th>
+                    <td>{{miscela.proprieta.sodio===null? '-':miscela.proprieta.sodio + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Cloro (Cl)</th>
+                    <td>{{miscela.proprieta.cloro===null? '-':miscela.proprieta.cloro + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Potassio (K)</th>
+                    <td>{{miscela.proprieta.potassio===null? '-':miscela.proprieta.potassio + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Calcio (Ca)</th>
+                    <td>{{miscela.proprieta.calcio===null? '-':miscela.proprieta.calcio + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Magnesio (Mg)</th>
+                    <td>{{miscela.proprieta.magnesio===null? '-':miscela.proprieta.magnesio + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title">Fosfato (PO3-4)</th>
+                    <td>{{miscela.proprieta.fosfato===null? '-':miscela.proprieta.fosfato + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title"> Zinco (Zn)</th>
+                    <td>{{miscela.proprieta.zinco===null? '-':miscela.proprieta.zinco + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th scope="title"> Selenio (Se)</th>
+                    <td>{{miscela.proprieta.selenio===null? '-':miscela.proprieta.selenio + ' mg'}}</td>
+                </tr>
+                <ng-container *ngIf="miscela.aggiunte.length>0">
+
+                    <tr>
+                        <th class="title" scope="title">Aggiunte</th>
+                    </tr>
+                    <tr *ngFor="let item of miscela.aggiunte">
+                        <th scope="title"> {{item.aggiunta}} - {{item.Tipo}} </th>
+                        <td>{{item.quantita===null? '-':item.quantita + ' ml'}}</td>
+                    </tr>
+                </ng-container>
+
+                <ng-container *ngIf="!appGen.isNullOrUndefined(miscela.proprieta.note)">
+
+
+                    <tr>
+                        <th class="title" scope="title">Note</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">{{miscela.proprieta.note}}</td>
+                    </tr>
+                </ng-container>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">Chiudi</button>
+</div>

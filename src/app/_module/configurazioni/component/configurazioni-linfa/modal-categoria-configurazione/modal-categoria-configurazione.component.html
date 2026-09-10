@@ -1,0 +1,44 @@
+<div mat-dialog-content class="container">
+    <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between;">
+        <h3 class="title">
+            {{Title}}
+        </h3>
+        <mat-icon (click)="closeDialog()" color="primary">close</mat-icon>
+    </div>
+
+    <form [formGroup]="formCategoria" class="form">
+
+        <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Categoria</mat-label>
+            <input required matInput #input formControlName="descrizione" (keyup.enter)="saveCategoria()"
+                class="note-input" />
+            <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="abilitato"
+         color="primary" fxFlex="30" 
+         style="margin-top: 12px;"
+         [disabled]="!data || listaConfigurazioniCoinvolte.length > 0">
+            Abilitato 
+        </mat-checkbox>
+    </form>
+
+    <div *ngIf="listaConfigurazioniCoinvolte.length > 0">
+        <strong class="warning">
+            <mat-icon color="accent">warning</mat-icon>
+            Impossibile disabilitare la categoria poichè è coinvolta nelle seguenti configurazioni</strong>
+        <ul class="lista-config">
+            <li *ngFor="let config of listaConfigurazioniCoinvolte">
+                {{config.proprieta}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="button-ctn">
+        <button mat-raised-button class="save-button" color="primary" (click)="saveCategoria()"
+          [disabled]="!formCategoria.valid || formCategoria.get('descrizione').value.trim() === ''">
+          <mat-icon>save</mat-icon>
+          Salva
+        </button>
+      </div>
+</div>

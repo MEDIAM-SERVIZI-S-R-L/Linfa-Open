@@ -1,0 +1,72 @@
+<div *ngFor="let gruppo of arrayCruscottiNew;let i=index;" class="mainContainer">
+  <!-- <ng-container *ngIf="gruppo.tipo === 'referti' && !authGuard.canAccess(this.appGen.permesso.FirmaDigitale) || !this.appGen.configLinfa.FirmaDigitaleAbilitata ? false: true"> -->
+    <ng-container *ngIf="gruppo.tipo === 'referti'">
+
+      <h3 class="keyTitle">{{gruppo.sezione}}
+
+
+          <button mat-raised-button color="primary" class="updateBtn" *ngIf="i==0" matTooltip="Aggiorna richieste" (click)="refresh()">
+
+              <mat-icon>sync</mat-icon>
+          </button>
+          <ng-container *ngIf="authGuard.canRole(appGen.ruolo.Reparto) || authGuard.canRole(appGen.ruolo.Distretto)">
+            <button mat-raised-button color="primary" class="updateBtn" [routerLink]="authGuard.canRole(appGen.ruolo.Reparto)?'../../richieste/nuova-orderentry':authGuard.canRole(appGen.ruolo.Distretto)?'../../richieste/nuova-distrettuale':'nuova'">
+              <mat-icon>add_circle_outline</mat-icon>
+            Nuova Richiesta
+          </button>
+          </ng-container>
+
+      </h3>
+      <mat-divider></mat-divider>
+  </ng-container>
+
+
+  <div class="container externalContent" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" stretch="fill">
+      <ng-container  *ngFor="let cruscotto of gruppo.value" >
+
+
+        <div [ngSwitch]="gruppo.sezione" *ngIf="(cruscotto.queryId === 9 && (!authGuard.canAccess(appGen.permesso.FirmaDigitale) || !appGen.configLinfa.FirmaDigitaleAbilitata )) || (cruscotto.queryId === 16 && !appGen.configLinfa.ModuloOrderEntry) || (cruscotto.queryId === 17 && !appGen.configLinfa.ModuloDistretto)? false: true">
+          <mat-card class="box_bianco" [ngStyle]="cruscotto.count >0 && {'cursor':'pointer'}" fxFlex [matTooltip]="cruscotto.count >0? 'Clicca per il dettaglio':''" >
+            <div (click)="detailCruscottoNew(cruscotto)">
+                <mat-card-title>
+                    <h3 class="box_bianco_titolo">{{cruscotto.titolo}}</h3>
+
+                </mat-card-title>
+
+                <div fxLayout="row wrap">
+
+
+                    <div class="box_bianco_numero">{{cruscotto.count}}</div>
+
+                    <div class="iconBox">
+                        <mat-icon *ngSwitchCase="'visite'" class="mat-icon-people material-icons-outlined">people
+                        </mat-icon>
+                        <mat-icon *ngSwitchCase="'referti'" class="mat-icon-people material-icons-outlined">
+                            assignment</mat-icon>
+                        <mat-icon *ngSwitchCase="'richieste'" class="mat-icon-people material-icons-outlined">
+                            perm_contact_calendar</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+        </div>
+      </ng-container>
+  </div>
+</div>
+
+<div class="container externalContent" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" stretch="fill">
+  <ng-container *ngIf="dashboardAssenti">
+    <mat-card>
+      <h3 class="title">
+        Non sono presenti dashboard per questo utente, verificare se quest'ultimo è associato correttamente a un ente, 
+        <br> oppure contattare il supporto
+      </h3>
+    </mat-card>
+  </ng-container>
+
+</div>
+
+
+
+
+

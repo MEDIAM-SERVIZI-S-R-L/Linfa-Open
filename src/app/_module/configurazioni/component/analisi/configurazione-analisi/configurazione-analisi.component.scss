@@ -1,0 +1,83 @@
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.title {
+  font-weight: bold;
+  color: #00afa6;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-weight: bold;
+  font-size: 18px;
+  color: #ff8a3d;
+  margin-bottom: 48px;
+  margin-left: 48px;
+}
+
+.button-interno-tabella {
+  padding-top: 64px;
+}
+
+.example-detail-row {
+  min-height: 0px;
+  border: none;
+}
+
+.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row {
+  border-bottom-width: 0.1px;
+  border-color: #efefef;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+}
+
+.tabella-interna-container {
+  width: 100%;
+  table-layout: fixed;
+  overflow: hidden;
+  height: auto;
+  min-height: fit-content;
+  margin-bottom: 12px;
+}
+
+.tabella-interna {
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: auto;
+  width: auto;
+  max-width: 90%;
+  padding-bottom: 48px;
+}
+
+.valori-container {
+  border: none;
+  min-width: 100%;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+.button-interno-tabella {
+  margin-right: 8%;
+}
+
+.filtri{
+  padding-left: 2px;
+}

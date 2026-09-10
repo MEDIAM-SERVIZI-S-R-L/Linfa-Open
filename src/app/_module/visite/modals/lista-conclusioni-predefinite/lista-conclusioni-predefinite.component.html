@@ -1,0 +1,51 @@
+
+<h1 mat-dialog-title>Lista conclusioni predefinite</h1>
+
+<div mat-dialog-content>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Filtra conclusione</mat-label>
+    <input matInput (keyup)="applyFilter($event)"  #filtraConclusione>
+  </mat-form-field>
+
+
+  <mat-table id="table" [dataSource]="conclusioniDataSource">
+
+
+
+
+    <ng-container matColumnDef="note">
+      <mat-header-cell *matHeaderCellDef>Conclusioni predefinite</mat-header-cell>
+
+      <mat-cell *matCellDef="let storico" data-label="Note">
+        <span class="truncate-text">{{storico.conclusione}}</span>
+      </mat-cell>
+    </ng-container>
+
+
+
+
+    <ng-container matColumnDef="pulsanti">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let storico" class="pulsantiTab"
+        style="justify-content:flex-end">
+
+
+        <mat-icon class="material-icons-outlined selectConclusione" (click)="selezioniConclusione(storico.conclusione)" matTooltip="Seleziona" color="primary" >edit
+                </mat-icon>
+
+
+
+
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="conclusioniViewsColumns"></mat-header-row>
+    <mat-row *matRowDef="let row;columns:conclusioniViewsColumns"></mat-row>
+  </mat-table>
+  <mat-paginator [length]="conclusioniDataSource.data?.length"
+  [pageSizeOptions]="[2,5, 10, 20]"
+                 showFirstLastButtons >
+  </mat-paginator>
+
+</div>

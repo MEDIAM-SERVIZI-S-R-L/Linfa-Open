@@ -1,0 +1,220 @@
+<!-- <ng-container *ngIf="idPaziente && !isRiepilogoStorico && !inRiepilogoComponent">
+    <app-cruscotto-paziente></app-cruscotto-paziente>
+</ng-container> -->
+<div class="backBtn" >
+    <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Torna alla valutazione nutrizionale</span>
+  </button>
+</div>
+
+<ng-container *ngIf="!isRiepilogoStorico && !inRiepilogoComponent">
+    <mat-accordion>
+        <mat-expansion-panel [ngClass]="(isRiepilogo || isRiepilogoStorico) && !bEdit ?  'accordionStep':'' ">
+            <!--expanded-->
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    Anagrafica
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-anagrafica [isRiepilogoVisita]="isRiepilogoVisita"></app-anagrafica>
+            </ng-template>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="appGen.configLinfa.PrivacyAbilitata">
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    Consenso informato
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-privacy [isRiepilogoVisita]="isRiepilogoVisita"></app-privacy>
+            </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    Caregivers
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-lista-caregiver [riepilogoCaregivers]="isRiepilogoVisita"></app-lista-caregiver>
+            </ng-template>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel>
+            <!--expanded-->
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    Valutazione nutrizionale
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-valutazione-nutrizionale [isRiepilogoVisita]="isRiepilogoVisita"></app-valutazione-nutrizionale>
+            </ng-template>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    Anamnesi alimentare
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+
+                <app-new-form-dieta [riepilogoVisitaAnamnesi]="true" [isRiepilogoVisita]="isRiepilogoVisita" [stepCorrente]="stepVisita.AnamnesiAlimentare">
+                </app-new-form-dieta>
+
+            </ng-template>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    <!-- MNA-NRS-Karnofsky-MUST -->
+                    Screening Nutrizionale
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-mna-karnofsky [isRiepilogoVisita]="isRiepilogoVisita"></app-mna-karnofsky>
+
+
+            </ng-template>
+
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title color="primary" class="title">
+                    Anamnesi
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-anamnesi-paziente [isRiepilogoVisita]="isRiepilogoVisita"></app-anamnesi-paziente>
+
+            </ng-template>
+
+        </mat-expansion-panel>
+
+
+
+
+    </mat-accordion>
+
+
+    <br>
+
+    <!-- <mat-divider></mat-divider> -->
+</ng-container>
+
+<mat-card *ngIf="authGuard.canRole(appGen.ruolo.Medico) && noteDietistaAssenti === false">
+    <mat-card-title>
+        <h3 class="title">Note dietista</h3>
+    </mat-card-title>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+    <mat-form-field class="full-width" fxFlex>
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3"
+        [formControl]="noteCompilate"
+            cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+    </div>
+    <div>
+        <span> <mat-icon color="primary" class="material-icons-outlined" style="vertical-align:bottom">info</mat-icon> Le note del dietista non compariranno in alcun documento per il paziente e saranno utilizzate</span><span style="font-weight: bold"> solamente per uso interno</span> <span>.</span>
+    </div>
+</mat-card>
+<!--
+<mat-card *ngIf="authGuard.canRole(appGen.ruolo.Medico) || authGuard.canRole(appGen.ruolo.Administrator)">
+    <mat-card-title>
+
+        <h3 class="title" *ngIf="authGuard.canAccess(appGen.permesso.AccessoConclusioni)">
+            Conclusioni</h3>
+    </mat-card-title>
+    <mat-card-content>
+
+        <div>
+            <ng-container *ngIf="!isRiepilogo && !isRiepilogoStorico && bEdit">
+                <div style="margin-bottom:10px;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                    <mat-hint>Seleziona una conclusione prefefinita oppure digita manualmente</mat-hint>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                    <mat-form-field class="full-width" fxFlex="65">
+                        <mat-label>Lista conclusioni predefinite</mat-label>
+                        <mat-select matNativeControl (selectionChange)="selectedConclusionePredefinita($event.value)">
+                            <mat-option *ngFor="let conclusione of listaConclusioniPredefinite" [value]="conclusione.conclusione" [matTooltip]="conclusione.conclusione">
+                                {{conclusione.conclusione}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <mat-divider></mat-divider>
+            </ng-container>
+            <angular-editor [(ngModel)]="diagnosiModel" [config]="editorConfig" id="editor" required></angular-editor>
+        </div>
+
+
+
+    </mat-card-content>
+</mat-card> -->
+
+<!-- note (Per utente dietista che non può concludere la visita) -->
+
+<!-- <mat-card *ngIf="authGuard.canRole(appGen.ruolo.Dietista)">
+    <mat-card-title>
+        <h3 class="title">Note dietista</h3>
+    </mat-card-title>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+    <mat-form-field class="full-width" fxFlex>
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3"
+        [formControl]="note"
+            cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+    </div>
+    <div>
+        <span> <mat-icon color="primary" class="material-icons-outlined" style="vertical-align:bottom">info</mat-icon> Le note del dietista non compariranno in alcun documento per il paziente e saranno utilizzate</span><span style="font-weight: bold"> solamente per uso interno</span> <span>.</span>
+    </div>
+</mat-card> -->
+
+
+<ng-container>
+    <!-- <mat-divider *ngIf="!isRiepilogoStorico && !inRiepilogoComponent"></mat-divider> -->
+    <div *ngIf="!isRiepilogoStorico  && !inRiepilogoComponent" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+
+        <ng-container *ngIf="inError">
+            <div fxLayout="row wrap" fxLayoutGap="5px">
+                <mat-icon color="warn">error</mat-icon>
+                <mat-error class="errorCustom" [innerHTML]="msgErrore"></mat-error>
+            </div>
+        </ng-container>
+        <button mat-raised-button color="primary" (click)="onSubmit()" *ngIf="bEdit && authGuard.canRole(appGen.ruolo.Medico)">
+      Salva
+      <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+    </button>
+
+    <button mat-raised-button color="primary" (click)="chiudiVisitaDietista()" *ngIf="bEdit && authGuard.canRole(appGen.ruolo.Dietista)">
+        Salva
+        <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+      </button>
+
+        <button mat-raised-button color="accent" (click)="bozzaReferto()" *ngIf="!bEdit">
+      Bozza referto
+      <mat-icon style="margin:unset !important">assignment</mat-icon>
+    </button>
+
+        <!-- <button mat-raised-button type="button" color="primary" (click)="modificaNutrizione()" *ngIf="!bEdit">
+      Modifica
+      <mat-icon style="margin:unset !important">edit</mat-icon>
+    </button> -->
+
+
+
+        <button mat-raised-button color="primary" (click)="concludiVisita()" *ngIf="!bEdit && isRiepilogo ">
+      <ng-container *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita)"> Concludi visita
+      </ng-container>
+      <ng-container *ngIf="authGuard.canRole(appGen.ruolo.Dietista)">
+        <mat-icon>rate_review</mat-icon>
+        Chiudi, da refertare</ng-container>
+      <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+    </button>
+    </div>
+</ng-container>

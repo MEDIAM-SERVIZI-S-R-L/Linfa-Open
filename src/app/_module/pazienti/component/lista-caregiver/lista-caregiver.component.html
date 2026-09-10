@@ -1,0 +1,88 @@
+<!-- <app-stepper [stepCorrente]="step" *ngIf="!isDettaglio && !stepRiepilogo"></app-stepper> -->
+
+<!--
+
+<div class="backBtn" *ngIf="!stepRiepilogo && isVisita">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div> -->
+
+<mat-card class="linfaCard">
+    <div fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px" class="cntrBtnRow">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after" *ngIf="!stepRiepilogo" (click)="nuovoCaregiver()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Nuovo caregiver
+        </button>
+    </div>
+    <mat-card-title>
+        <h3 class="title" *ngIf="!stepRiepilogo">
+            Caregivers
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <mat-table id="table" [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="gradoParentela">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Parentela</mat-header-cell>
+                <mat-cell *matCellDef="let caregiver" data-label="Parentela">{{caregiver.gradoParentela == null ? '-': caregiver.gradoParentela}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nome">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+                <mat-cell *matCellDef="let caregiver" data-label="Nome">{{caregiver.nome == null ? '-' :caregiver.nome }}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cognome">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Cognome</mat-header-cell>
+                <mat-cell *matCellDef="let caregiver" data-label="Cognome">{{caregiver.cognome == null ? '-' : caregiver.cognome}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="telefono">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Telefono</mat-header-cell>
+                <mat-cell *matCellDef="let caregiver" data-label="Telefono">{{caregiver.telefono == null ? '-' : caregiver.telefono}}
+                </mat-cell>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="pulsanti">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let caregiver" class="pulsantiTab" style="justify-content:flex-end">
+
+
+                    <mat-icon class="material-icons-outlined" matTooltip="Visualizza caregiver" (click)="dettaglioCaregiver(caregiver.idCaregiver)" color="primary" *ngIf="!stepRiepilogo">
+                        remove_red_eye
+                    </mat-icon>
+                    <mat-icon matTooltip="Elimina caregiver" (click)="eliminaCaregiver(caregiver.idCaregiver)" color="warn" *ngIf="!stepRiepilogo">delete
+                    </mat-icon>
+
+
+                </mat-cell>
+
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="caregiverViewsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row;columns:caregiverViewsColumns"></mat-row>
+        </mat-table>
+    </mat-card-content>
+
+</mat-card>
+
+<div fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px" class="cntrBtnRow">
+    <button mat-raised-button color="accent" (click)="goForward()" *ngIf="this.appGen.isNullOrUndefined(idVisita)">
+        Esci
+        <mat-icon>navigate_next</mat-icon>
+    </button>
+
+</div>
+
+<!-- <ng-container *ngIf="inserimentoCaregiver">
+
+    <app-form-caregiver  #caregiver (outputEmit)="backCaregiver()"></app-form-caregiver>
+</ng-container> -->

@@ -1,0 +1,46 @@
+<div mat-dialog-content>
+
+  <mat-icon class="exit-button" color="warn" (click)="closeDialog()">close</mat-icon>
+
+
+
+  <h3 class="title">{{title}}</h3>
+
+  <form [formGroup]="formOspedale" class="form">
+
+    <span class="note-span">
+      <mat-form-field class="full-width" fxFlex>
+        <mat-label>Descrizione</mat-label>
+        <input required matInput #input formControlName="descrizione" 
+        (keyup.enter)="saveOspedale($event)"
+        class="note-input"/>
+        <mat-error>Il campo non può essere vuoto</mat-error>
+      </mat-form-field>
+    </span>
+
+    <span class="note-span">
+      <mat-form-field class="full-width" fxFlex>
+        <mat-label>Codice</mat-label>
+        <input matInput #input formControlName="cod"
+        required
+        (keyup.enter)="saveOspedale($event)"
+        class="note-input"/>
+        <mat-error>Il campo non può essere vuoto</mat-error>
+
+      </mat-form-field>
+    </span>
+
+
+  </form>
+
+  <div>
+    <button mat-raised-button class="save-button" color="primary" (click)="saveOspedale($event)"
+      [disabled]="!formOspedale.valid">
+      <mat-icon>save</mat-icon>
+      Salva
+    </button>
+
+  </div>
+</div>
+
+

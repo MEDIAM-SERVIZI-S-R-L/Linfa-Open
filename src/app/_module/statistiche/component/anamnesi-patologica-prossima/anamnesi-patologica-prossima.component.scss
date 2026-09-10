@@ -1,0 +1,29 @@
+button {
+    cursor: pointer;
+}
+
+.btnUpdate {
+    float: right;
+    margin-left: 30px;
+    padding: 0 20px;
+    mat-icon {
+        font-size: 30px;
+    }
+}
+
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content,
+mat-button-toggle {
+    // padding: 0px 25px !important;
+    width: 100%;
+}
+
+.chart-container {
+    position: relative;
+}
+chart-legend {
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translateY(-50%);
+}
+

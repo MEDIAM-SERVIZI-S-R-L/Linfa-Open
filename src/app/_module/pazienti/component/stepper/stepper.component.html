@@ -1,0 +1,19 @@
+<mat-horizontal-stepper labelPosition="bottom" (click)="navigate(stepper.selectedIndex)" #stepper>
+    <mat-step>
+        <ng-template matStepLabel>Anagrafica</ng-template>
+    </mat-step>
+
+
+
+    <mat-step *ngIf="this.appGen.configLinfa.PrivacyAbilitata">
+        <ng-template matStepLabel>Consenso informato
+        </ng-template>
+    </mat-step>
+
+
+
+    <!-- <mat-step>
+        <ng-template matStepLabel>Riepilogo</ng-template>
+    </mat-step> -->
+
+</mat-horizontal-stepper>

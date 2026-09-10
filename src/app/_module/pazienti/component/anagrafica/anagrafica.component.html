@@ -1,0 +1,558 @@
+<app-stepper [stepCorrente]="step" *ngIf="isNuovaVisita && !isRiepilogoVisita && this.appGen.configLinfa.PrivacyAbilitata"></app-stepper>
+
+<div class="backBtn" *ngIf="!isNuovaVisita && !isRiepilogoVisita && !isRiepilogo">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+<app-cruscotto-paziente *ngIf="!isNuovaVisita && !isRiepilogoVisita "></app-cruscotto-paziente>
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">Anagrafica</h3>
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formAnagrafica" autocomplete="off" (emitChange)="onSubmit()">
+                <!-- AREA ANAGRAFICA UTENTE-->
+                <div class="anagraficaArea">
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Nome</mat-label>
+                            <input type="text" matInput required formControlName="Nome" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Cognome</mat-label>
+                            <input type="text" matInput required formControlName="Cognome" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Codice Fiscale</mat-label>
+                            <input type="text" matInput id="cfInput" required formControlName="CF" autocomplete="off">
+
+                            <mat-error *ngIf="!formAnagraficaControls['CF'].hasError('required') && formAnagraficaControls['CF'].hasError('pattern')">
+                                <strong>Codice Fiscale</strong> non valido
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Sesso</mat-label>
+                            <mat-select matNativeControl required formControlName="Sesso">
+                                <mat-option *ngFor="let gender of appGen.GenderType" [value]="gender.abbrev">
+                                    {{ gender.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Data di nascita</mat-label>
+                            <input matInput type="text" [leadZeroDateTime]="true" mask="d0/M0/0000" 
+                            [keepCharacterPositions]="true" [showMaskTyped]="true" [dropSpecialCharacters]="false" [max]="appGen.today" required formControlName="DataNascita" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="DataNascitaPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DataNascitaPicker [disabled]="isRiepilogoVisita"></mat-datepicker>
+                            <input [matDatepicker]="DataNascitaPicker" [max]="appGen.today" (dateChange)="changeDate($event.value,'dataNascita')" style="width: 1px;height: 1px;position:absolute;left:0;visibility: hidden;display: none;">
+                        </mat-form-field>
+                        <!--inserire un input nascosto per datpicker che cambia il vaolore del input quando vienie inserito nel input normale con FormName inserire-->
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Data del decesso</mat-label>
+                            <input matInput type="text" formControlName="DataDecesso" autocomplete="off" [leadZeroDateTime]="true" mask="d0/M0/0000" [showMaskTyped]="true"  [keepCharacterPositions]="true" [dropSpecialCharacters]="false">
+
+                            <mat-datepicker-toggle matSuffix [for]="DataDecessoPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DataDecessoPicker [disabled]="isRiepilogoVisita"></mat-datepicker>
+                            <input [matDatepicker]="DataDecessoPicker" [max]="appGen.today" (dateChange)="changeDate($event.value,'dataDecesso')" style="width: 1px;height: 1px;position:absolute;left:0;visibility: hidden;display: none;">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-row checkboxDiv" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-checkbox color="primary" fxFlex="30" (change)="natoEstero($event)" [checked]="estero" [disabled]="isRiepilogoVisita">Nato all'estero</mat-checkbox>
+
+                        <mat-checkbox
+                        [checked]="ricercaTramiteComuneXNascita === true"
+                        (change)="statusRicercaComune(tipoIndirizzo.Nascita)"
+                        *ngIf="!estero"
+                        [disabled]="isRiepilogoVisita"
+                        >
+                            Ricerca tramite il comune
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Regione di nascita</mat-label>
+                            <mat-select matNativeControl formControlName="RegioneNascita" [disabled]="estero || ricercaTramiteComuneXNascita" (selectionChange)="setProvincia($event.value,tipoIndirizzo.Nascita)">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroRegioniNascita" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let regione of regioniNascitaFiltrate | async" [value]="regione.idRegione">
+                                    {{ regione.regione }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>
+                                {{estero?'Paese di nascita':'Provincia di nascita'}}
+
+
+                            </mat-label>
+                            <mat-select matNativeControl formControlName="ProvinciaNascita" (selectionChange)="setComuni($event.value,tipoIndirizzo.Nascita)" [disabled]="estero || ricercaTramiteComuneXNascita">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroProvinciaNascita" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let provincia of provinceNascitaFiltrate | async" [value]="provincia.idProvincia">
+                                    {{ provincia.provincia }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30" [style]="!ricercaTramiteComuneXNascita? 'display: inline' : 'display: none'">
+                            <mat-label>
+                                {{estero?'Nazione di nascita':'Comune di nascita'}}
+                            </mat-label>
+                            <mat-select matNativeControl formControlName="ComuneNascita">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroComuneNascita" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let comune of comuniNascitaFiltrate  | async " [value]="comune.idComune">
+                                    {{ comune.comune }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30"
+                        *ngIf="!estero"
+                         [style]="ricercaTramiteComuneXNascita? 'display: inline' : 'display: none'">
+                            <mat-label>
+                                Comune di nascita
+                            </mat-label>
+                            <mat-select matNativeControl 
+                            (selectionChange)="setDatiNascitaDaComune($event.value)"
+                            formControlName="ComuneNascita">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroComuneNascitaXDescr" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let comune of comuniNascitaFiltrate  | async " [value]="comune">
+                                    {{ comune.comune }} ({{comune.provincia}})
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- AREA LUOGO RESIDENZA E DOMICILIO-->
+                <div class="boxArea">
+
+                    <h3 class="subTitle">Residenza</h3>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <div class="check-container">
+                            <mat-checkbox
+                            [checked]="ricercaTramiteComuneXResidenza === true"
+                            (change)="statusRicercaComune(tipoIndirizzo.Residenza)"
+                            [disabled]="isRiepilogoVisita"
+                            >
+                                Ricerca tramite il comune
+                            </mat-checkbox>
+                        </div>
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Regione di residenza</mat-label>
+                            <mat-select matNativeControl formControlName="RegioneResidenza"
+                             required (selectionChange)="setProvincia($event.value,tipoIndirizzo.Residenza)"
+                             [disabled]="ricercaTramiteComuneXResidenza">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroRegioniResidenza" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let regione of regioniResidenzaFiltrate | async" [value]="regione.idRegione">
+                                    {{ regione.regione }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Provincia di residenza</mat-label>
+                            <mat-select matNativeControl formControlName="ProvinciaResidenza"
+                             required (selectionChange)="setComuni($event.value,tipoIndirizzo.Residenza)"
+                             [disabled]="ricercaTramiteComuneXResidenza">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroProvinciaResidenza" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let provincia of provinceResidenzaFiltrate | async" [value]="provincia.idProvincia">
+                                    {{ provincia.provincia }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <div class="full-width" fxFlex="30">
+                            <mat-form-field class="full-width" [style]="!ricercaTramiteComuneXResidenza? 'display: inline' : 'display: none'">
+                                <mat-label>Comune di residenza</mat-label>
+                                <mat-select matNativeControl formControlName="ComuneResidenza"
+                                 required
+                                 (selectionChange)="setCap($event.value,tipoIndirizzo.Residenza)">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="filtroComuneResidenza" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let comune of comuniResidenzaFiltrate | async" [value]="comune.idComune">
+                                        {{ comune.comune }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            
+                        <mat-form-field class="full-width"  [style]="ricercaTramiteComuneXResidenza? 'display: inline' : 'display: none'">
+                            <mat-label>Comune di residenza</mat-label>
+                            <mat-select matNativeControl formControlName="ComuneResidenza"
+                             required (selectionChange)="setDatiResidenzaDaComune($event.value)">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="filtroComuneResidenzaXDescr" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let comune of comuniResidenzaFiltrate | async" [value]="comune">
+                                    {{ comune.comune }} ({{comune.provincia}})
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Indirizzo di residenza</mat-label>
+                            <input type="text" matInput required formControlName="IndirizzoResidenza" autocomplete="off">
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Cap di residenza</mat-label>
+                            <input type="text" matInput maxLength="5" formControlName="CapResidenza" digitOnly [allowPaste]="true" autocomplete="off">
+
+                        </mat-form-field>
+                    </div>
+
+                    <div class="input-row checkboxDiv" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-checkbox color="primary" fxFlex="30" (change)="sameAddressCheck($event)" [disabled]="isRiepilogoVisita" [checked]="isSameAdress">Domicilio = Residenza
+                        </mat-checkbox>
+                    </div>
+
+                    <ng-container *ngIf="!isSameAdress">
+                        <h3 class="subTitle">Domicilio</h3>
+                        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <div class="check-container">
+                                <mat-checkbox
+                                [checked]="ricercaTramiteComuneXDomicilio === true"
+                                (change)="statusRicercaComune(tipoIndirizzo.Domicilio)"
+                                [disabled]="isRiepilogoVisita"
+                                >
+                                    Ricerca tramite il comune
+                                </mat-checkbox>
+                            </div>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Regione di domicilio</mat-label>
+                                <mat-select matNativeControl formControlName="RegioneDomicilio" (selectionChange)="setProvincia($event.value,tipoIndirizzo.Domicilio)" 
+                                 [required]="!isSameAdress"
+                                 [disabled]="ricercaTramiteComuneXDomicilio">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="filtroRegioniDomicilio" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let regione of regioniDomicilioFiltrate | async" [value]="regione.idRegione">
+                                        {{ regione.regione }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Provincia di domicilio</mat-label>
+                                <mat-select matNativeControl formControlName="ProvinciaDomicilio" (selectionChange)="setComuni($event.value,tipoIndirizzo.Domicilio)" 
+                                [required]="!isSameAdress"
+                                [disabled]="ricercaTramiteComuneXDomicilio">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="filtroProvinciaDomicilio" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let provincia of provinceDomicilioFiltrate | async" [value]="provincia.idProvincia">
+                                        {{ provincia.provincia }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <div class="full-width" fxFlex="30">
+
+                                <mat-form-field class="full-width" [style]="!ricercaTramiteComuneXDomicilio? 'display: inline' : 'display: none'">
+                                    <mat-label>Comune di domicilio</mat-label>
+                                    <mat-select matNativeControl formControlName="ComuneDomicilio" [required]="!isSameAdress" (selectionChange)="setCap($event.value,tipoIndirizzo.Domicilio)">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="filtroComuneDomicilio" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let comune of comuniDomicilioFiltrate | async" [value]="comune.idComune">
+                                            {{ comune.comune }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+
+                                <mat-form-field class="full-width" [style]="ricercaTramiteComuneXDomicilio? 'display: inline' : 'display: none'">
+                                    <mat-label>Comune di domicilio</mat-label>
+                                    <mat-select matNativeControl formControlName="ComuneDomicilio" [required]="!isSameAdress"
+                                     (selectionChange)="setDatiDomicilioDaComune($event.value)">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="filtroComuneDomicilioXDescr" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let comune of comuniDomicilioFiltrate | async" [value]="comune">
+                                            {{ comune.comune }} ({{comune.provincia}})
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </div>
+
+                        </div>
+                        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Indirizzo di domicilio</mat-label>
+                                <input type="text" matInput formControlName="IndirizzoDomicilio" autocomplete="off" [required]="!isSameAdress">
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Cap di domicilio</mat-label>
+                                <input type="text" matInput maxLength="5" formControlName="CapDomicilio" digitOnly [allowPaste]="true" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <!-- AREA CONTATTI-->
+                <div class="boxArea">
+                    <h3 class="subTitle">Contatti</h3>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" style="display: flex; flex-direction: row; justify-content: flex-end;">
+                        <mat-checkbox
+                        [checked]="mailAssente === true"
+                        (change)="statusMail(false)"
+                        [disabled]="isRiepilogoVisita"
+                        matTooltip="Il paziente non possiede una mail propria oppure preferisce non comunicarla">
+                            Mail assente 
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Telefono</mat-label>
+                            <input type="text" matInput formControlName="Telefono1" autocomplete="off">
+
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Telefono 2</mat-label>
+                            <input type="text" matInput formControlName="Telefono2" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Email</mat-label>
+                            <input type="text" matInput formControlName="Email" autocomplete="off">
+                            <mat-error>mail non valida</mat-error>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+
+
+                <!-- AREA INFO (lavorativa e/studio)-->
+                <div class="boxArea">
+                    <h3 class="subTitle">Altre informazioni</h3>
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Stato civile</mat-label>
+                            <mat-select matNativeControl formControlName="StatoCivile">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let stato of listaStatoCivile" [value]="stato.id">
+                                    {{ stato.statoCivile }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Convivenza</mat-label>
+                            <mat-select matNativeControl formControlName="Convivenza">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let convivenza of listaConvivenze" [value]="convivenza.id">
+                                    {{ convivenza.convivenza }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Altra convivenza</mat-label>
+                            <input type="text" matInput formControlName="AltraConvivenza" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Componenti nucleo familiare</mat-label>
+                            <mat-select matNativeControl formControlName="nNucleoFamiliare">
+                                <mat-option>-</mat-option>
+                                <mat-option *ngFor="let i of listaNucleoFamiliare" [value]="i">
+                                    {{i}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Titolo di studio</mat-label>
+                            <mat-select matNativeControl formControlName="TitoloStudio">
+                                <mat-option>-</mat-option>
+                                <mat-option *ngFor="let titolo of listaTitoliStudio" [value]="titolo.id">
+                                    {{ titolo.titoloStudio }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>MMG</mat-label>
+                            <input type="text" matInput formControlName="MMG" autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Codice esenzione</mat-label>
+                            <input type="text" #input matInput maxlength="10" formControlName="CodiceEsenzione" autocomplete="off">
+                            <mat-hint align="end">{{input.value.length}}/10</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Occupazione attuale</mat-label>
+                            <input type="text" matInput formControlName="OccupazioneAttuale" autocomplete="off">
+                            
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <!-- *INFO:  Per vedere la privacy deve essere presente ID Paziente quindi non sara accessibile in "Nuovo paziente"-->
+                <div class="boxArea" *ngIf="!isNuovaVisita && idPaziente && !isRiepilogoVisita && !idPaziente && appGen.configLinfa.PrivacyAbilitata">
+                    <h3 class="subTitle">Consenso informato</h3>
+
+
+                    <div class="input-row checkboxDiv" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="20px">
+                        <!-- <div > -->
+                        <!-- <mat-checkbox color="primary" class="checkPrivacy" #privacy (change)="checkedPrivacy($event.checked)"
+                      formControlName="PrivacyFirmata">Documento
+                      privacy firmato</mat-checkbox> -->
+
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <mat-label>Consenso informato</mat-label>
+                            <mat-select matNativeControl #privacy  formControlName="Privacy" (selectionChange)="($event.value)">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let livello of livelliPrivacy" [value]="livello.id">
+                                    {{ livello.livelloPrivacy }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" type="button" (click)="moduloPrivacy()" *ngIf="!isRiepilogoVisita || !privacyFirmata">
+                            Modulo consenso informato
+                        </button>
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <mat-label>Data firma consenso informato</mat-label>
+                            <input matInput type="text" [matDatepicker]="DataFirmaPrivacyPicker" readonly (focus)="DataFirmaPrivacyPicker.open()" [max]="appGen.today" formControlName="DataFirmaPrivacy" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="DataFirmaPrivacyPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DataFirmaPrivacyPicker></mat-datepicker>
+                            <mat-hint *ngIf="isRiepilogo && !isRiepilogoVisita && privacyFirmata && !appGen.isNullOrUndefined(validitaPrivacy)">
+                                Valido fino al {{this.validitaPrivacy}}</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+
+                    <!-- <div class="input-row checkboxDiv" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+                        <div fxFlex="30"  >
+                            <mat-checkbox color="primary" class="checkPrivacy" #privacy
+                                (change)="checkedPrivacy($event.checked)" formControlName="PrivacyFirmata">Documento
+                                privacy firmato</mat-checkbox>
+
+                        </div>
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="privacy.checked">
+                            <mat-label>Data firma privacy</mat-label>
+                            <input matInput type="text" [matDatepicker]="DataFirmaPrivacyPicker" readonly
+                                (focus)="DataFirmaPrivacyPicker.open()" [max]="appGen.today" required
+                                formControlName="DataFirmaPrivacy" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="DataFirmaPrivacyPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DataFirmaPrivacyPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div> -->
+                </div>
+
+            </form>
+        </div>
+
+    </mat-card-content>
+    <ng-container *ngIf="!isRiepilogoVisita">
+
+        <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+            <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(false)">
+                <mat-icon>save</mat-icon>
+                Salva
+            </button>
+        </div>
+    </ng-container>
+</mat-card>
+
+
+<ng-container *ngIf="isNuovaVisita">
+
+    <mat-divider id="dividerCustom"></mat-divider>
+
+    <app-lista-caregiver [riepilogoCaregivers]="isRiepilogoVisita" 
+    [hidden]="isRiepilogoVisita"></app-lista-caregiver>
+
+
+    <ng-container *ngIf="!isRiepilogoVisita">
+        <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+
+
+
+            <button mat-raised-button color="primary" (click)="onSubmit(true)">
+                <mat-icon>save</mat-icon>
+
+                <ng-container *ngIf="isNuovaVisita">{{isNuovaVisita?'Salva e prosegui':'Salva'}}</ng-container>
+
+
+            </button>
+
+            <button mat-raised-button color="accent" *ngIf="isNuovaVisita" (click)="goFoward()">
+
+                <ng-container> Prosegui senza salvare</ng-container>
+                <mat-icon>keyboard_arrow_right</mat-icon>
+
+            </button>
+
+        </div>
+
+    </ng-container>
+
+</ng-container>

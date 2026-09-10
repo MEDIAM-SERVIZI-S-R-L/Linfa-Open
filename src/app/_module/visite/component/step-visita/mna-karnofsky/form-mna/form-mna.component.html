@@ -1,0 +1,100 @@
+<mat-card class="linfaCard">
+    <mat-card-content>
+        <div class="container">
+
+            <div class="container" fxflexfill>
+
+                <h3 class="subTitle">Screening</h3>
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-sm="15px">
+                    <ng-container *ngFor="let domanda of listaScreening; let i = index;">
+                        <mat-form-field class="full-width" fxFlex.gt-sm="45" fxFlex.sm="45" fxFlex.lt-sm="100"
+                            class="formSelect" [matTooltip]="domanda.domanda">
+                            <mat-label>{{domanda.domanda}}</mat-label>
+                            <mat-select matNativeControl required (selectionChange)="selectRispostaScreening(i,$event)"
+                                [disabled]="isRiepilogoVisita" [value]="domanda.idRispostaSelezionata">
+                                <mat-option>-</mat-option>
+                                <mat-option [value]="risposta.id" *ngFor="let risposta of domanda.xRisposte">
+                                    {{ risposta.risposta }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint style="color: red;font-size: smaller;" *ngIf="arrayErroriScreening[i]">Nessuna
+                                risposta
+                                selezionata</mat-hint>
+
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="container" fxflexfill *ngIf="showGlobale">
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-sm="15px">
+                    <ng-container *ngFor="let domanda of listaGlobale; let i = index;">
+
+                        <mat-form-field class="full-width" fxFlex.gt-sm="45" fxFlex.sm="45" fxFlex.lt-sm="100"
+                            class="formSelect" [matTooltip]="domanda.domanda">
+                            <mat-label>{{domanda.domanda}}</mat-label>
+                            <mat-select matNativeControl required (selectionChange)="selectRispostaGlobale(i,$event)"
+                                [disabled]="isRiepilogoVisita" [value]="domanda.idRispostaSelezionata">
+                                <mat-option>-</mat-option>
+                                <mat-option [value]="risposta.id" *ngFor="let risposta of domanda.xRisposte">
+                                    {{ risposta.risposta }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint style="color: red;font-size: smaller;" *ngIf="arrayErroriGlobale[i]">Nessuna
+                                risposta
+                                selezionata</mat-hint>
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+            </div>
+
+
+
+            <div id="valutazioniDiv" *ngIf="showValutazioni">
+                <mat-card fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px"
+                    class="mat-elevation-z8 boxValutazioni">
+                    <div>
+                        <mat-hint>A --> F</mat-hint>
+                        <h3>Valutazione screening
+                        </h3>
+                        <span class="resValutazioni"> {{valutazioneScreening}} </span>
+
+                    </div>
+                    <div *ngIf="showGlobale && valutazioneGlobale >0">
+                        <mat-hint>G --> R</mat-hint>
+                        <h3>Valutazione globale
+                        </h3>
+                        <span class="resValutazioni"> {{valutazioneGlobale}} </span>
+                    </div>
+                    <div *ngIf="showGlobale && valutazioneGlobale >0">
+                        <mat-hint>V. screening + V. globale</mat-hint>
+
+                        <h3>Valutazione totale
+                        </h3>
+                        <span class="resValutazioni"> {{valutazioneTotale}} </span>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <h3>Descrizione valutazione:
+                            <span class="DescrVal"> {{descrizioneValutazione}} </span>
+
+                        </h3>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="primary" class="btnFooterCard" *ngIf="!isRiepilogoVisita" (click)="onSubmit()">
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+
+    </div>
+</mat-card>

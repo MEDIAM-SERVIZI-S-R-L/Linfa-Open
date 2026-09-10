@@ -1,0 +1,210 @@
+<!-- <mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title">Configurazione Linfa</h3>
+
+
+
+
+    </mat-card-title>
+    <mat-card-content>
+
+
+        <div class="container" fxflexfill>
+
+            <mat-tab-group mat-align-tabs="start" animationDuration="1000ms" md-stretch-tabs>
+
+
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">settings_applications</mat-icon>
+                        Configurazioni
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+                            <app-lista-config></app-lista-config>
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">lock</mat-icon>
+                        Permessi
+                    </ng-template>
+
+                    <mat-accordion #accordionPanel>
+
+                        <mat-expansion-panel>
+
+                            <mat-expansion-panel-header>
+                                <mat-panel-title color="primary" class="title">
+                                    <ng-container>Permessi per ruoli</ng-container>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+
+                                <div class="containerTab">
+
+                                    <app-form-permessi [tabPermessi]="0"></app-form-permessi>
+
+                                </div>
+
+
+                            </ng-template>
+                        </mat-expansion-panel>
+
+
+                        <mat-expansion-panel>
+
+                            <mat-expansion-panel-header>
+                                <mat-panel-title color="primary" class="title">
+                                    <ng-container>Permessi per utenti</ng-container>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+
+
+                                <div class="containerTab">
+
+                                    <app-form-permessi [tabPermessi]="1"></app-form-permessi>
+                                </div>
+
+
+                            </ng-template>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+
+                </mat-tab>
+
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">assignment</mat-icon>
+                        Gestione predefinite
+                    </ng-template>
+
+                    <mat-accordion multi>
+
+                        <mat-expansion-panel>
+
+                            <mat-expansion-panel-header>
+                                <mat-panel-title color="primary" class="title">
+                                    <ng-container>Conclusioni predefinite</ng-container>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+
+                                <div class="containerTab">
+
+                                    <app-form-conclusioni-predefinite></app-form-conclusioni-predefinite>
+
+                                </div>
+
+                            </ng-template>
+                        </mat-expansion-panel>
+
+
+
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title color="primary" class="title">
+                                    <ng-container>Metodi assunzione integratori</ng-container>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+                                <div class="containerTab">
+
+                                    <app-form-metodo-assunzione></app-form-metodo-assunzione>
+
+                                </div>
+
+                            </ng-template>
+                        </mat-expansion-panel>
+
+
+                        <mat-expansion-panel>
+
+                            <mat-expansion-panel-header>
+                                <mat-panel-title color="primary" class="title">
+                                    <ng-container>Note nutrizionali predefinite</ng-container>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ng-template matExpansionPanelContent>
+
+                                <div class="containerTab">
+
+                                    <app-form-note-predefinite></app-form-note-predefinite>
+
+                                </div>
+
+                            </ng-template>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+
+
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">rule</mat-icon>
+                        Proprietà kcal-base
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+
+                            <app-lista-proprieta></app-lista-proprieta>
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">inventory_2</mat-icon>
+                        Prodotti-Gare
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+                            <app-lista-prodotti-gare></app-lista-prodotti-gare>
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">report</mat-icon>
+                        Log sistema
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+
+                            <app-lista-log></app-lista-log>
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+            </mat-tab-group>
+
+
+
+        </div>
+
+
+
+
+    </mat-card-content>
+
+
+
+
+
+</mat-card> -->

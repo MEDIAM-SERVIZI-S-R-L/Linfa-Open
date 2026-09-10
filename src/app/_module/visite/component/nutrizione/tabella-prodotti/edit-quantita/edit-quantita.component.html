@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>
+  Prodotto {{prodotto}}
+</h1>
+
+<div mat-dialog-content>
+  <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+    <mat-form-field class="full-width" fxFlex>
+      <mat-label>Quantità</mat-label>
+      <input type="text" matInput [(ngModel)]="quantita" required maxlength="4" autocomplete="off">
+      <span matSuffix class="suffix">ml</span>
+    </mat-form-field>
+  </div>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+  <button mat-raised-button class="cancelBtn" (click)="onDismiss()">Annulla</button>
+  <button mat-raised-button color="primary" (click)="confirm()">Conferma</button>
+</div>

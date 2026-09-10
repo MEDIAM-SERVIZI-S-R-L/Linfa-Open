@@ -1,0 +1,41 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova anamnesi patologica remota</ng-container>
+            <ng-container *ngIf="isRiepilogo">Dettaglio anamnesi patologica remota</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formAnamnesiPatologicaRemota" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <mat-label>Patologia</mat-label>
+
+                            <textarea matInput formControlName="patologia" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                                cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px"
+        fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

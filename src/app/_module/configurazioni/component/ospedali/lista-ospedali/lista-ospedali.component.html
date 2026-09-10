@@ -1,0 +1,64 @@
+<mat-card class="linfaCard">
+
+  <div class="container">
+
+    <h3 class="title">Ospedali</h3>
+
+    <mat-card-content>
+
+
+
+    <div class="filtri">
+      <mat-form-field class="full-width" fxflex>
+        <mat-label>Cerca</mat-label>
+        <input matInput type="text" (keyup)="applyFilter($event)" #input>
+      </mat-form-field>
+    </div>
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+
+      <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after" (click)="addOspedale()">
+        <mat-icon>add</mat-icon>
+        Nuovo ospedale
+      </button>
+    </div>
+
+    <mat-table [dataSource]="dataSource" multiTemplateDataRows id="table">
+
+      <ng-container matColumnDef="descrizione">
+        <mat-header-cell *matHeaderCellDef>Descrizione</mat-header-cell>
+        <mat-cell *matCellDef="let element" (click)="goToReparti(element)" class="caselle"
+          matTooltip="Clicca per reparti">
+          {{element.descrizione}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cod">
+        <mat-header-cell *matHeaderCellDef>Codice</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.cod}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="buttons">
+
+          <mat-icon class="material-icons-outlined" matTooltip="Modifica" color="black" style="margin: 4px;"
+            (click)="editOspedale(element, $event)">edit</mat-icon>
+
+          <mat-icon class="material-icons-outlined" matTooltip="Elimina" color="warn" style="margin: 4px;"
+            (click)="deleteOspedale(element, $event)">delete</mat-icon>
+
+          <mat-icon class="material-icons-outlined" matTooltip="Reparti" color="primary" style="margin: 4px;"
+            (click)="goToReparti(element)">visibility</mat-icon>
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator class="paginator" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons>
+    </mat-paginator>
+    </mat-card-content>
+  </div>
+</mat-card>

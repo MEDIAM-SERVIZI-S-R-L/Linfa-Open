@@ -1,0 +1,81 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title">Patologie</h3>
+
+        <button mat-raised-button color="primary" matTooltipPosition="after" *ngIf="!isRiepilogoVisita" (click)="nuovoPatologia()">
+      <mat-icon>add_circle_outline</mat-icon>
+      <!-- Nuovo patologia -->Aggiungi
+    </button>
+
+    </mat-card-title>
+    <ng-container *ngIf="patologieDataSource.data.length > 0">
+
+        <mat-card-content>
+
+            <mat-table id="table" [dataSource]="patologieDataSource">
+
+                <ng-container matColumnDef="patologia">
+                    <mat-header-cell *matHeaderCellDef>Patologia</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Patologia">{{patologia.patologia }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="primaria">
+                    <mat-header-cell *matHeaderCellDef>Primaria</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Primaria">
+                        <mat-icon color="primary" *ngIf="patologia.primaria">done</mat-icon>
+                        <ng-container *ngIf="!patologia.primaria">-</ng-container>
+
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="cronica">
+                    <mat-header-cell *matHeaderCellDef>Cronica</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Cronica">
+
+                        <mat-icon color="primary" *ngIf="patologia.cronica">done</mat-icon>
+                        <ng-container *ngIf="!patologia.cronica">-</ng-container>
+
+
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="stress">
+                    <mat-header-cell *matHeaderCellDef>Stress</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Dal Al">{{patologia.stress}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="trauma">
+                    <mat-header-cell *matHeaderCellDef>Trauma</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Trauma">{{patologia.trauma}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="attivita">
+                    <mat-header-cell *matHeaderCellDef>Attività</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Attività">{{patologia.attivita}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="terapia">
+                    <mat-header-cell *matHeaderCellDef>Terapia</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Terapia">{{patologia.terapia}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="periodo">
+                    <mat-header-cell *matHeaderCellDef>Dal Al</mat-header-cell>
+                    <mat-cell *matCellDef="let patologia" data-label="Dal Al">{{patologia.dal| date: 'dd/MM/yyyy'}} - {{patologia.al| date: 'dd/MM/yyyy'}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let patologia" style="justify-content:flex-end">
+
+                        <mat-icon class="material-icons-outlined" *ngIf="!isRiepilogoVisita" matTooltip="Dettaglio patologia" (click)="dettaglioPatologia(patologia.id)" color="primary">remove_red_eye
+                        </mat-icon>
+                        <mat-icon *ngIf="!isRiepilogoVisita" matTooltip="Elimina patologia" (click)="delete(patologia.id)" color="warn">
+                            delete
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="patologieViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:patologieViewsColumns"></mat-row>
+            </mat-table>
+
+        </mat-card-content>
+    </ng-container>
+</mat-card>

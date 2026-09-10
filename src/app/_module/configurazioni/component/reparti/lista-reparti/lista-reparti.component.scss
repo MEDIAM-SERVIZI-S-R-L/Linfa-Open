@@ -1,0 +1,25 @@
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.full-width{
+    width: 100%;
+}
+
+.buttons{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filtri{
+    margin-top: 12px;
+    margin-bottom: 36px;
+}
+
+.hide{
+    display: none;
+    transition-delay: 4s;
+}

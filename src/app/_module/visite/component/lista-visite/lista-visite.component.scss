@@ -1,0 +1,72 @@
+.filtri {
+    padding-bottom: 15px;
+}
+
+.btnFiltri button {
+    margin: 5px;
+}
+
+// ::ng-deep .mat-sort-header-arrow {
+//     transform: none !important;
+//     opacity: 1 !important;
+// }
+
+.badgeStato {
+    height: 13px;
+    width: 13px;
+    margin: 5px;
+}
+.stato-20 {
+    background-color: #ffea00 !important;
+}
+.stato-25 {
+    background-color: #726905 !important;
+}
+.stato-35 {
+    background-color: #00afa6 !important;
+}
+.stato-99 {
+    background-color: #ff5858 !important;
+}
+.stato-30 {
+    background-color: #dccc86 !important;
+}
+.stato-40 {
+    background-color: #00af06 !important;
+}
+
+// DaIniziare = 20,
+// Iniziata = 25,
+// DaRefertare = 30,
+// Terminata = 35,
+// Cancellata = 99
+
+.mat-column-priorita {
+    cursor: pointer;
+}
+
+.mat-column-cf {
+    text-transform: uppercase;
+}
+
+.mat-column-pulsanti {
+    flex: 0 0 5% !important;
+}
+.mat-column-priorita {
+    flex: 0 0 9% !important;
+}
+
+@media screen and (min-width: 1101px) {
+    .mat-column-cf {
+        padding-right: 55px;
+    }
+    .mat-column-paziente {
+        padding-right: 25px;
+    }
+    .mat-column-tipoPrestazione {
+        padding-right: 20px;
+    }
+}
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+@import "/src/theme/table-responsive.scss";

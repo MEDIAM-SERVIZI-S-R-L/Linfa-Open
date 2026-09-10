@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>
+    Prodotti
+</h1>
+
+<div mat-dialog-content>
+
+
+    <mat-table id="table" [dataSource]="prodottiDataSource">
+
+        <ng-container matColumnDef="prodotto">
+            <mat-header-cell *matHeaderCellDef>Prodotto</mat-header-cell>
+            <mat-cell *matCellDef="let prodotto" data-label="Prodotto">
+                {{prodotto.prodotto }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="quantita">
+            <mat-header-cell *matHeaderCellDef>Quantità</mat-header-cell>
+            <mat-cell *matCellDef="let prodotto" data-label="Quantità">{{prodotto.quantita}} {{prodotto.unitaMisura}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kcal">
+            <mat-header-cell *matHeaderCellDef>Kcal</mat-header-cell>
+            <mat-cell *matCellDef="let prodotto" data-label="Kcal">{{prodotto.kcal}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proteine">
+            <mat-header-cell *matHeaderCellDef>Proteine</mat-header-cell>
+
+            <mat-cell *matCellDef="let prodotto" data-label="Proteine">{{prodotto.proteine}}g/die
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="azoto">
+            <mat-header-cell *matHeaderCellDef>Azoto</mat-header-cell>
+
+            <mat-cell *matCellDef="let prodotto" data-label="Azoto">{{prodotto.azoto}}g/die
+            </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *matHeaderRowDef="prodottiViewsColumns"></mat-header-row>
+        <mat-row *matRowDef="let row;columns:prodottiViewsColumns"></mat-row>
+    </mat-table>
+
+
+
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">Chiudi</button>
+</div>

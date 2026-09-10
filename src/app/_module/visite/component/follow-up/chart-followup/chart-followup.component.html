@@ -1,0 +1,57 @@
+<mat-card>
+    <mat-card-content>
+
+        <div style="width:100%;">
+            <form [formGroup]="formFiltriFollowUp" autocomplete="off">
+                <div class="filtri" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="0px">
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="selectedValBtn" (change)="setProprieta(bntProperty.value)" #bntProperty="matButtonToggleGroup">
+                        <mat-button-toggle value="PESO,Peso">Peso</mat-button-toggle>
+                        <mat-button-toggle value="BMI,Bmi" selected>BMI</mat-button-toggle>
+                        <mat-button-toggle value="KCAL,Kcal">Kcal</mat-button-toggle>
+                        <!-- <mat-button-toggle value="QNT,Quantita">Quantità</mat-button-toggle> -->
+                        <!-- <mat-button-toggle value="PRD,Prodotti">Prodotti</mat-button-toggle> -->
+                    </mat-button-toggle-group>
+
+
+                    <mat-form-field class="full-width" fxFlex="15">
+                        <mat-label>Data inizio</mat-label>
+                        <input matInput type="text" [matDatepicker]="DataInizialePicker" readonly (focus)="DataInizialePicker.open()" (ngModelChange)="changeData()" [max]="appGen.today" formControlName="DataIniziale" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="DataInizialePicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker touchUi #DataInizialePicker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="15">
+                        <mat-label>Data fine</mat-label>
+                        <input matInput type="text" [matDatepicker]="DataFinalePicker" [min]="dataInizio" readonly (focus)="DataFinalePicker.open()" (ngModelChange)="changeData()" formControlName="DataFinale" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="DataFinalePicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker touchUi #DataFinalePicker></mat-datepicker>
+                    </mat-form-field>
+                    <div fxFlex>
+                    </div>
+
+                    <button mat-button type="button" color="primary" matTooltip="Aggiorna" (click)="changeData()" class="btnUpdate">
+                        <mat-icon>update</mat-icon>
+                    </button>
+
+
+                </div>
+            </form>
+
+
+        </div>
+        <div class="chart-wrapper">
+            <!-- <ng-container *ngIf="followUpChartData.length >0">
+
+                <canvas id="theCanvas" baseChart width="400" height="400" backgroundColor="false"
+                    [datasets]="followUpChartData" [labels]="followUpChartLabels" [options]="followUpChartOptions"
+                    [chartType]="followUpChartType" [colors]="followUpChartColor" [plugins]="lineChartPlugins">
+                </canvas>
+            </ng-container> -->
+        </div>
+    </mat-card-content>
+    <mat-card-footer><button mat-raised-button color="primary" (click)="stampaReport()">
+            <mat-icon>file_download</mat-icon>
+            Stampa report
+        </button></mat-card-footer>
+</mat-card>

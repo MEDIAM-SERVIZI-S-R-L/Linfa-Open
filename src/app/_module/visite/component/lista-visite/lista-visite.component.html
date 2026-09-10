@@ -1,0 +1,251 @@
+<mat-card class="linfaCard">
+
+  <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+    <button mat-raised-button color="primary" matTooltipPosition="after" class="btnTopCard" (click)="showCalendario()">
+      <mat-icon>event</mat-icon>
+      Calendario 
+    </button>
+  </div>
+
+  <mat-card-title>
+
+    <h3 class="title nomePaziente">Elenco visite
+    </h3>
+
+  </mat-card-title>
+  <mat-card-content>
+
+
+    <mat-accordion>
+      <mat-expansion-panel class="accordionFiltri">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="accordionFiltriTitle">
+            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+            Filtri ricerca
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filtri">
+          <form [formGroup]="formFiltrivisita" autocomplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Data visita</mat-label>
+                <input matInput type="text" [matDatepicker]="dataVisitaPicker" formControlName="dataVisita"
+                  autocomplete="off" (focus)="dataVisitaPicker.open()" autocomplete="off" readonly>
+                <mat-datepicker-toggle matSuffix [for]="dataVisitaPicker"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #dataVisitaPicker></mat-datepicker>
+
+                <mat-datepicker-toggle matSuffix (click)="clearDate($event)">
+                  <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                </mat-datepicker-toggle>
+              </mat-form-field>
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Tipo visita</mat-label>
+                <mat-select matNativeControl formControlName="tipoVisita">
+                  <mat-option *ngFor="let tipo of listaTipiVisite" [value]="tipo.id">
+                    {{ tipo.tipoRichiesta }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Stato visita</mat-label>
+                <mat-select matNativeControl formControlName="statoVisita">
+                  <mat-option *ngFor="let stato of appGen.StatoVisite" [value]="stato.id">
+                    {{ stato.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex>
+                <!-- <mat-icon matPrefix>search</mat-icon> -->
+                <mat-label>Codice fiscale</mat-label>
+                <input matInput type="text" formControlName="cf">
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                <mat-label>Cognome</mat-label>
+                <input matInput type="text" formControlName="cognome">
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <mat-label>Nome</mat-label>
+                <input matInput type="text" formControlName="nome">
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Medico</mat-label>
+                <mat-select matNativeControl formControlName="medico">
+                  <mat-option *ngFor="let medico of listaMedici" [value]="medico.idUtente">
+                    {{ medico.nome }} {{ medico.cognome }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Ambulatorio</mat-label>
+                <mat-select matNativeControl formControlName="ambulatorio">
+                  <mat-option *ngFor="let ambulatorio of listaAmbulatori" [value]="ambulatorio.id">
+                    {{ ambulatorio.descr }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+
+            <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+              <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                <mat-icon>search</mat-icon>
+                Cerca
+              </button>
+              <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                <mat-icon>remove_circle_outline</mat-icon>
+                Resetta
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
+
+
+
+    <mat-table id="table" [dataSource]="visitaDataSource" matSortActive="data" matSortDirection="desc"
+      (matSortChange)="sortData($event)" matSort matSortDisableClear>
+      <ng-container matColumnDef="data">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Data visita</mat-header-cell>
+        <mat-cell *matCellDef="let visita" data-label="Data visita">{{visita.dataPrestazione == null ?
+          '-':visita.dataPrestazione| date: 'dd/MM/yyyy HH:mm' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="paziente">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente</mat-header-cell>
+        <mat-cell *matCellDef="let visita" data-label="Paziente">{{visita.paziente}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cf">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Codice fiscale</mat-header-cell>
+        <mat-cell *matCellDef="let visita" data-label="Codice fiscale">{{visita.cf}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoPrestazione">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Prestazione</mat-header-cell>
+        <mat-cell *matCellDef="let visita" data-label="Prestazione">{{visita.tipoPrestazione}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="priorita">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Priorità</mat-header-cell>
+
+        <mat-cell *matCellDef="let visita" data-label="Priorità" [matTooltip]="visita.priorita"
+          [ngClass]="visita.priorita">{{visita.acronimoPriorita}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="medico">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Medico</mat-header-cell>
+
+        <mat-cell *matCellDef="let visita" data-label="Medico">{{visita.medico}}
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="stato">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Stato</mat-header-cell>
+
+        <mat-cell *matCellDef="let visita" data-label="Stato" (click)="compilaVisita(visita)"
+          [matTooltip]="visita.idStatoVisita == statoVisita.Iniziata ? 'Riprendi visita':(visita.idStatoVisita == statoVisita.DaIniziare ? 'Inizia visita':'')"
+          [ngStyle]="{'cursor': (visita.idStatoVisita == statoVisita.Iniziata || visita.idStatoVisita == statoVisita.DaIniziare) ?  'pointer':''}">
+
+          <button mat-mini-fab disabled class="badgeStato" [ngClass]="'stato-'+visita.idStatoVisita">
+          </button>
+          {{visita.stato }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pulsanti">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let visita" class="pulsantiTab" style="justify-content:flex-end">
+
+          <mat-icon class="material-icons-outlined"
+            *ngIf="visita.idStatoVisita == statoVisita.Cancellata && !appGen.isNullOrUndefined(visita.motivoCancellazione)"
+            color="warn" [matTooltip]="visita.motivoCancellazione">feedback
+          </mat-icon>
+
+
+          <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="visita.idStatoVisita != statoVisita.Cancellata">
+            <mat-icon color="primary">more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item
+              *ngIf="visita.idStatoVisita == statoVisita.Terminata || visita.idStatoVisita == statoVisita.Firmata"
+              (click)="openDocumentList(visita.id, visita.dataPrestazione)">
+              <mat-icon class="material-icons-outlined" color="primary">folder_special
+              </mat-icon>
+              <span> Documenti </span>
+            </button>
+            <button mat-menu-item
+              *ngIf="visita.idStatoVisita == statoVisita.Terminata || visita.idStatoVisita == statoVisita.Firmata"
+              (click)="stampaReferto(visita.id,visita.idDocumentoReferto)">
+              <mat-icon class="material-icons-outlined" color="primary">assignment
+              </mat-icon>
+              <span> Referto </span>
+            </button>
+
+
+            <button mat-menu-item
+              *ngIf="visita.idStatoVisita == statoVisita.Terminata  || visita.stato == statoVisita.Firmata"
+              (click)="dettaglioVisita(visita)">
+              <mat-icon class="material-icons-outlined" color="primary">remove_red_eye</mat-icon>
+              <span> Dettaglio visita </span>
+            </button>
+
+            <button mat-menu-item (click)="compilaVisita(visita)"
+              *ngIf="visita.idStatoVisita== statoVisita.DaRefertare && this.authGuard.canAccess(this.appGen.permesso.ConcludiVisita)">
+              <mat-icon class="material-icons-outlined" color="primary">receipt
+              </mat-icon>
+              <span> Referta visita </span>
+            </button>
+            <button mat-menu-item (click)="compilaVisita(visita)" *ngIf="visita.idStatoVisita== statoVisita.DaIniziare">
+              <mat-icon class="material-icons-outlined" color="primary">edit
+              </mat-icon>
+              <span> Inizia visita </span>
+            </button>
+            <button mat-menu-item (click)="compilaVisita(visita)" *ngIf="visita.idStatoVisita == statoVisita.Iniziata">
+              <mat-icon class="material-icons-outlined" color="primary">restore
+              </mat-icon>
+              <span> Riprendi visita </span>
+            </button>
+            <button mat-menu-item (click)="anteprimaReferto(visita)"
+              *ngIf="visita.idStatoVisita == statoVisita.Terminata && authGuard.canAccess(appGen.permesso.FirmaDigitale) && this.appGen.configLinfa.FirmaDigitaleAbilitata">
+              <mat-icon class="material-icons-outlined" color="accent">verified_user
+              </mat-icon>
+              <span> Firma referto </span>
+            </button>
+            <button mat-menu-item (click)="annullaVisita(visita)"
+              *ngIf="visita.idStatoVisita == statoVisita.Iniziata || visita.idStatoVisita == statoVisita.DaIniziare">
+              <mat-icon color="warn">delete</mat-icon>
+              <span> Annulla visita </span>
+            </button>
+
+          </mat-menu>
+
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="visitaViewsColumns"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:visitaViewsColumns"></mat-row>
+    </mat-table>
+    <mat-paginator [length]="totalElements" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage"
+      (page)="onChangePage($event)" [pageSizeOptions]="[5, 10, 25, 50]">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

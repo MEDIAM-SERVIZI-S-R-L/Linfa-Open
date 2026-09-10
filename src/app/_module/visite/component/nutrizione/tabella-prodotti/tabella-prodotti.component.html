@@ -1,0 +1,290 @@
+<mat-table id="table" [dataSource]="withoutDeleted(prodottiDataSource)" multiTemplateDataRows>
+
+    <ng-container matColumnDef="nomeProdotto">
+        <mat-header-cell *matHeaderCellDef>AFMS</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Prodotto">
+            {{prodotto.prodotto }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="quantita">
+        <mat-header-cell *matHeaderCellDef>Quantità</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Quantità">
+            <!-- {{prodotto.quantita}} {{prodotto.unitaMisura}} -->
+
+            <ng-container *ngIf="prodotto.idTipoProdotto == tipoProdotto.SacchePersonalizzate">
+
+                <mat-form-field appearance="fill" fxFlex>
+
+                    <mat-label>N* Sacche da {{prodotto.quantitaBase}} ml</mat-label>
+                    <mat-select matNativeControl [disabled]="isRiepilogo" required [value]="prodotto.quantita/prodotto.quantitaBase" (selectionChange)="selectedQuantitaSacca(prodotto,$event.value)">
+                        <mat-option *ngFor="let item of appGen.NumeroSacche" [value]="item.value">
+                            {{item.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </ng-container>
+            <ng-container *ngIf="prodotto.idTipoProdotto != tipoProdotto.SacchePersonalizzate">
+                <mat-form-field class="full-width" fxFlex="90" appearance="fill">
+                    <input type="text" matInput [value]="prodotto.quantita" max="9999" [readonly]="isRiepilogo || prodotto.idTipoProdotto == tipoProdotto.SacchePersonalizzate" [disabled]="isRiepilogo || prodotto.idTipoProdotto == tipoProdotto.SacchePersonalizzate" digitOnly
+                        (change)="valueWasChanged(prodotto)" (blur)="editQuantita(prodotto,$event.target.value)" maxlength="4" autocomplete="off">
+                    <span matSuffix class="suffix">ml</span>
+                </mat-form-field>
+            </ng-container>
+
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="confezionamenti">
+        <mat-header-cell *matHeaderCellDef class="colonnaConfezionamenti">Confezionamenti</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Confezionamento" class="colonnaConfezionamenti">
+            <mat-form-field class="full-width" fxFlex="120" appearance="fill">
+                <mat-label>Confezioni</mat-label>
+                <mat-select 
+                [required]="prodotto.confezionamenti || prodotto.confezionamenti?.length > 0" 
+                [disabled]="!prodotto.confezionamenti || prodotto.confezionamenti.length <= 0 || isRiepilogo" 
+                (selectionChange)="sceltaConfezionamento(prodotto)" 
+                [(value)]="prodotto.idConfezionamentoProdotto" 
+                [matTooltip]="!prodotto.confezionamenti || prodotto.confezionamenti.length <= 0? 'Non ci sono confezioni per questo prodotto' : '' ">
+                  <mat-option *ngFor="let confezionamento of prodotto.confezionamenti" [value]="confezionamento.idConfezionamento" [disabled]="!confezionamento.disponibile" >
+                    {{confezionamento.quantita}} {{confezionamento.unitaMisura}} 
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </mat-cell>
+    
+    
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="velocitaSomministrazione">
+        <mat-header-cell *matHeaderCellDef>Vel. somm.</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Vel. somm.">
+            <!-- {{prodotto.quantita}} {{prodotto.unitaMisura}} -->
+
+            <mat-form-field class="full-width" fxFlex="90" appearance="fill">
+                <input type="text" matInput [value]="prodotto.velocitaSomministrazione" [readonly]="isRiepilogo" [disabled]="isRiepilogo" digitOnly (blur)="editVelocitaSomministrazione(prodotto,$event.target.value)" required maxlength="4" autocomplete="off">
+                <span matSuffix class="suffix">ml/h</span>
+            </mat-form-field>
+
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="kcal">
+        <mat-header-cell *matHeaderCellDef>Kcal</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Kcal">{{prodotto.kcal}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="proteine">
+        <mat-header-cell *matHeaderCellDef>Proteine</mat-header-cell>
+
+        <mat-cell *matCellDef="let prodotto" data-label="Proteine">{{prodotto.proteine== null ?'-':prodotto.proteine}}g/die
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="azoto">
+        <mat-header-cell *matHeaderCellDef>Azoto</mat-header-cell>
+
+        <mat-cell *matCellDef="let prodotto" data-label="Azoto">{{prodotto.azoto== null ?'-':prodotto.azoto}}g/die
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="acqua">
+        <mat-header-cell *matHeaderCellDef>Acqua</mat-header-cell>
+
+        <mat-cell *matCellDef="let prodotto" data-label="Acqua">{{prodotto.acqua== null ?'-':prodotto.acqua}} ml
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="confezioni">
+        <mat-header-cell *matHeaderCellDef>Confezioni</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Confezioni">
+            <span>
+                {{prodotto.nConfezionamentiDaUtilizzareArrotondato? prodotto.nConfezionamentiDaUtilizzareArrotondato: '-'}}
+            </span>
+            <span *ngIf="prodotto.nConfezionamentiDaUtilizzareArrotondato">
+                <mat-icon matTooltip="Il numero di confezioni da utilizzare non arrotondato è  {{prodotto.nConfezionamentiDaUtilizzare | number : '1.2-2'}}" color="accent">{{prodotto.nConfezionamentiDaUtilizzareArrotondato === prodotto.nConfezionamentiDaUtilizzare? '' : 'warning'}}</mat-icon>
+            </span>
+        </mat-cell>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="prezzoTot">
+        <mat-header-cell *matHeaderCellDef>Tot. €</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Prezzo">
+            {{prodotto.prezzoTot? '€' : ''}} {{prodotto.prezzoTot? prodotto.prezzoTot: '-'}}
+        </mat-cell>
+    </ng-container> -->
+
+    <ng-container matColumnDef="pulsanti">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" class="pulsantiTab" style="justify-content:flex-end">
+
+
+            <mat-icon *ngIf="prodotto.saccaEditabile" matTooltip="Modifica sacca personalizzata" class="editIco" (click)="modificaSacca(prodotto)">
+                edit
+            </mat-icon>
+
+            <mat-icon matTooltip="Clicca per ulteriori informazioni sull' AFMS" class="infoIco" color="primary" (click)="getInfo(prodotto)">info_outline
+            </mat-icon>
+
+            <mat-icon (click)="deleteProdotto(prodotto)" *ngIf="!isRiepilogo && !fromFollowUp" matTooltip="Rimuovi quantità" color="warn">delete
+            </mat-icon>
+
+
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+
+        <mat-cell *matCellDef="let prodotto" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+
+            <mat-form-field class="full-width" fxFlex="45">
+                <mat-label>Modalità assunzione</mat-label>
+                <mat-select matNativeControl [disabled]="isRiepilogo" [value]="prodotto.idMetodoAssunzione" #modalitaselect (selectionChange)="selectedMetodoAssunzione(prodotto,$event.value)" required>
+                    <mat-option *ngFor="let modalita of listametodoAssunzione" [value]="modalita.id">
+                        {{modalita.metodo}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" *ngIf="modalitaselect.value ==3" fxFlex="45">
+                <mat-label>Digita modalità assunzione</mat-label>
+                <input type="text" matInput [readonly]="isRiepilogo" (blur)="setMetodoAssunzione(prodotto,$event.target.value)" [value]="prodotto.metodoAssunzione" [disabled]="isRiepilogo" required maxlength="250" autocomplete="off">
+            </mat-form-field>
+
+        </mat-cell>
+
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="prodottiViewsColumns"></mat-header-row>
+    <mat-row *matRowDef="let row;columns:prodottiViewsColumns" [ngClass]="row.idTipoProdotto == tipoProdotto.Integratori ? 'hideDivider': ''"></mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail'];" [ngClass]="row.idTipoProdotto == tipoProdotto.Integratori ? 'show': 'hide'"></mat-row>
+</mat-table>
+
+<mat-divider></mat-divider>
+
+
+<h3 class="title">
+    <span>Note piano alimentare</span>
+</h3>
+
+<ng-container *ngIf="!isRiepilogo">
+    <form [formGroup]="form" autocomplete="off">
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+            <mat-form-field class="full-width" fxFlex="65">
+                <mat-label>Lista note predefinite</mat-label>
+                <mat-select (selectionChange)="selectedNotePredefinita($event.value)" matNativeControl formControlName="notePredefinite">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let conclusione of listaNotePredefinite" [value]="conclusione.conclusione" [matTooltip]="conclusione.conclusione">
+                        {{conclusione.conclusione}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+    <mat-divider></mat-divider>
+</ng-container>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+    <mat-form-field class="full-width" fxFlex>
+        <textarea matInput [(ngModel)]="note" cdkTextareaAutosize cdkAutosizeMinRows="3" [disabled]="isRiepilogo" cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+</div>
+
+<mat-divider></mat-divider>
+
+
+<h3 class="title">
+    <span> Valori nutrizionali totali</span>
+
+</h3>
+
+<!--VALORI NUTRIZIONALI TOTALI CON SLIDER, PER LA VISITA-->
+<div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="!dataPianoNutrizionale">
+
+    <div fxFlex class="valoriTotali">
+
+        <span>Kcal</span>
+        <div class="matProgress">
+            <mat-progress-bar mode="determinate" [color]="updateColor(kcalTot,kcal)" [value]="returntValue(kcalTot,kcal)" [bufferValue]="kcal"></mat-progress-bar>
+        </div>
+        <div>
+
+            <strong [ngClass]="kcalTot>kcal?'over':''">{{kcalTot}} </strong> / <strong class="basic">{{kcal}}
+                kcal</strong>
+        </div>
+    </div>
+    <div fxFlex class="valoriTotali">
+
+        <span>Proteine</span>
+        <div class="matProgress">
+            <mat-progress-bar mode="determinate" [color]="updateColor(proteineTot,proteine)" [value]="returntValue(proteineTot,proteine)"></mat-progress-bar>
+        </div>
+        <div>
+
+            <strong [ngClass]="proteineTot>proteine?'over':''">{{proteineTot}} </strong> / <strong class="basic">{{proteine}} g</strong>
+        </div>
+    </div>
+    <!-- <div fxFlex class="valoriTotali">
+
+        <span>Azoto</span>
+        <div class="matProgress">
+            <mat-progress-bar mode="determinate" [color]="updateColor(azotoTot,azoto)" [value]="returntValue(azotoTot,azoto)">
+            </mat-progress-bar>
+        </div>
+        <div>
+
+            <strong [ngClass]="azotoTot>azoto?'over':''">{{azotoTot}} </strong> / <strong class="basic">{{azoto}}</strong> g
+        </div>
+    </div> -->
+    <div fxFlex class="valoriTotali">
+
+        <span>Apporto idrico</span>
+        <div class="matProgress">
+            <mat-progress-bar mode="determinate" [color]="updateColor(apportoIdricoTot,apportoIdrico)" [value]="returntValue(apportoIdricoTot,apportoIdrico)"></mat-progress-bar>
+        </div>
+        <div>
+
+            <strong [ngClass]="apportoIdricoTot>apportoIdrico?'over':''">{{apportoIdricoTot}} </strong> / <strong class="basic">{{apportoIdrico}}</strong> ml
+        </div>
+    </div>
+</div>
+
+<!--VALORI NUTRIZIONALI TOTALI SENZA SLIDER PER IL PIANO NUTRIZIONALE-->
+<!-- <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px"
+    *ngIf="!dataPianoNutrizionale">
+
+    <div fxFlex class="valoriTotali">
+
+        <span>Kcal</span>
+        <div>
+
+            <strong [ngClass]="kcalTot>kcal?'over':''">{{kcalTot}} kcal</strong>
+        </div>
+    </div>
+    <div fxFlex class="valoriTotali">
+
+        <span>Proteine</span>
+
+        <div>
+
+            <strong [ngClass]="proteineTot>proteine?'over':''">{{proteineTot}} g</strong>
+        </div>
+    </div>
+    <div fxFlex class="valoriTotali">
+
+        <span>Azoto</span>
+
+        <div>
+
+            <strong [ngClass]="azotoTot>azoto?'over':''">{{azotoTot}} g</strong>
+        </div>
+    </div>
+    <div fxFlex class="valoriTotali">
+
+        <span>Apporto idrico</span>
+
+        <div>
+            <strong [ngClass]="apportoIdricoTot>apportoIdrico?'over':''">{{apportoIdricoTot}} ml</strong>
+        </div>
+    </div>
+</div> -->

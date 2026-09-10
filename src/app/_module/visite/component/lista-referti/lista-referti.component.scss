@@ -1,0 +1,87 @@
+.filtri {
+    padding-bottom: 15px;
+}
+
+.highlight {
+    background: #ababab;
+}
+
+::ng-deep {
+    .mat-tooltip-custom {
+        white-space: pre-line;
+    }
+}
+
+.mat-column-paziente {
+    cursor: pointer;
+}
+
+.title {
+    span{
+        font-weight: bold;
+        color: #00afa6;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+.btnFiltri button {
+    margin: 5px;
+}
+
+// ::ng-deep .mat-sort-header-arrow {
+//     transform: none !important;
+//     opacity: 1 !important;
+// }
+
+.badgeStato {
+    height: 13px;
+    width: 13px;
+    margin: 5px;
+}
+
+.stato-20 {
+    background-color: #ffea00 !important;
+}
+.stato-25 {
+    background-color: #726905 !important;
+}
+.stato-35 {
+    background-color: #00afa6 !important;
+}
+.stato-99 {
+    background-color: #ff5858 !important;
+}
+.stato-30 {
+    background-color: #dccc86 !important;
+}
+.stato-40 {
+    background-color: #00af06 !important;
+}
+
+// DaIniziare = 20,
+// Iniziata = 25,
+// DaRefertare = 30,
+// Terminata = 35,
+// Cancellata = 99
+
+@media screen and (min-width: 1101px) and(max-width: 1780px) {
+    // .mat-column-pulsanti {
+    //     flex: 0 0 5% !important;
+    // }
+
+    .mat-column-select {
+        flex: 0 0 10% !important;
+    }
+}
+.mat-column-cf {
+    text-transform: uppercase;
+}
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+@import "/src/theme/table-responsive.scss";

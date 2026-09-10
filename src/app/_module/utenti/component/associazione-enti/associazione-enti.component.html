@@ -1,0 +1,67 @@
+<div class="container">
+
+  <div class="filtri">
+    <mat-form-field class="full-width" fxFlex>
+      <mat-label>Cerca</mat-label>
+      <mat-icon matSuffix>search</mat-icon>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+  </div>
+
+  <mat-table [dataSource]="dataSource" multiTemplateDataRows id="table">  
+    <ng-container matColumnDef="ente">
+      <mat-header-cell *matHeaderCellDef>
+        <div *ngIf="idTipoEnte === tipoEnti.Reparto">
+          Reparto
+        </div>
+        <div *ngIf="idTipoEnte === tipoEnti.Distretto">
+          Distretto
+        </div>
+        <div *ngIf="idTipoEnte === tipoEnti.FarmaciaOspedaliera">
+          Farmacia ospedaliera
+        </div>
+
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.ente}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="ospedale">
+      <mat-header-cell *matHeaderCellDef class="ospedale">
+        <div *ngIf="idTipoEnte === tipoEnti.Reparto">
+          <div>
+            <mat-form-field>
+              <mat-label>Ospedale</mat-label>
+              <mat-select (selectionChange)="filterEntiXOspedale($event)" [(ngModel)]="defaultValue">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="filtroOspedale" placeholderLabel="Ricerca ospedale"
+                    noEntriesFoundLabel="Nessun ospedale trovato"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option [value]="0">Tutti gli ospedali</mat-option>
+                <mat-option *ngFor="let ospedale of listaOspedaleFiltrata | async"
+                  [value]="ospedale.descrizione">{{ospedale.descrizione}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div *ngIf="idTipoEnte === tipoEnti.Reparto">
+          {{element.ospedale}}
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="associato">
+      <mat-header-cell *matHeaderCellDef class="header-associato">Associato</mat-header-cell>
+      <mat-cell *matCellDef="let element" class="associato">
+        <mat-checkbox [checked]="element.associato" color="primary"
+          (change)="cambiaAssocia(element, $event)"></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns" class="header-tabella"></mat-header-row>
+    <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons>
+  </mat-paginator>
+</div>

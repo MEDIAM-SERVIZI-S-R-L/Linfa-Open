@@ -1,0 +1,35 @@
+.filtri {
+    padding-bottom: 15px;
+}
+
+.btnFiltri button {
+    margin: 5px;
+}
+
+// ::ng-deep .mat-sort-header-arrow {
+//     transform: none !important;
+//     opacity: 1 !important;
+// }
+
+.gender {
+    margin-right: 5px;
+}
+
+.separator {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 3px;
+}
+
+.storicoIcon {
+    color: rgba(0, 0, 0, 0.42);
+}
+
+.mat-column-paziente {
+    cursor: pointer;
+    white-space: break-spaces;
+}
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+
+@import "/src/theme/table-responsive.scss";

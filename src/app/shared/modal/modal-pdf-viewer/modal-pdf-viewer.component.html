@@ -1,0 +1,125 @@
+<h1 mat-dialog-title>
+    {{title}}
+</h1>
+
+<div mat-dialog-content>
+    <div id="pdfViewer" *ngIf="!isFirmaDigitale">
+
+<!--
+    !BUG
+  TODO
+  *IMPORTANT* - cambbiare la classe
+Disabilitalo la firma nella visita perche è fuori flusso xk il documento vene creato dopo la conclusione. Quindi vedere come ovviare questo problema xk non ho in questo momento il documento fisico
+      <div [ngClass]="(isReferto && authGuard.canAccess(this.appGen.permesso.FirmaDigitale) && this.appGen.configLinfa.FirmaDigitaleAbilitata) ? 'pdfViewerSign' :'pdfViewer'">
+
+      -->
+
+        <div [ngClass]="(isReferto && authGuard.canAccess(this.appGen.permesso.FirmaDigitale) && this.appGen.configLinfa.FirmaDigitaleAbilitata) && testFirma ? 'pdfViewer' :'pdfViewer'">
+
+            <!-- <app-pdf-viewer *ngIf="pdfFile" [pdfFile]="pdfFile" [nomeDocumento]="nomeDocumento"  ></app-pdf-viewer> -->
+            <app-pdf-viewer *ngIf="pdfFile"  [pdfFile]="pdfFile"  [isBase64]="isBase64"></app-pdf-viewer>
+        </div>
+    </div>
+<!--
+    !BUG
+  TODO
+  *IMPORTANT* - abbilitare il form per la scheda e per PIN(OTP)
+Disabilitalo la firma nella visita perche è fuori flusso xk il documento vene creato dopo la conclusione. Quindi vedere come ovviare questo problema xk non ho in questo momento il documento fisico
+    <div class="boxArea" *ngIf="authGuard.canAccess(appGen.permesso.FirmaDigitale) && isReferto">
+    -->
+
+    <div class="boxArea" *ngIf="isReferto && !disableFirmaDigitale">
+        <form [formGroup]="formFirma" autocomplete="off">
+
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex="45" *ngIf="!firmaRemota">
+                    <mat-label>Lettore</mat-label>
+                    <mat-select matNativeControl required formControlName="lettore">
+                        <ng-container *ngFor="let lettore of lstLettori">
+                            <mat-option [value]="lettore.CardIndex">
+                                {{ lettore.ReaderName + (lettore.CardName == null ? '' : ' - ' + lettore.CardName) }}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" fxFlex="45">
+                    <mat-label>Pin</mat-label>
+                    <input [type]="!showPassword ? 'password' : 'text'" #password matInput required formControlName="pin" autocomplete="off">
+                    <span matSuffix *ngIf="password.value" class="iconShow" matTooltip="Mostra pin" [hidden]="showPassword" (click)="toggleShow()">
+            <mat-icon class="material-icons-outlined" color="primary"> visibility</mat-icon>
+          </span>
+                    <span matSuffix *ngIf="password.value" class="iconShow" matTooltip="Nascondi pin" [hidden]="!showPassword" (click)="toggleShow()">
+            <mat-icon class="material-icons-outlined" color="primary">visibility_off</mat-icon>
+          </span>
+                </mat-form-field>
+
+                    <mat-form-field class="full-width" fxFlex="45" *ngIf="firmaRemota">
+                        <mat-label>OTP</mat-label>
+                        <input type="text" matInput formControlName="otp" autocomplete="off" [required]="true">
+                    </mat-form-field>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+<div mat-dialog-actions id="btnModal" *ngIf="!anteprimaIntestazione" 
+[ngClass]="xInvioMail? 'button-mail' : 'button-no-mail'">
+
+    <div style="width: 50%;" *ngIf="xInvioMail">
+        <mat-form-field style="width: 100%;">
+            <mat-label>Email</mat-label>
+            <input type="text" matInput [formControl]="email" autocomplete="off" required>
+            <mat-error>mail non valida</mat-error>
+        </mat-form-field>
+
+    </div>
+
+    <div>
+        <ng-container *ngIf="!testFirma">
+            <button mat-raised-button color="accent" *ngIf="(allowPrint && !xInvioMail) || (allowPrint && bothMailPrint)" type="button" (click)="stampa()">Stampa</button>
+    
+            <button mat-raised-button color="primary" 
+            (click)="confirmSendEmail()"
+            *ngIf="xInvioMail" 
+            [disabled]="!xInvioMail || !email.valid" 
+            type="button"
+            >Invia per mail</button>
+    <!--
+      !BUG
+      TODO
+      *IMPORTANT*
+    Disabilitalo la firma nella visita perche è fuori flusso xk il documento vene creato dopo la conclusione. Quindi vedere come ovviare questo problema xk non ho in questo momento il documento fisico
+    <button mat-raised-button color="primary" *ngIf="authGuard.canAccess(appGen.permesso.FirmaDigitale) && this.appGen.configLinfa.FirmaDigitaleAbilitata && isReferto" (click)="firmaDigitale(ProvenienzaFirma.Visita)">Firma digitalmente </button>
+    -->
+    
+    {{testFirma}}
+            <button mat-raised-button color="warn" (click)="onDismiss()">Chiudi</button>
+    
+            <!-- <button mat-raised-button color="primary" *ngIf="authGuard.canAccess(appGen.permesso.TestSincronizzazione) && this.appGen.configLinfa.Sincronizzazione &&  isReferto" (click)="sincronizza()">test
+          sincronizza</button> -->
+        </ng-container>
+
+
+        <ng-container *ngIf="firmaRemota && otpManuale">
+            <button mat-raised-button 
+            (click)="richiestaOtp()"
+            [disabled]="timer > 0"
+            color="accent">
+                Richiedi nuovamente OTP 
+                <span 
+                class="timer-span">
+                    {{timer > 0? '(' + (timer) + ')' : ''}}
+                </span> 
+            </button>
+        </ng-container>
+    
+        <ng-container >
+            <button mat-raised-button color="primary" *ngIf="authGuard.canAccess(appGen.permesso.FirmaDigitale) && this.appGen.configLinfa.FirmaDigitaleAbilitata && isReferto  && !disableFirmaDigitale" (click)="testFirma?firmaDigitale(ProvenienzaFirma.Test):firmaDigitale(ProvenienzaFirma.ListaReferti)">{{testFirma?'Test firma':'Firma digitalmente'}}</button>
+        </ng-container>
+    </div>
+
+
+</div>

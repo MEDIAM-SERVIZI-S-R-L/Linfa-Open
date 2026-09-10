@@ -1,0 +1,56 @@
+ .boxArea {
+     margin-bottom: 30px;
+     
+ }
+
+ .title{
+     font-size: medium;
+ }
+
+ 
+ mat-divider {
+     margin-bottom: 15px;
+ }
+
+ .btnProsegui {
+     padding-bottom: 55px;
+ }
+
+ .ctnrList {
+     //  padding-top: 55px;
+     mat-divider {
+         margin-bottom: 60px;
+     }
+ }
+
+ .mat-accordion .mat-expansion-panel:first-of-type{
+    border-top-right-radius: 12px !important;
+    border-top-left-radius: 12px !important;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type {
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+}
+
+
+
+.mat-expansion-panel-header.mat-expanded {
+    
+    border-radius:  12px !important;
+}
+.btnSave {
+    float: right;
+    div {
+        padding: 10px 0;
+    }
+}
+
+
+.expandCollpaseBtn{
+    float: right;
+    span{
+        // float: left;
+        margin: 0 10px;
+    }
+}

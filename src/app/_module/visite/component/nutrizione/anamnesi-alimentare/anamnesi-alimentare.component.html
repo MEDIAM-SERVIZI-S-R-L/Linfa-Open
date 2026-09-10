@@ -1,0 +1,25 @@
+<!-- <app-cruscotto-paziente></app-cruscotto-paziente> -->
+
+<app-stepper [stepCorrente]="step" *ngIf="!isRiepilogoVisita"></app-stepper>
+
+<div class="backBtn" *ngIf="!isRiepilogoVisita">
+    <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Step precedente</span>
+  </button>
+</div>
+
+
+
+<mat-divider *ngIf="!isRiepilogoVisita && showBtnProsegui"></mat-divider>
+
+<app-new-form-dieta [isRiepilogo]="isRiepilogoVisita" [stepCorrente]="step"
+(showBtnProsegui)="showBtnProseguiResult()"></app-new-form-dieta>
+
+<div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+
+    <button mat-raised-button color="primary" (click)="prosegui()">
+   Salva e prosegui
+    <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+  </button>
+</div>

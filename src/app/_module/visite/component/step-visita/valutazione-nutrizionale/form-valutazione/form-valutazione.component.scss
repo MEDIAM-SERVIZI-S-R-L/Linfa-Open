@@ -1,0 +1,73 @@
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+mat-checkbox {
+    padding: 15px 0;
+}
+
+mat-card {
+    margin-bottom: 60px;
+}
+
+.valutazioni {
+    margin-top: 25px;
+}
+
+.boxValutazioni {
+    background: #f5f5f5 !important;
+    h3 {
+        margin: 4px 0 12px 0px !important;
+    }
+}
+
+.resValutazioni {
+    color: #00afa6 !important;
+    font-size: 20px;
+    font-weight: bold;
+    mat-icon {
+        vertical-align: middle !important;
+    }
+}
+
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+    .custom-slider .ng5-slider .ng5-slider-bar {
+        // background: #00afa6;
+        height: 4px;
+    }
+    .custom-slider .ng5-slider .ng5-slider-pointer {
+        width: 8px;
+        height: 16px;
+        top: auto;
+        /* to remove the default positioning */
+        bottom: 0;
+        background-color: #333;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .custom-slider .ng5-slider .ng5-slider-pointer:after {
+        display: none;
+    }
+    .custom-slider .ng5-slider .ng5-slider-bubble {
+        bottom: 14px;
+    }
+    .custom-slider .ng5-slider .ng5-slider-limit {
+        font-weight: bold;
+        color: orange;
+    }
+    .custom-slider .ng5-slider .ng5-slider-tick {
+        width: 2px;
+        height: 8px;
+        margin-left: 4px;
+        border-radius: 0;
+        background: #616161; //#ffe4d1;
+        top: -1px;
+    }
+}
+
+.infoIco {
+    align-self: center;
+    margin-left: 15px;
+}

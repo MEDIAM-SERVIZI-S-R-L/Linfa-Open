@@ -1,0 +1,83 @@
+<!-- <app-cruscotto-paziente *ngIf="!isRiepilogoVisita"></app-cruscotto-paziente> -->
+
+<app-stepper [stepCorrente]="step" *ngIf="!isRiepilogoVisita"></app-stepper>
+
+<div class="backBtn" *ngIf="!isRiepilogoVisita">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Step precedente</span>
+    </button>
+</div>
+
+<app-form-valutazione [isRiepilogoVisita]="isRiepilogoVisita" (showBtnNutrizioneEmit)="showBtnNutrizioneResult()" (updateCruscottoEmit)="updateCruscotto()" (idvalutazioneNutrizionaleEmit)="getIdValutazione($event)">
+</app-form-valutazione>
+
+
+<mat-accordion *ngIf="!isRiepilogoVisita">
+    <mat-expansion-panel>
+        <!--expanded-->
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Allega documenti
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-upload-file [isStepVisita]="isStepVisita"></app-upload-file>
+
+
+    </mat-expansion-panel>
+</mat-accordion>
+
+
+<mat-divider></mat-divider>
+
+
+
+
+
+<div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px" fxLayoutGap.lt-md="10px">
+
+    <button mat-raised-button color="warn" *ngIf="showBtnAnnullaCambioAlimentazione" (click)="showBtnNutrizioneResult()">
+        <mat-icon>replay</mat-icon>
+        Annulla
+    </button>
+
+    <ng-container *ngIf="!isRiepilogoVisita && showBtnNutrizione">
+
+
+        <button mat-raised-button color="primary" (click)="goToAlimentazione('conclusioni')" *ngIf="(authGuard.canRole(appGen.ruolo.Medico) && authGuard.canAccess(appGen.permesso.ConcludiVisita))">
+            <mat-icon>rate_review</mat-icon>
+            Concludi
+        </button>
+
+        <!-- <button mat-raised-button color="primary" (click)="concludiVisita()" *ngIf="authGuard.canRole(appGen.ruolo.Dietista)">
+            <mat-icon>rate_review</mat-icon>
+            Chiudi, da refertare
+        </button> -->
+
+        <button mat-raised-button color="primary" (click)="goToAlimentazione('conclusioni')" *ngIf="authGuard.canRole(appGen.ruolo.Dietista)">
+            <mat-icon>rate_review</mat-icon>
+            Chiudi, da refertare
+        </button>
+
+        <button mat-raised-button color="accent" (click)="goToAlimentazione('naturale')" *ngIf="(appGen.ruolo.Dietista || appGen.ruolo.Medico) && authGuard.canAccess(appGen.permesso.AccessoNutrizioneNaturale)">
+            <mat-icon>menu_book</mat-icon>
+            Naturale - mista
+        </button>
+
+        <button mat-raised-button color="primary" (click)="goToAlimentazione('artificiale')" *ngIf="authGuard.canAccess(appGen.permesso.AccessoNutrizioneArtificiale)">
+            <mat-icon>opacity</mat-icon>
+            Artificiale
+        </button>
+
+    </ng-container>
+
+    <button mat-raised-button color="accent" *ngIf="!isRiepilogoVisita && showBtnContinuaAlimentazione && (authGuard.canRole(appGen.ruolo.Medico) || authGuard.canRole(appGen.ruolo.Dietista))" (click)="cambiaAlimentazione()">
+        <mat-icon>replay</mat-icon>
+        Cambia alimentazione
+    </button>
+    <button mat-raised-button color="primary" *ngIf="!isRiepilogoVisita && showBtnContinuaAlimentazione" (click)="riprendiVisita()">
+        <mat-icon>play_arrow</mat-icon>
+        Riprendi alimentazione
+    </button>
+
+</div>

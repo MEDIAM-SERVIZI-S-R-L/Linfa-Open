@@ -1,0 +1,15 @@
+.filtri {
+    padding-bottom: 15px;
+}
+
+.btnFiltri button {
+    margin: 5px;
+}
+
+.mat-column-username {
+    cursor: pointer;
+}
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+
+@import "/src/theme/table-responsive.scss";

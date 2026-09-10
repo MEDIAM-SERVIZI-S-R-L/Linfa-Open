@@ -1,0 +1,82 @@
+<h1 mat-dialog-title>
+  Gara {{dataObj.item.gara}}
+</h1>
+
+<div mat-dialog-content>
+
+  <div class="container">
+
+    <form [formGroup]="form" autocomplete="off">
+
+
+      <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Tipo nutrizione artificiale</mat-label>
+          <mat-select matNativeControl required formControlName="tipoArtificiale"
+            (selectionChange)="selectedTipoAlimentazione($event.value)">
+            <mat-option *ngFor="let tipoAlimentazione of listaTipoAlimentazioneArtificiale"
+              [value]="tipoAlimentazione.id">
+              {{tipoAlimentazione.artificiale}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+      <ng-container *ngIf="idTipoAlimentazioneArtificiale">
+
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+          <mat-hint>Seleziona un AFMS da assegnare alla gara</mat-hint>
+        </div>
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="full-width" fxFlex>
+            <mat-label>AFMS</mat-label>
+            <mat-select matNativeControl formControlName="prodotto">
+              <ng-container *ngIf="!mostraSacche">
+                <mat-option [value]="prodotto.id" *ngFor="let prodotto of returnFiltered(0)">
+                  {{ prodotto.prodotto }}
+                </mat-option>
+              </ng-container>
+              <ng-container *ngIf="idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Parenterale">
+                <hr>
+                <mat-optgroup label="SACCHE">
+                  <mat-option [value]="prodotto.id"
+                    *ngFor="let prodotto of returnFiltered(tipoProdotto.SacchePersonalizzate)">
+                    {{ prodotto.prodotto }}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <ng-container *ngIf="!mostraSacche">
+                <hr>
+
+                <mat-optgroup label="INTEGRATORI" *ngIf="!mostraSacche">
+                  <mat-option [value]="prodotto.id" *ngFor="let prodotto of returnFiltered(tipoProdotto.Integratori)">
+                    {{ prodotto.prodotto }}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+
+            </mat-select>
+          </mat-form-field>
+          <mat-checkbox color="primary" formControlName="abilitato" fxFlex>Abilitato</mat-checkbox>
+
+        </div>
+      </ng-container>
+    </form>
+  </div>
+</div>
+
+
+<div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+  fxLayoutGap.lt-md="10px">
+  <button mat-raised-button color="warn" (click)="onDismiss()">Annulla</button>
+
+  <button mat-raised-button color="accent" (click)="onSubmit(false)" *ngIf="dataObj.newVal">
+    <mat-icon>save</mat-icon>
+    Salva e aggiungi
+  </button>
+  <button mat-raised-button color="primary" (click)="onSubmit(true)">
+    <mat-icon>save</mat-icon>
+    Salva ed esci
+  </button>
+</div>

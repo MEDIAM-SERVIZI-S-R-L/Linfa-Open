@@ -1,0 +1,93 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">Supporto</h3>
+
+    </mat-card-title>
+    <mat-card-content>
+
+        <h4 class="subTitle">Per necessità di supporto tecnico informatico si prega di utilizzare i seguenti canali:
+        </h4>
+
+        <div class="row-content" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+            <mat-label>
+                <mat-icon matPrefix id="pazienteIcon" color="primary">
+                    email
+                </mat-icon>
+                <span class="info">helpdesk@mediam.it </span>
+            </mat-label>
+
+            <mat-label>
+                <mat-icon matPrefix id="pazienteIcon" color="primary">
+                    call
+                </mat-icon>
+                <span class="info">  010/8972272 </span>
+            </mat-label>
+        </div>
+        <div class="row-content" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+            <mat-hint>Il servizio è attivo dalle 08.30 alle 12.30 e dalle 13.30 alle 17.30 dal Lunedi al Venerdi
+            </mat-hint>
+        </div>
+
+
+
+
+
+
+        <!-- <form [formGroup]="formContatti" autocomplete="off">
+                <div class="contattaciFormArea">
+                    <h3 class="subTitle">Scrivici per ulteriori informazioni</h3>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Nome</mat-label>
+                            <input type="text" matInput required formControlName="nome" autocomplete="off">
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Cognome</mat-label>
+                            <input type="text" matInput required formControlName="cognome" autocomplete="off">
+
+                        </mat-form-field>
+
+                    </div>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Oggetto</mat-label>
+                            <input type="text" matInput required formControlName="oggetto" autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Mail</mat-label>
+                            <input type="text" matInput required formControlName="mail" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="65">
+                            <mat-label>Messaggio</mat-label>
+                            <textarea rows="5" cols="40" type="text" matInput required formControlName="messaggio"
+                                autocomplete="off"></textarea>
+
+                        </mat-form-field>
+
+
+                    </div>
+                </div>
+
+
+            </form> -->
+
+    </mat-card-content>
+
+    <!-- <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+
+
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit()">
+            <mat-icon>save</mat-icon>
+            Invia
+        </button>
+    </div> -->
+</mat-card>

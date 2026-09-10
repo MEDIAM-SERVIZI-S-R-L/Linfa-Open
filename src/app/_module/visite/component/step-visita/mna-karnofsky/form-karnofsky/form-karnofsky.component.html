@@ -1,0 +1,81 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <!-- <h3 class="title">Karnofsky</h3> -->
+    </mat-card-title>
+    <ng-container *ngIf="karnofskyDataSource.data.length > 0">
+
+        <mat-card-content>
+
+
+            <mat-table id="table" [dataSource]="karnofskyDataSource">
+
+                <ng-container matColumnDef="attivitaLavorativa">
+                    <mat-header-cell *matHeaderCellDef>Attività lavorativa</mat-header-cell>
+                    <mat-cell *matCellDef="let karnofsky" data-label="Attività lavorativa">
+                        {{karnofsky.attivitaLavorativa== null ? '-':karnofsky.attivitaLavorativa }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="attivitaQuotidiana">
+                    <mat-header-cell *matHeaderCellDef>Attività quotidiana</mat-header-cell>
+                    <mat-cell *matCellDef="let karnofsky" data-label="Attività quotidiana">
+                        {{karnofsky.attivitaQuotidiane== null ? '-':karnofsky.attivitaQuotidiane}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="curaPersonale">
+                    <mat-header-cell *matHeaderCellDef>Cura personale</mat-header-cell>
+                    <mat-cell *matCellDef="let karnofsky" data-label="Cura personale">
+                        {{karnofsky.curaPersonale == null ? '-':karnofsky.curaPersonale }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="sintomiSupporto">
+                    <mat-header-cell *matHeaderCellDef>Sintomi/Supporto sanitario</mat-header-cell>
+                    <mat-cell *matCellDef="let karnofsky" data-label="Sintomi/Supporto sanitario">
+                        {{karnofsky.sintomiSupportoSanitario== null ? '-':karnofsky.sintomiSupportoSanitario}}
+                    </mat-cell>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let karnofsky" style="justify-content:flex-end">
+
+                        <mat-radio-button color="primary" fxFlex="30" [checked]="karnofsky.id == rigaSelezionata"
+                            *ngIf="!isRiepilogoVisita" (change)="selectRiga(karnofsky.id)">
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" fxFlex="30" [checked]="karnofsky.id == rigaSelezionata"
+                            *ngIf="isRiepilogoVisita" disabled></mat-radio-button>
+                    </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="karnofskyViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:karnofskyViewsColumns" (click)="selectRiga(row.id)"></mat-row>
+            </mat-table>
+
+            <ng-container *ngIf="showPunteggio">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+                    <mat-card class="mat-elevation-z8" id="boxValutazioni">
+                        <h3>Punteggio karnofsky:
+                            <span class="resValutazioni"> {{punteggio}} </span>
+                        </h3>
+                        <mat-divider></mat-divider>
+                        <div>
+                            <h3> {{indice}}
+
+                            </h3>
+                        </div>
+                    </mat-card>
+                </div>
+            </ng-container>
+        </mat-card-content>
+    </ng-container>
+    <mat-card-footer>
+        <button mat-raised-button color="primary"
+            *ngIf="!isRiepilogoVisita &&  (rigaSelezionata != null ||  this.rigaSelezionata != undefined)"
+            (click)="onSubmit()" style="margin-left: 30px;">
+            <mat-icon>save</mat-icon>
+            Salva
+
+        </button>
+    </mat-card-footer>
+</mat-card>

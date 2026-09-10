@@ -1,0 +1,45 @@
+//Add this to your css
+mat-cell > span.truncate-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+// ::ng-deep .mat-sort-header-arrow {
+//     transform: none !important;
+//     opacity: 1 !important;
+// }
+
+.separator {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 3px;
+
+}
+
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.hr{
+    background-color: #e7e7e7
+}
+
+.lista{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    li{
+        margin: 12px;
+    }
+}
+
+
+.input-row-confezionamenti{
+    margin: 12px;
+}
+@import "/src/theme/table-responsive.scss";

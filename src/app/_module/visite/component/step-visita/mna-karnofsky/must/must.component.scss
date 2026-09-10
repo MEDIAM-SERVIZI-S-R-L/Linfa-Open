@@ -1,0 +1,51 @@
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.container div {
+    margin-bottom: 10px;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+mat-checkbox {
+    padding: 15px 0;
+}
+
+::ng-deep .mat-checkbox-layout {
+    white-space: normal !important;
+}
+
+.mat-card .mat-divider-horizontal {
+    position: relative !important;
+}
+
+.resValutazioni {
+    color: #00afa6 !important;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.DescrVal {
+    color: #00afa6 !important;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.boxValutazioni {
+    background: #f5f5f5 !important;
+    h3 {
+        margin: 4px 0 12px 0px !important;
+    }
+}
+
+#valutazioniDiv {
+    margin-bottom: 40px !important;
+}
+
+.formSelect {
+    margin: 3px 0;
+}

@@ -1,0 +1,254 @@
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+#labelRadio,
+.mat-radio-button ~ .mat-radio-button {
+    margin-top: 16px;
+}
+
+mat-slider {
+    width: 300px;
+}
+
+.boxArea {
+    margin: 20px 0;
+}
+
+mat-divider {
+    margin-bottom: 15px;
+}
+
+#divProdotti {
+    margin-top: 30px;
+}
+
+.mat-card-title {
+    margin-bottom: unset !important;
+}
+
+.btnSave {
+    padding-bottom: 55px;
+}
+
+.btnProd {
+    padding: 20px 0;
+}
+
+.btnCreaSacca {
+    background-color: #4747a1;
+    color: white;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+.checkboxDiv mat-checkbox {
+    margin: 10px 0 10px 0;
+}
+
+.checkboxCust {
+    margin: 10px !important;
+}
+
+.addBtn {
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+    .custom-slider .ngx-slider .ngx-slider-bar {
+        // background: grey;
+        height: 5px;
+    }
+    .ngx-slider-span .ngx-slider-bar .ngx-slider-selection,
+    .custom-slider .ngx-slider .ngx-slider-selection {
+        background: #00afa6 !important;
+    }
+    .custom-slider .ngx-slider .ngx-slider-pointer {
+        width: 8px;
+        height: 16px;
+        top: auto;
+        /* to remove the default positioning */
+        bottom: 0;
+        background-color: #333;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .custom-slider .ngx-slider .ngx-slider-pointer:after {
+        display: none;
+    }
+    .custom-slider .ngx-slider .ngx-slider-bubble {
+        bottom: 14px;
+    }
+    .custom-slider .ngx-slider .ngx-slider-limit {
+        font-weight: bold;
+        // color: orange;
+    }
+    .custom-slider .ngx-slider .ngx-slider-tick {
+        width: 2px;
+        height: 8px;
+        margin-left: 4px;
+        border-radius: 0;
+        background: #616161; //#ffe4d1;
+        top: -1px;
+    }
+    .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+        background: #00afa6;
+    }
+}
+
+ngx-slider {
+    margin-bottom: 50px;
+}
+
+.sliders {
+    // margin-right: 10%;
+    mat-label {
+        font-weight: 600;
+        color: #55637d;
+    }
+}
+
+/* @media screen and (max-width: 960px) { */
+
+@media screen and (max-width: 1100px) {
+    mat-cell:first-of-type,
+    mat-header-cell:first-of-type,
+    mat-footer-cell:first-of-type {
+        padding-left: unset !important;
+    }
+    .pulsantiTab {
+        text-align: center !important;
+    }
+    .pulsantiTab mat-icon {
+        font-size: 35px;
+        width: 45px !important;
+        height: 52px !important;
+    }
+    mat-cell:last-of-type,
+    mat-header-cell:last-of-type,
+    mat-footer-cell:last-of-type {
+        padding: unset;
+    }
+    .mat-table {
+        border: 0;
+        vertical-align: middle;
+    }
+    mat-header-row {
+        display: none;
+    }
+    /*  Enable this to hide header
+  .mat-table .mat-header-cell {
+
+    border: 10px solid;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  */
+    .mat-table .mat-row {
+        border-bottom: 5px solid #ddd;
+        display: block;
+    }
+    /*
+  .mat-table .mat-row:nth-child(even) {background: #CCC}
+  .mat-table .mat-row:nth-child(odd) {background: #FFF}
+  */
+    .mat-table .mat-cell {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: 1em;
+        text-align: right;
+        font-weight: bold;
+        //height: 30px;
+        height: 100%;
+        margin-bottom: 4%;
+    }
+    .mat-table .mat-cell:before {
+        /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+        content: attr(data-label);
+        float: left;
+        text-transform: uppercase;
+        font-weight: normal;
+        font-size: 0.85em;
+    }
+    .mat-table .mat-cell:last-child {
+        border-bottom: 0;
+    }
+    .mat-table .mat-cell:first-child {
+        margin-top: 4%;
+    }
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type,
+.mat-accordion .mat-expansion-panel:last-of-type {
+    border-radius: 12px !important;
+}
+
+.accordionTitle {
+    color: #00afa6;
+    font-size: 16px;
+}
+
+.backBtn {
+    margin-top: 25px;
+}
+
+.mat-error {
+    //font-size: 18px !important;
+    strong {
+        font-size: 18px !important;
+    }
+}
+
+.cntrBtnRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between !important;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.check-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 36px;
+    width: 100%;
+    margin-right: 0px !important;    
+    .checkbox{
+        padding-left: 1%;
+    }
+}
+
+.left-button-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important;
+}
+
+.button-div{
+    width: 25%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end !important;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    transform: scale(0.55);
+    vertical-align: middle;
+}

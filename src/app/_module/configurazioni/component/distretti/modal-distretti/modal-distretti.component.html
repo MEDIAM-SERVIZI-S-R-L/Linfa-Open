@@ -1,0 +1,75 @@
+<div mat-dialog-content class="container">
+
+  <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between;">
+
+    <h3 class="title">
+      {{title}}
+    </h3>
+
+    <mat-icon (click)="closeDialog()" color="primary">close</mat-icon>
+  </div>
+
+  <div class="upper-container">
+
+    <form [formGroup]="formDistretto" class="form">
+
+      <span class="note-span">
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Descrizione</mat-label>
+          <input required matInput #input formControlName="descrizione" (keyup.enter)="saveDistretto($event)"
+            class="note-input" />
+          <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+      </span>
+
+      <span class="note-span">
+        <mat-checkbox formControlName="approvazione" color="primary" fxFlex="30">
+          Approvazione automatica
+        </mat-checkbox>
+      </span>
+    </form>
+
+    <div class="button-ctn">
+      <button mat-raised-button class="save-button" color="primary" (click)="saveDistretto($event)"
+        [disabled]="!formDistretto.valid">
+        <mat-icon>save</mat-icon>
+        Salva
+      </button>
+    </div>
+    
+  </div>
+
+
+  <div *ngIf="listaMedici.length > 0 && data?.id" class="filter-table-container">
+
+    <mat-divider></mat-divider>
+
+    <mat-form-field class="full-width" fxFlex>
+      <mat-label>Cerca</mat-label>
+      <input matInput [formControl]="filtroMedici" />
+    </mat-form-field>
+
+    <div class="table-container">
+      <mat-table [dataSource]="listaMediciDataSource">
+
+        <ng-container matColumnDef="medico">
+          <mat-header-cell *matHeaderCellDef>Medico</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.medico}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="associato">
+          <mat-header-cell *matHeaderCellDef>Associato a {{data.descrizione}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-checkbox [checked]="element.associatoDistretto" (change)="statusCheck($event, element)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="header-row"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons [pageSize]="10" class="mat-paginator-sticky">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

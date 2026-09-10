@@ -1,0 +1,191 @@
+.btn-group {
+    mat-button-toggle-group {
+        margin-right: 10px;
+        // height: 36px;
+        border-radius: 10px;
+    }
+    #prevNextBtn {
+        margin: 0 12px;
+        vertical-align: middle;
+    }
+}
+
+.subTitle{
+    padding-right: 20px;
+}
+
+.badge-99 {
+    background: #ff5858
+}
+
+
+.badge-20 { //dainiziare
+    background: #ffeb00;
+    // color: black;
+}
+
+.badge-35 { //terminata
+    background: #00afa6
+}
+.badge-30 { //darefertare
+    background: #86dc89
+}
+.badge-25 { //iniziata
+    background: #726905
+}
+
+.badge {
+    border-radius: 50%;
+    color: white;
+    padding: 0.5px 6px;
+    font-weight: 600;
+}
+
+.subContainer{
+    padding: 0 20px 0 20px;
+}
+
+mat-divider{
+     position: relative !important;
+    border: 0.5px solid #e1e1e1 !important;
+}
+
+
+.cal-week-view {
+
+    .cal-hour-segment.cal-after-hour-start .cal-time {
+        display: block;
+    }
+ }
+
+.filtri{
+    margin-top: 15px;
+}
+.btnLegend {
+  
+    button {
+        vertical-align: middle;
+        min-width: 1px !important;
+        height: 10px;
+        cursor: unset;
+    }
+  
+    .cancellata {
+        background-color: #ff5858;
+    }
+    .inAttesa {
+        background-color: #e37434;
+    }
+    .daEffettuare,.daAccettare {
+        background-color: #ffea00;
+    }
+    .iniziata {
+        background-color: #726905;
+    }
+    .effettuata {
+        background-color: #00afa6;
+    }
+    .daRefertare,.accettata {
+        background-color: #86dc89;
+    }
+}
+
+mat-button-toggle-group {
+    border-radius: 25px !important;
+    height: 38px !important;
+    .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+        // padding: 0 15px;
+        line-height: 38px !important;
+    }
+    button:not(.active) {
+        padding: 0 5px;
+        color: #848484 !important;
+    }
+    .active button {
+        color: #00afa6 !important;
+        font-weight: bold;
+    }
+}
+
+element.style {
+    background-color: rgb(255, 88, 88);
+    border-color: rgb(255, 88, 88);
+}
+
+.cal-week-view .cal-ends-within-day .cal-event {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.cal-week-view .cal-starts-within-day .cal-event {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.cal-week-view .cal-time-events .cal-event {
+    width: calc(100% - 2px);
+    height: 100%;
+    margin: 1px;
+    padding: 0px 5px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.cell-totals {
+    margin: 5px;
+    text-align: center;
+}
+
+.badge {
+    margin-right: 5px;
+}
+
+.cal-month-view .my-custom-class {
+    padding: 4px;
+}
+
+.divTitle {
+ 
+    margin: 0px auto 0px 0px;
+    h2 {
+        text-transform: capitalize;
+    }
+}
+
+.cal-week-view .cal-event {
+    color: black !important;
+}
+
+.cal-week-view .cal-current-time-marker {
+    background: black;
+}
+
+.cal-event-title {
+    white-space: normal;
+    // font-size: 16px !important
+}
+
+@media (max-width: 960px) {
+    .headerCalendar {
+        text-align: center !important;
+    }
+    .btn-group {
+        mat-button-toggle-group {
+            margin: 2px;
+        }
+    }
+    .divTitle {
+        margin: 6px auto;
+        // margin: 0px auto 0px -15px;
+    }
+    mat-button-toggle-group {
+        width: max-content;
+        align-self: center;
+    }
+}
+
+.cal-month-view .cal-day-badge {
+     background-color: unset !important; 
+    color: black !important; 
+    border: 1px solid #c8c8c8;
+}

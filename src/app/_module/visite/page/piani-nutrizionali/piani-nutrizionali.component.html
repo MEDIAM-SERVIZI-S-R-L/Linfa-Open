@@ -1,0 +1,9 @@
+<!-- <div class="backBtn">
+    <button mat-raised-button (click)="backToPrevious()" class="backBtn">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        indietro
+    </button>
+</div> -->
+
+<router-outlet #outlet (activate)="appGen.onActivate($event, outlet)">
+</router-outlet>

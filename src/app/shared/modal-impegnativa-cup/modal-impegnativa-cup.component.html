@@ -1,0 +1,19 @@
+<div mat-dialog-content class="container">
+    <div class="div-exit">
+        <mat-icon (click)="closeDialog()" color="primary">close</mat-icon>
+    </div>
+
+    <div>
+        <mat-form-field class="full-width" fxFlex="80">
+            <mat-label>Numero impegnativa CUP</mat-label>
+            <input type="text" matInput [formControl]="numeroImpegnativaCup" autocomplete="off" (keyup.enter)="onSubmit()">
+        </mat-form-field>
+    </div>
+
+    <div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+    fxLayoutGap.lt-md="10px">
+
+    <button mat-raised-button color="warn" (click)="onDismiss()">Annulla</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" (keyup.enter)="onSubmit()">Conferma</button>
+</div>
+</div>

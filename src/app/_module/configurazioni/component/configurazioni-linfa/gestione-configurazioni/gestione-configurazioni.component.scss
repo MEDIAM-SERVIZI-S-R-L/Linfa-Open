@@ -1,0 +1,23 @@
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.mat-column-categoria {
+    flex: 0 0 60% !important;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.mat-column-abilitato {
+    flex: 0 0 20% !important;
+    display: flex;
+    justify-content: center;
+}
+
+.mat-column-button {
+    display: flex;
+    justify-content: flex-end;
+}

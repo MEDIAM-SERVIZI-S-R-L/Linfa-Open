@@ -1,0 +1,9 @@
+<ng-container *ngIf="idPaziente">
+    <app-cruscotto-paziente [mapToPazientId]="idPaziente"></app-cruscotto-paziente>
+</ng-container>
+
+<app-artificiale [dataPianoNutrizionale]="dataResult" *ngIf="dataResult && idTipoAlimentazione == tipoAlimentazione.Artificiale"></app-artificiale>
+
+
+<app-new-form-dieta *ngIf="dataResult && idTipoAlimentazione == tipoAlimentazione.NaturaleMista" [dataPianoNutrizionale]="dataResult">
+</app-new-form-dieta>

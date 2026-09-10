@@ -1,0 +1,81 @@
+<mat-card class="linfaCard">
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px" (click)="addAnalisi()">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after">
+    <mat-icon>add_circle_outline</mat-icon>
+    Nuova analisi
+</button>
+    </div>
+
+    <mat-card-title>
+
+        <h3 class="title">Analisi
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+
+
+        <!-- Lista analisi per Paziente-->
+        <div [hidden]="!(listaAnalisi?.data.length>0)">
+            <mat-table id="table" [dataSource]="listaAnalisi" multiTemplateDataRows matSortActive="data" matSortDirection="desc" matSort matSortDisableClear>
+
+
+                <ng-container matColumnDef="descrizione">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Descrizione Analisi</mat-header-cell>
+                    <mat-cell *matCellDef="let analisi" data-label="Data">{{analisi.descrizione}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="data">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+
+                    <mat-cell *matCellDef="let analisi" data-label="Data analisi">
+                        <span class="truncate-text">{{analisi.data| date: 'dd/MM/yyyy' }}</span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="expand">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+
+                    <mat-cell *matCellDef="let analisi" data-label="Note" style="justify-content: flex-end;padding: 0;">
+
+                        <mat-icon>{{analisi.expand?'keyboard_arrow_up':'keyboard_arrow_down'}}</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="details">
+
+
+                    <mat-cell *matCellDef="let analisi" data-label="Note">
+                        <ng-container *ngIf="analisi.expanded">
+                            <!--Dettaglio del analisi-->
+
+
+                            <app-dettaglio-analisi *ngIf="analisi.expanded" [analisiId]="analisi.idAnalisi" style="width: 100%;"></app-dettaglio-analisi>
+
+                        </ng-container>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"> </mat-header-row>
+                <!-- riga padre-->
+                <mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row" [ngClass]="element.expanded? 'noBorder': ''" [class.example-expanded-row]="rowOpened === element" (click)="inserimentoDatiEspandibili(element)" style="cursor:pointer">
+                </mat-row>
+                <!--riga nascosta-->
+
+                <mat-row *matRowDef="let row; columns: ['details']" class="{{row.expanded? 'show': 'hide'}}"></mat-row>
+
+            </mat-table>
+            <!-- <mat-paginator [length]="listaAnalisi?.data.length" class="paginator" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons>
+            </mat-paginator> -->
+
+            <mat-paginator [length]="listaAnalisi.data.length" [pageSize]="15" showFirstLastButtons [pageSizeOptions]="[15, 25, 50]"></mat-paginator>
+        </div>
+        <p *ngIf="listaAnalisi?.data.length==0">
+            Nessuna analisi trovata
+        </p>
+
+
+
+    </mat-card-content>
+</mat-card>

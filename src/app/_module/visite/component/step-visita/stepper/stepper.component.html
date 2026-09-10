@@ -1,0 +1,24 @@
+<mat-horizontal-stepper labelPosition="bottom" (click)="navigate(stepper.selectedIndex)" #stepper>
+
+    <mat-step>
+        <ng-template matStepLabel>Anamnesi</ng-template>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Anamnesi alimentare</ng-template>
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>
+          <!-- MNA - NRS-2002 - Karnofsky - MUST -->
+          Screening Nutrizionale
+        </ng-template>
+
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Valutazione Nutrizionale</ng-template>
+    </mat-step>
+    <!-- <mat-step>
+        <ng-template matStepLabel>Riepilogo e fine visita</ng-template>
+    </mat-step> -->
+
+</mat-horizontal-stepper>

@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>
+    {{title}}
+</h1>
+
+<div mat-dialog-content>
+    <p [innerHTML]="message"></p>
+</div>
+
+<div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+    fxLayoutGap.lt-md="10px">
+
+    <button mat-raised-button color="warn" (click)="onDismiss()">Annulla</button>
+    <button mat-raised-button color="primary" (click)="confirm()">Conferma</button>
+</div>

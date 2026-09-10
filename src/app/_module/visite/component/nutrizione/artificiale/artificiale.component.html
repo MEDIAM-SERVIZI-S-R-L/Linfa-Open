@@ -1,0 +1,451 @@
+<form [formGroup]="formArtificiale" autocomplete="off">
+    <!-- <ng-container *ngIf="isLoaded && !isRiepilogoStorico">
+        <app-cruscotto-paziente></app-cruscotto-paziente>
+
+    </ng-container> -->
+
+    <div class="backBtn" *ngIf="isDietaXpaziente && !isRiepilogoStorico">
+        <button (click)="backToPrevious()">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+            <span>Torna alla valutazione nutrizionale</span>
+        </button>
+    </div>
+
+    <div class="backBtn" *ngIf="isDettaglioPianoNutrizionale">
+        <button (click)="backToList()">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+            <span>Torna alla lista dei piani nutrizionali</span>
+        </button>
+    </div>
+
+
+    <mat-card class="linfaCard" *ngIf="!isDettaglioPianoNutrizionale">
+        <mat-card-title>
+            <h3 class="title">
+                <ng-container>Nutrizione artificiale</ng-container>
+            </h3>
+
+        </mat-card-title>
+        <mat-card-content>
+
+            <mat-hint>Fabbisogno nutrizionale giornaliero stimato per il paziente. I valori iniziali sotto riportati
+                rappresentano il metabolismo basale BEE e sono stati calcolati automaticamente mediante l'algoritmo standard di Harris-Benedict</mat-hint>
+            <!-- <mat-hint>Fabbisogno giornaliero calcolato utilizzando la formula di Harris–Benedict sui dati inseriti negli step precedenti, i valori possono essere modificati</mat-hint> -->
+            <div class="boxArea" fxflexfill>
+
+                <div fxLayout="row wrap" class="custom-slider sliders" fxLayout.lt-sm="column" fxLayoutGap="4%" fxLayoutGap.lt-md="0px">
+                    <div fxFlex>
+                        <mat-label>Kcal
+                            <mat-hint>(die)</mat-hint>
+
+                        </mat-label>
+                        <ngx-slider [(value)]="kcalVal" [options]="optionsKcal"></ngx-slider>
+
+                    </div>
+                    <div fxFlex>
+
+                        <mat-label>Proteine
+                            <mat-hint>(g/die)</mat-hint>
+                        </mat-label>
+                        <ngx-slider [(value)]="protVal" [options]="optionsProt"></ngx-slider>
+
+                    </div>
+
+                    <!--#545 <div fxFlex>
+
+                        <mat-label>Azoto
+                            <mat-hint>(g/die)</mat-hint>
+                        </mat-label>
+                        <ngx-slider [(value)]="azotoVal" [options]="optionsAzoto"></ngx-slider>
+                    </div> -->
+
+                    <div fxFlex>
+                        <mat-label>Apporto idrico
+                            <mat-hint>(ml/die)</mat-hint>
+                        </mat-label>
+                        <ngx-slider [(value)]="apportoIdricoVal" [options]="optionsApportoIdrico"></ngx-slider>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </mat-card-content>
+    </mat-card>
+
+
+    <mat-card *ngIf="!isDettaglioPianoNutrizionale">
+        <mat-card-content>
+
+
+            <div class="boxArea">
+                <h3 class="subTitle">Tipologia di nutrizione</h3>
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Tipo nutrizione artificiale</mat-label>
+                        <mat-select matNativeControl required formControlName="artificiale" (selectionChange)="selectedTipoAlimentazione($event.value)">
+                            <mat-option *ngFor="let tipoAlimentazione of listaTipoAlimentazioneArtificiale" [value]="tipoAlimentazione.id">
+                                {{tipoAlimentazione.artificiale}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="idTipoAlimentazioneArtificiale != null">
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Metodo di somministrazione</mat-label>
+                        <mat-select matNativeControl formControlName="metodoSomministrazione">
+                            <mat-option *ngFor="let metodo of listaMetodiSomministrazione" [value]="metodo.id">
+                                {{ metodo.metodoSomministrazione }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="full-width" fxFlex="30" *ngIf="idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Parenterale">
+                        <mat-label>Tipo catetere posizionato</mat-label>
+                        <input type="text" matInput formControlName="tipoCatetereParenterale" maxlength="500" autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="full-width" fxFlex="30" *ngIf="idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Enterale">
+                        <mat-label>Tipo sonda</mat-label>
+                        <mat-select matNativeControl formControlName="tipoSonda">
+                            <mat-option *ngFor="let tipoSonda of listaTipiSonda" [value]="tipoSonda.id">
+                                {{tipoSonda.tipoSonda}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Data posizionamento</mat-label>
+                        <input matInput type="text" [matDatepicker]="dataPosizionamentoPicker" formControlName="dataPosizionamento" readonly (focus)="dataPosizionamentoPicker.open()" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="dataPosizionamentoPicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker touchUi #dataPosizionamentoPicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="idTipoAlimentazioneArtificiale != null && idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Enterale">
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Lunghezza sonda</mat-label>
+                        <input type="text" matInput formControlName="dimensioneSonda" maxlength="10" [OnlyNumber]="true" autocomplete="off">
+                        <span class="suffix" matSuffix>cm</span>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Calibro sonda (FR)</mat-label>
+                        <mat-select matNativeControl formControlName="calibroSonda">
+                            <mat-option *ngFor="let calibro of listaCalibriSonda" [value]="calibro.id">
+                                {{calibro.calibro}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="idTipoAlimentazioneArtificiale != null">
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Data inizio nutrizione artificiale</mat-label>
+                        <input matInput type="text" [matDatepicker]="dataInizioNEPicker" formControlName="dataInizioNE" autocomplete="off" readonly (focus)="dataInizioNEPicker.open()">
+                        <mat-datepicker-toggle matSuffix [for]="dataInizioNEPicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker touchUi #dataInizioNEPicker></mat-datepicker>
+                    </mat-form-field>
+
+
+                </div>
+
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+
+    <!-- PRODOTTI -->
+    <mat-card class="linfaCard" *ngIf="idTipoAlimentazioneArtificiale != null">
+        <mat-card-title>
+            <h3 class="title">Piano nutrizionale</h3>
+
+        </mat-card-title>
+
+        <mat-card-content>
+
+            <div style="margin-bottom:20px;" class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="30px" fxLayoutGap.lt-md="10px" *ngIf="!isDettaglioPianoNutrizionale">
+
+                <!-- <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Validità piano nutrizionale</mat-label>
+                    <mat-select matNativeControl formControlName="validitaPiano" required>
+                        <mat-option *ngFor="let durata of appGen.DurataPianoNutrizionale" [value]="durata">
+                            {{ durata }} giorni
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+                <mat-form-field fxFlex="30">
+                    <mat-label>Validità piano nutrizionale</mat-label>
+                    <input matInput type="number" formControlName="validitaPiano" required="true" #input>
+                    <mat-error>La validità del piano deve rientrare tra la durata di 1 giorno e 365 giorni</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="!isDettaglioPianoNutrizionale" class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="30px" fxLayoutGap.lt-md="10px">
+                <mat-hint>Gli AFMS vengono restituiti in base alla scelta della tipologia di nutrizione artificiale
+                </mat-hint>
+            </div>
+            <div class="container" id="divProdotti">
+
+                <ng-container>
+                    <div class="boxArea" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px" *ngIf="this.authGuard.canAccess(this.appGen.permesso.GestioneSacche) && idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Parenterale  && !isDettaglioPianoNutrizionale">
+                        <mat-checkbox color="primary" (change)="mostraSacche = !mostraSacche"> Mostra solo sacche parenterali personalizzate
+                        </mat-checkbox>
+                    </div>
+
+                    <div *ngIf="!isDettaglioPianoNutrizionale" class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="30px" fxLayoutGap.lt-md="10px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Gara</mat-label>
+                            <mat-select matNativeControl formControlName="gara" (selectionChange)="setGara($event.value)" required>
+                                <mat-option *ngFor="let gara of listaGare" [value]="gara.id">
+                                    {{gara.gara}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>AFMS</mat-label>
+
+                            <mat-select matNativeControl #ProdottoSelezionato [disabled]="!editProdotti || !misceleVisibili">
+
+                                <ng-container *ngIf="!mostraSacche">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="filtroProdotti" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option [value]="prodotto" *ngFor="let prodotto of returnFiltered(0)">
+                                        {{ prodotto.prodotto }}
+                                    </mat-option>
+                                </ng-container>
+                                <ng-container *ngIf="idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Parenterale">
+                                    <hr>
+                                    <mat-optgroup label="SACCHE">
+                                        <mat-option [value]="prodotto" *ngFor="let prodotto of returnFiltered(tipoProdotto.SacchePersonalizzate)">
+                                            {{ prodotto.prodotto }}
+                                        </mat-option>
+                                    </mat-optgroup>
+                                </ng-container>
+                                <ng-container *ngIf="!mostraSacche && returnFiltered(tipoProdotto.Integratori).length >0">
+                                    <hr>
+
+                                    <mat-optgroup label="INTEGRATORI" *ngIf="!mostraSacche ">
+                                        <mat-option [value]="prodotto" *ngFor="let prodotto of returnFiltered(tipoProdotto.Integratori)">
+                                            {{ prodotto.prodotto }}
+                                        </mat-option>
+                                    </mat-optgroup>
+                                </ng-container>
+
+                            </mat-select>
+                        </mat-form-field>
+
+
+
+                        <mat-icon *ngIf="!appGen.isNullOrUndefined(ProdottoSelezionato.value)" matTooltip="Clicca per ulteriori informazioni sull' AFMS" class="infoIco" color="primary" (click)="getInfo(ProdottoSelezionato.value)">info_outline
+                        </mat-icon>
+
+                        <button mat-raised-button color="primary" type="button" (click)="addProdotto(ProdottoSelezionato.value)" *ngIf="editProdotti" [disabled]="!ProdottoSelezionato.value">
+                            Aggiungi
+                        </button>
+
+
+
+                        <button mat-raised-button
+                        [disabled]="!this.idGara"
+                        [matTooltip]="!this.idGara? 'Selezionare prima una gara' : '' "
+                        class="btnCreaSacca" type="button" (click)="creaSacca()"
+                        *ngIf="editProdotti && this.authGuard.canAccess(this.appGen.permesso.GestioneSacche)
+                            &&   idTipoAlimentazioneArtificiale != null
+                            && idTipoAlimentazioneArtificiale == TipoAlimentazioneArtificiale.Parenterale">
+                            Componi sacca personalizzata
+                        </button>
+
+                    </div>
+
+                </ng-container>
+
+                <div *ngIf="prodottiSelezionati && prodottiSelezionati.length > 0 && idGara || prodottiSelezionati && prodottiSelezionati.length > 0 && isDettaglioPianoNutrizionale">
+                    <app-tabella-prodotti [prodotti]="prodottiSelezionati" [kcal]="kcalVal" [proteine]="protVal" [apportoIdrico]="apportoIdricoVal" [azoto]="azotoVal" [stepVisita]="stepVisita" [notePianoNutr]="notePianoNutr" [isRiepilogo]="!editProdotti"
+                    [idGara]="idGara" [isDettaglio]="isDettaglioPianoNutrizionale">
+                    </app-tabella-prodotti>
+                </div>
+            </div>
+
+
+
+        </mat-card-content>
+
+        <ng-container *ngIf="isDettaglioPianoNutrizionale && editProdotti">
+
+            <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+                <button mat-raised-button color="primary" class="btnFooterCard" (click)="salvaPianoNutrizionale()">
+                    <mat-icon>save</mat-icon>
+
+                    Salva
+                </button>
+            </div>
+        </ng-container>
+    </mat-card>
+
+
+
+    <!-- <mat-card *ngIf="idTipoAlimentazioneArtificiale != null && !isDettaglioPianoNutrizionale && !isRiepilogoStorico">        <ng-container>
+            <mat-card-title>
+                <h3 class="title">Note dietista</h3>
+            </mat-card-title>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                <mat-form-field class="full-width" fxFlex>
+                    <textarea matInput
+                    formControlName = "noteDietista"
+                    cdkTextareaAutosize cdkAutosizeMinRows="3"
+                    cdkAutosizeMaxRows="5"
+                    ></textarea>
+                </mat-form-field>
+            </div>
+            <div>
+                <span> <mat-icon color="primary" class="material-icons-outlined" style="vertical-align:bottom">info</mat-icon> Le note del dietista non compariranno in alcun documento per il paziente e saranno utilizzate</span><span style="font-weight: bold"> solamente per uso interno</span> <span>.</span>
+            </div>
+        </ng-container>
+    </mat-card> -->
+
+<!--
+    <mat-card *ngIf="idTipoAlimentazioneArtificiale != null && !isDettaglioPianoNutrizionale && authGuard.canRole(appGen.ruolo.Medico) && !isRiepilogoStorico">
+
+    <ng-container>
+        <mat-card-title>
+            <h3 class="title" *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita) && !isDaRefertare">
+                Conclusioni</h3>
+            </mat-card-title>
+        <mat-card-content>
+
+            <div *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita) && !isDaRefertare">
+                <ng-container *ngIf="!isRiepilogo && !isRiepilogoStorico">
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-hint>Seleziona una conclusione prefefinita oppure digita manualmente</mat-hint>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="65">
+                            <mat-label>Lista conclusioni predefinite</mat-label>
+                            <mat-select matNativeControl formControlName="conclusioniPredefinite" (selectionChange)="selectedConclusionePredefinita($event.value)">
+                                <mat-option *ngFor="let conclusione of listaConclusioniPredefinite" [value]="conclusione.conclusione" [matTooltip]="conclusione.conclusione">
+                                    {{conclusione.conclusione}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <mat-divider></mat-divider>
+                </ng-container>
+                <angular-editor formControlName="diagnosi" [config]="editorConfig" id="editor" [required]="!authGuard.canRole(appGen.ruolo.Dietista)"></angular-editor>
+            </div>
+
+        </mat-card-content>
+    </ng-container>
+    </mat-card> -->
+
+    <ng-container *ngIf="idTipoAlimentazioneArtificiale != null && !isDettaglioPianoNutrizionale">
+        <mat-divider *ngIf="!isRiepilogoStorico"></mat-divider>
+        <div *ngIf="!isRiepilogoStorico" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+            <div class="check-container">
+                <mat-checkbox
+                color="primary"
+                class="checkbox"
+                matTooltip="Compila i documenti senza mostrare le Kcal"
+                [checked]="kcalNonVisibili === true"
+                (change)="statusKcal()"
+                *ngIf="!bEdit && authGuard.canRole(appGen.ruolo.Medico)">
+                    Nascondi Kcal
+                </mat-checkbox>
+            </div>
+            <div class="left-button-div">
+
+                <button color="accent" class="btnStampDocuments" mat-raised-button [matMenuTriggerFor]="menu" *ngIf="!editProdotti && authGuard.canAccess(appGen.permesso.ConcludiVisita)">
+                    <mat-icon >more_vert</mat-icon>
+                    Anteprima documenti
+                </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item type="button" (click)="bozzaAnamnesiAlimentare()">
+                      <mat-icon  color="accent">menu_book</mat-icon>
+                      Anamnesi alimentare
+
+                </button>
+                      <button mat-menu-item type="button" (click)="bozzaPianoNutrizionale()">
+                        <mat-icon  color="accent">assignment</mat-icon>
+                    Piano nutrizionale
+
+                </button>
+                      <button mat-menu-item type="button" (click)="bozzaReferto()">
+                        <mat-icon  color="accent">assignment</mat-icon>
+                        Referto
+
+                  </button>
+                  </mat-menu>
+
+            </div>
+
+            <ng-container *ngIf="inError">
+                <div fxLayout="row wrap" fxLayoutGap="5px">
+                    <mat-icon color="warn">error</mat-icon>
+                    <mat-error class="errorCustom" [innerHTML]="msgErrore"></mat-error>
+                </div>
+            </ng-container>
+
+
+            <div class="button-div">
+                <button mat-raised-button color="primary" (click)="onSubmit()" *ngIf="bEdit">
+                    Salva e seleziona piano
+                    <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+                </button>
+
+
+                <button mat-raised-button type="button" color="primary" (click)="modificaNutrizione()" *ngIf="!bEdit">
+                    <mat-icon style="margin:unset !important">edit</mat-icon>
+                    Modifica
+                </button>
+
+
+            <!-- <button mat-raised-button color="accent" (click)="bozzaPianoNutrizionale()" *ngIf="!editProdotti && authGuard.canAccess(appGen.permesso.ConcludiVisita)">
+              Anteprima piano nutrizionale
+              <mat-icon style="margin:unset !important">assignment</mat-icon>
+          </button>
+
+            <button mat-raised-button color="accent" (click)="bozzaReferto()" *ngIf="!editProdotti && authGuard.canAccess(appGen.permesso.ConcludiVisita)">
+                Anteprima referto
+                <mat-icon style="margin:unset !important">assignment</mat-icon>
+            </button> -->
+
+            <button
+            mat-raised-button color="primary" (click)="concludiVisita()" *ngIf="!bEdit && isRiepilogo">
+                <ng-container *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita)"> Concludi visita
+                </ng-container>
+                <ng-container *ngIf="authGuard.canRole(appGen.ruolo.Dietista)">
+                    <mat-icon>rate_review</mat-icon>
+                    Chiudi, da refertare</ng-container>
+                <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+            </button>
+        </div>
+
+        </div>
+    </ng-container>
+
+
+    <!-- PIANO NUTRIZIONALE NON ESISTENTE (PROBABILMENTE DATI SPORCHI)-->
+    <ng-container *ngIf="!pianoNutrizionaleExist">
+        <mat-card
+         class="linfaCard">
+
+            <h3 class="title">Piano nutrizionale non trovato</h3>
+        </mat-card>
+    </ng-container>
+
+</form>

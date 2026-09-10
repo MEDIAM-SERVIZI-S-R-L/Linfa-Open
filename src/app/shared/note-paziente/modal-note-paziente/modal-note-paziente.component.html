@@ -1,0 +1,131 @@
+<h1 mat-dialog-title>
+  Note paziente <ng-container *ngIf="dataCreazione">- {{dataCreazione|date:'dd/MM/yyyy HH:mm'}}
+  </ng-container>
+</h1>
+
+<div mat-dialog-content>
+
+  <div class="container">
+
+    <div class="container" fxflexfill>
+      <ng-container *ngIf="!isRiepilogo">
+        <form [formGroup]="formFiltriPaziente" autocomplete="off" class="containerFiltri">
+          <h4 class="">Cerca un paziente esistente</h4>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px">
+            <mat-form-field class="full-width" fxFlex="30">
+              <mat-label>Nome</mat-label>
+              <input type="text" matInput formControlName="nome" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field class="full-width" fxFlex="30">
+              <mat-label>Cognome</mat-label>
+              <input type="text" matInput formControlName="cognome" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field class="full-width" fxFlex="30">
+              <mat-label>Codice Fiscale</mat-label>
+              <input type="text" matInput id="cf" formControlName="cf" autocomplete="off">
+
+
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px">
+            <button mat-raised-button color="primary" (click)="searchPaziente()">
+              <mat-icon>search</mat-icon>
+              Cerca
+            </button>
+          </div>
+        </form>
+      </ng-container>
+
+      <form [formGroup]="form" autocomplete="off" id="form">
+        <ng-container *ngIf="!isRiepilogo">
+          <div fxLayout="row wrap" class="selectPaziente" fxLayout.lt-sm="column" fxLayoutGap="3%"
+            fxLayoutGap.lt-md="10px" *ngIf="listaPazienti.length>0">
+            <mat-form-field class="full-width" fxFlex="55">
+              <mat-label>Paziente</mat-label>
+              <mat-select matNativeControl #pazienteSelect (selectionChange)="selectedPaziente($event.value)">
+                <mat-option *ngFor="let paziente of listaPazienti" [value]="paziente">
+                  {{ paziente.nome }} {{paziente.cognome}} - {{paziente.cf}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-raised-button color="warn" type="button" (click)="svuotaPaziente()"
+              *ngIf="pazienteSelezionato">Svuota
+              paziente</button>
+
+          </div>
+        </ng-container>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px"
+          *ngIf="pazienteSelezionato">
+          <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Nome</mat-label>
+            <input type="text" matInput [value]="pazienteSelezionato.nome" autocomplete="off" disabled>
+          </mat-form-field>
+          <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Cognome</mat-label>
+            <input type="text" matInput disabled [value]="pazienteSelezionato.cognome" autocomplete="off"
+              oninput="this.value = this.value.toCapitalize()">
+          </mat-form-field>
+          <mat-form-field class="full-width" fxFlex="30" provideReadonly>
+            <mat-label>Codice Fiscale</mat-label>
+            <input type="text" matInput id="cf" disabled [value]="pazienteSelezionato.cf" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px"
+          *ngIf="pazienteSelezionato">
+          <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Sesso</mat-label>
+            <mat-select matNativeControl disabled [value]="pazienteSelezionato.sesso">
+              <mat-option *ngFor="let gender of appGen.GenderType" [value]="gender.abbrev">
+                {{ gender.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Data di nascita</mat-label>
+            <input matInput type="text" [matDatepicker]="DataNascitaPicker" readonly [max]="appGen.today"
+              (focus)="DataNascitaPicker.open()" disabled [value]="pazienteSelezionato.dataNascita" autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="DataNascitaPicker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #DataNascitaPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Tipo contatto</mat-label>
+            <mat-select matNativeControl required formControlName="contatto">
+              <mat-option *ngFor="let item of appGen.TipoContatto" [value]="item.value">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="10px"
+          *ngIf="pazienteSelezionato">
+
+          <mat-form-field class="full-width" fxFlex>
+            <mat-label>Note</mat-label>
+            <textarea matInput formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="3" required
+              cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+
+</div>
+
+<div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+  fxLayoutGap.lt-md="10px">
+  <button mat-raised-button color="warn" type="button" (click)="onDismiss()">Chiudi</button>
+
+  <button mat-raised-button color="primary" type="button" (click)="onSubmit()"
+    *ngIf="pazienteSelezionato && !isRiepilogo">
+    <mat-icon>save</mat-icon>
+    Salva
+  </button>
+</div>

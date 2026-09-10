@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>
+    Stampa piano terapeutico
+</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="form" autocomplete="off">
+
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field class="full-width" fxFlex="45">
+                <mat-label>Validità piano terapeutico (in giorni) </mat-label>
+                <input type="number" matInput required formControlName="validita" autocomplete="off" placeholder="numero di giorni">
+            </mat-form-field>
+        </div>
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+            <mat-form-field class="full-width" fxFlex="45">
+                <mat-label>Data e ora prossima prescrizione</mat-label>
+                <input matInput [ngxMatDatetimePicker]="picker" [min]="appGen.today" readonly (focus)="picker.open()" [(ngModel)]="dataPrescrizioneModel" formControlName="dataProssimaPrescrizione">
+                <mat-datepicker-toggle matSuffix [for]="picker">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker color="primary" [stepMinute]="appGen.stepMinute">
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" fxFlex="45">
+                <mat-label>Ambulatorio</mat-label>
+                <mat-select matNativeControl formControlName="ambulatorio">
+                    <mat-option *ngFor="let ambulatorio of listaAmbulatori" [value]="ambulatorio.descr">
+                        {{ ambulatorio.descr }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="container" formArrayName="integratori">
+            <div *ngFor="let integratoriForm of integratori.controls; let i=index;" class="form" style="margin-bottom: 10px;">
+                <div [formGroupName]="i">
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="45">
+                            <input type="text" matInput disabled readonly formControlName="prodotto" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="45">
+                            <mat-label>N° confezioni totali</mat-label>
+                            <input type="text" matInput formControlName="confezioni" required autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px"
+      *ngFor="let prodotto of integratori">
+
+      <mat-form-field class="full-width" fxFlex="45">
+        <input  type="text" matInput disabled [value]="prodotto.prodotto" autocomplete="off">
+      </mat-form-field>
+
+      <mat-form-field class="full-width" fxFlex="45">
+        <mat-label>N° confezioni totali</mat-label>
+        <input  type="text" matInput required autocomplete="off">
+      </mat-form-field>
+    </div> -->
+    </form>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button class="cancelBtn" (click)="onDismiss()">Annulla</button>
+    <button mat-raised-button color="primary" (click)="confirm()">Conferma</button>
+</div>

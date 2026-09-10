@@ -1,0 +1,105 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova patologia</ng-container>
+            <ng-container *ngIf="isRiepilogo">Patologia</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formPatologia" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Patologia</mat-label>
+                            <mat-select matNativeControl formControlName="patologia" required
+                                (selectionChange)="patologiaSelezionata($event.value)">
+                                <mat-option *ngFor="let tipo of listaPatologie" [value]="tipo.id">
+                                    {{ tipo.patologia }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-checkbox fxFlex="20" formControlName="primaria">Primaria</mat-checkbox>
+                        <mat-checkbox fxFlex="20" formControlName="cronica">Cronica</mat-checkbox>
+                    </div>
+
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="showStress">
+                            <mat-label>Stress</mat-label>
+                            <mat-select matNativeControl formControlName="stress">
+                                <mat-option *ngFor="let stress of listaStress" [value]="stress.id">
+                                    {{ stress.stress }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="showAttivita">
+                            <mat-label>Attività</mat-label>
+                            <mat-select matNativeControl formControlName="attivita">
+                                <mat-option *ngFor="let attivita of listaAttivita" [value]="attivita.id">
+                                    {{ attivita.attivita }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="showTrauma">
+                            <mat-label>Trauma</mat-label>
+                            <mat-select matNativeControl formControlName="trauma">
+                                <mat-option *ngFor="let trauma of listaTraumi" [value]="trauma.id">
+                                    {{ trauma.trauma }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="65">
+                            <mat-label>Terapia</mat-label>
+                            <input type="text" matInput formControlName="terapia" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Dal</mat-label>
+                            <input matInput type="text" [matDatepicker]="DalPicker" formControlName="dal"
+                                (dateChange)="changeFinalDate()" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="DalPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DalPicker></mat-datepicker>
+
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Al</mat-label>
+                            <input matInput type="text" [matDatepicker]="AlPicker" [min]="dataFinale"
+                                formControlName="al" [(ngModel)]="dataFinale" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="AlPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #AlPicker></mat-datepicker>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+
+    </mat-card-content>
+    <mat-card-footer>
+        <button mat-raised-button color="accent" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+
+    </mat-card-footer>
+</mat-card>

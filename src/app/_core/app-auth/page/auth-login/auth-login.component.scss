@@ -1,0 +1,143 @@
+#loginPage {
+    width: 100vw;
+    height: 100vh;
+    background: url("../../../../../assets/img/login/MaskGroup1.webp") #ecefef;
+    background-size: cover;
+}
+
+.dispositivo {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#loginOwerflow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    .appLogo {
+        width: 100%;
+        img {
+            width: 150px;
+            margin-top: 10px;
+            margin-bottom: 60px;
+        }
+    }
+    #loginBox {
+        filter: drop-shadow(10px 10px 10px #2333);
+        position: absolute;
+        top: calc(50vh - 310px);
+        left: 5%;
+        form {
+            width: 480px;
+            margin: auto;
+            display: block;
+            mat-card {
+                height: 450px;
+                border-radius: 12px;
+                padding: 35px 60px;
+                background: rgba(255, 255, 255, 1);
+                ::ng-deep .mat-card-header-text {
+                    /* CSS styles go here */
+                    margin: 0px; // for example to remove the margin
+                }
+                mat-form-field {
+                    width: 100%;
+                    font-size: 18px;
+                    line-height: 25px;
+                    mat-label {
+                        mat-icon {
+                            margin-left: 5px;
+                            font-size: 24px;
+                            float: left;
+                        }
+                        * {
+                            margin-right: 10px;
+                            font-size: 16px;
+                            font-weight: 100;
+                        }
+                        b {
+                            color: #272f33;
+                        }
+                    }
+                }
+                #loginBtn {
+                    margin-top: 20px;
+                    width: 144px;
+                    height: 48px;
+                    background: #00afa6;
+                    border-radius: 25px;
+                    border: none;
+                    box-shadow: 0px 10px 20px #0069634e;
+                    color: #fff;
+                    text-align: center;
+                    font-size: 16px;
+                    text-transform: uppercase;
+                    letter-spacing: 1.6px;
+                }
+            }
+        }
+        #medical {
+            img {
+                height: 16px;
+                margin: 2px;
+            }
+        }
+    }
+    #loginInfoBox {
+        width: 50%;
+        position: absolute;
+        right: 10%;
+        top: 4%;
+        #loginBoxImg {
+            width: 100%;
+            height: auto;
+        }
+    }
+    .mediamFooter {
+        img {
+            height: 12px;
+            margin-top: 4px;
+        }
+    }
+}
+
+@media screen and (min-width: 1720px) {
+    #loginInfoBox {
+        #loginBoxImg {
+            width: 80% !important;
+        }
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .cntrBtn {
+        display: -webkit-inline-box !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    form {
+        width: unset !important;
+    }
+    mat-card {
+        top: unset;
+    }
+    #loginInfoBox {
+        display: none;
+    }
+    #loginBox {
+        form {
+            mat-card {
+                padding: 40px !important;
+            }
+        }
+    }
+}
+
+.iconShow {
+    mat-icon {
+        cursor: pointer;
+    }
+    cursor: pointer;
+}

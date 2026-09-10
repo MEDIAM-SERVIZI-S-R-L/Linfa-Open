@@ -1,0 +1,21 @@
+   .lineDivider {
+       height: 2px;
+       margin: 35px 100px 35px 0;
+       background: #00aed6;
+       width: 70%;
+       border-radius: 100px;
+       border: 0px;
+   }
+
+   .info {
+       font-size: medium;
+       margin-left: 5px;
+   }
+
+   #pazienteIcon {
+       vertical-align: middle;
+   }
+
+   .row-content {
+       margin: 20px 0;
+   }

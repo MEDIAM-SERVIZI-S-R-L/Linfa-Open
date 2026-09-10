@@ -1,0 +1,81 @@
+<div [hidden]="idTipoProdotto !== 2">
+
+        <div class="container">
+
+            <h3 class="title">Confezionamenti</h3>
+
+            <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+                <button mat-raised-button (click)="addConf(prodottoSpecifico)" color="primary" class="btnTopCard">
+                    <mat-icon class="add-icon">add</mat-icon>
+                    Nuovo confezionamento
+                </button>
+            </div>
+
+        <h4 *ngIf="dataSource.data.length <= 0">Non sono ancora presenti dei confezionamenti per questo prodotto</h4>   
+
+        <div [hidden]="dataSource.data.length <= 0">
+
+            <mat-table mat-table [dataSource]="dataSource" multiTemplateDataRows id="table">
+
+                <ng-container matColumnDef="quantita">
+                    <mat-header-cell *matHeaderCellDef>Quantità</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <span style="margin-right: 2px;">{{element.quantita}} {{element.unitaMisura}}</span>
+                        <span matTooltip="L'unità di misura del prodotto e del confezionamento non sono uguali">
+                            <mat-icon color="accent">{{element.idUnitaMisura !== idUnitaMisura? 'warning' : ''}}</mat-icon>
+                        </span>
+                    </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="disponibile">
+                    <mat-header-cell *matHeaderCellDef>Disponibile</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-icon *ngIf="element.disponibile === true" [ngStyle]="{'color': '#00afa6'}">done</mat-icon>
+                        <mat-icon *ngIf="element.disponibile === false" [ngStyle]="{'color': '#d33'}">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="prezzo">
+                    <mat-header-cell *matHeaderCellDef>Prezzo unitario</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.prezzo | currency:'EUR' }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="listaGare">
+                    <mat-header-cell *matHeaderCellDef>Gare associate</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.nomeGara}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dataCreazione">
+                    <mat-header-cell *matHeaderCellDef>Inserito il: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dataCreazione | date: 'dd/MM/yyyy'}}</mat-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="dataModifica">
+                    <mat-header-cell *matHeaderCellDef>Modificato il: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dataModifica? (element.dataModifica | date: 'dd/MM/yyyy') : '-'}}</mat-cell>
+                </ng-container> -->
+
+                <ng-container matColumnDef="button">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="buttons">
+
+                        <mat-icon class="material-icons-outlined" matTooltip="Modifica" color="black"
+                            style="margin: 12px;" (click)="editConf(element)">edit</mat-icon>
+
+                        <mat-icon color="warn" class="material-icons-outlined" matTooltip="Elimina"
+                            (click)="deleteConf(element)">delete_outline</mat-icon>
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+
+            <mat-paginator class="paginator" [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+
+</div>

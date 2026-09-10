@@ -1,0 +1,16 @@
+.box {
+    margin: 0 5px;
+}
+
+.expandCollpaseBtn {
+    float: right;
+    span {
+        float: left;
+        margin: 0 10px;
+    }
+}
+
+iframe {
+    height: 1500px;
+    overflow: auto;
+}

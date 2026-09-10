@@ -1,0 +1,255 @@
+<div class="container">
+
+
+    <form [formGroup]="form" autocomplete="off">
+        <div class="btnButtonSacche" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="this.appGen.isNullOrUndefined(this.idProdotto)">
+
+            <button mat-raised-button color="primary" type="button" (click)="showSaccheEsistenti()" *ngIf="editProdotti">
+                Crea nuova da sacca esistente
+            </button>
+
+        </div>
+        <div class="btnButtonSacche" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="saccheEsistenti && this.appGen.isNullOrUndefined(this.idProdotto)">
+
+            <mat-hint class="title">Crea nuova personalizzata da una sacca già esistente altrimenti inserisci i dati manualmente
+            </mat-hint>
+        </div>
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field class="full-width" fxFlex="30" *ngIf="saccheEsistenti">
+                <mat-label>Importa sacca esistente</mat-label>
+                <mat-select matNativeControl required (selectionChange)="setValoriSacca($event.value)">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let prodotto of listaSaccheEsistenti" [value]="prodotto">
+                        {{ prodotto.prodotto }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Nome sacca</mat-label>
+                <input type="text" matInput required formControlName="prodotto" autocomplete="off">
+            </mat-form-field>
+
+            <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Quantità base</mat-label>
+                <input type="text" matInput required formControlName="quantita" maxlength="6" digitOnly autocomplete="off">
+                <span class="suffix" matSuffix>ml</span>
+
+            </mat-form-field>
+
+        </div>
+        <mat-divider></mat-divider>
+        <div class="boxArea">
+            <h3 class="subTitle">Macroelementi</h3>
+
+
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Kcal</mat-label>
+                    <input type="text" matInput required formControlName="kcal" autocomplete="off">
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Glucosio {{showLabel(4)}}</mat-label>
+                    <input type="text" matInput required formControlName="glucosio" maxLength="6" DecimalFormatter (blur)="calcolaKcal()" autocomplete="off">
+                    <span class="suffix" matSuffix>g</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Lipidi {{showLabel(1)}}</mat-label>
+                    <input type="text" matInput formControlName="lipidi" required maxLength="6" DecimalFormatter autocomplete="off" (blur)="calcolaKcal()">
+                    <span class="suffix" matSuffix>g</span>
+                </mat-form-field>
+            </div>
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Acqua
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="acqua" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>ml</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Amminoacidi {{showLabel(2)}}</mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="amminoacidi" required DecimalFormatter autocomplete="off" (blur)="calcolaKcal()">
+                    <span class="suffix" matSuffix>g</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Tipo amminoacidi</mat-label>
+                    <mat-select matNativeControl formControlName="tipoAmminoacidi" required>
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let item of appGen.TipiAmminoacidi" [value]="item.id">
+                            {{ item.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" *ngIf="this.form.get('tipoAmminoacidi').value == tipiAmminoacidi.Completi">
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Aggiunta di Glutamina </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="acGlutamina" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>%</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Aggiunta di AA Ramificati</mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="acRamificati" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>%</span>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <!-- ELEMENTI-->
+        <div class="boxArea">
+            <h3 class="subTitle">Microelementi</h3>
+
+
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Sodio -
+                        <mat-hint>Na</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="sodio" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Cloro -
+                        <mat-hint>Cl</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="cloro" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Potassio -
+                        <mat-hint>K</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="potassio" autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+            </div>
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Calcio -
+                        <mat-hint>Ca</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="calcio" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Magnesio -
+                        <mat-hint>Mg</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="magnesio" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Fosfato -
+                        <mat-hint>PO3−4</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="fosfato" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+
+            </div>
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Zinco -
+                        <mat-hint>Zn</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="zinco" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>mg</span>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" fxFlex="30">
+                    <mat-label>Selenio -
+                        <mat-hint>Se</mat-hint>
+                    </mat-label>
+                    <input type="text" matInput maxLength="6" formControlName="selenio" DecimalFormatter autocomplete="off">
+                    <span class="suffix" matSuffix>μg</span>
+                </mat-form-field>
+
+            </div>
+        </div>
+
+
+        <mat-divider></mat-divider>
+        <!-- VITAMINE-->
+        <div class="boxArea">
+            <h3 class="subTitle">Aggiunte</h3>
+
+            <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="6%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex="30" *ngIf="editProdotti">
+                    <mat-label>Vitamine</mat-label>
+                    <mat-select matNativeControl #vitaminaSelezionata>
+                        <mat-option *ngFor="let item of listaVitamine" [value]="item">
+                            {{ item.aggiunta }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="button" (click)="addProdotto(vitaminaSelezionata.value,tipoAggiunta.Vitamine)" *ngIf="editProdotti">
+                    Aggiungi
+                </button>
+
+                <mat-form-field class="full-width" fxFlex="30" *ngIf="editProdotti">
+                    <mat-label>Oligoelementi</mat-label>
+                    <mat-select matNativeControl #oligoelementoSelezionato>
+                        <mat-option *ngFor="let item of listaOligoelementi" [value]="item">
+                            {{ item.aggiunta }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="button" (click)="addProdotto(oligoelementoSelezionato.value,tipoAggiunta.Oligoelementi)" *ngIf="editProdotti">
+                    Aggiungi
+                </button>
+            </div>
+
+            <div id="table" [hidden]="aggiunteSelezionate.length <=0">
+
+                <app-tabella-aggiunte [aggiunte]="aggiunteSelezionate" [isRiepilogo]="!editProdotti">
+                </app-tabella-aggiunte>
+            </div>
+
+            <div class="boxArea">
+                <h3 class="subTitle">Note</h3>
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                    <mat-form-field class="full-width" fxFlex>
+                        <textarea matInput formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </form>
+</div>
+
+
+<ng-container *ngIf="inError">
+    <div fxLayout="row wrap" fxLayoutGap="5px">
+        <mat-icon color="warn">error</mat-icon>
+        <mat-error>Alcuni campi obbligatori non sono compilati, prego riprovare</mat-error>
+    </div>
+</ng-container>
+
+
+<div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px" fxLayoutGap.lt-md="10px" *ngIf="!fromModal">
+    <button mat-raised-button color="accent" class="btnFooter" (click)="anteprimaSacche()" *ngIf="!this.appGen.isNullOrUndefined(this.idProdotto)">
+        <mat-icon>save</mat-icon>
+        Stampa
+    </button>
+
+    <button mat-raised-button color="primary" class="btnFooter" (click)="onSubmit()" *ngIf="authGuard.canAccess(this.appGen.permesso.ModificaProdotti)">
+        <mat-icon>save</mat-icon>
+        Salva
+    </button>
+</div>

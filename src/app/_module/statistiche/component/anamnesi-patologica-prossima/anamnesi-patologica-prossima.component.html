@@ -1,0 +1,33 @@
+<!-- <mat-card>
+  <mat-card-content> -->
+<!-- <h3 class="title">Anamnesi patologica prossima</h3> -->
+<div class="filtri" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px">
+
+    <mat-button-toggle-group fxFlex.gt-lg (change)="getPatologiaDettaglio(bntProperty.value)" [ngModel]="selectedValBtn" #bntProperty="matButtonToggleGroup" *ngFor="let item of datasource">
+        <mat-button-toggle [value]="item.id">{{item.macroPatologia}}</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+<mat-divider></mat-divider>
+<div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div class="item" fxFlex="50">
+        <!-- <canvas baseChart [data]="ChartData" [labels]="ChartLabels" [options]="ChartOptions" [chartType]="ChartType"
+          [colors]="ChartColor" [plugins]="lineChartPlugins">
+        </canvas> -->
+    </div>
+
+    <div class="item" fxFlex="50">
+        <ng-container *ngIf="ChartDataDettaglio.length >0">
+
+            <!-- <canvas baseChart [data]="ChartDataDettaglio" [labels]="ChartLabelsDettaglio" [options]="ChartOptions"
+            [chartType]="ChartType" [colors]="ChartColorDettaglio" [plugins]="lineChartPlugins">
+          </canvas> -->
+        </ng-container>
+        <!-- <ng-container *ngIf="ChartDataDettaglio.length <=0">
+          <h3 class="title">Nessun dato presente per la macro patologia selezionata</h3>
+
+        </ng-container> -->
+
+    </div>
+</div>
+<!-- </mat-card-content>
+</mat-card> -->

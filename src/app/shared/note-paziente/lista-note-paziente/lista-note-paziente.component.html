@@ -1,0 +1,106 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title nomePaziente">Note
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+
+
+        <div>
+
+
+            <mat-accordion>
+                <mat-expansion-panel class="accordionFiltri">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="accordionFiltriTitle">
+                            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                            Filtri ricerca
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+
+                    <div class="filtri">
+                        <form [formGroup]="formFiltriStorico" autocomplete="off">
+
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Data</mat-label>
+                                    <input matInput type="text" [matDatepicker]="dataPicker" [max]="appGen.today" formControlName="data" autocomplete="off">
+                                    <mat-datepicker-toggle matSuffix [for]="dataPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker touchUi #dataPicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+                                <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                  <mat-icon>search</mat-icon>
+                  Cerca
+                </button>
+                                <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                  Resetta
+                </button>
+                            </div>
+                        </form>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+
+
+        <div>
+
+            <mat-table id="table" [dataSource]="storicoDataSource" matSortActive="data" matSortDirection="desc" (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+
+                <ng-container matColumnDef="data">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Data">{{storico.data| date: 'dd/MM/yyyy HH:mm' }}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="note">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Note</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Note">
+                        <span class="truncate-text">{{storico.note}}</span>
+                    </mat-cell>
+                </ng-container>
+
+
+
+
+                <ng-container matColumnDef="creato">
+                    <mat-header-cell *matHeaderCellDef>Creato da</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="medico">{{storico.creato}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let storico" class="pulsantiTab" style="justify-content:flex-end">
+
+
+                        <mat-icon class="material-icons-outlined" (click)="openDettaglio(storico.idNote)" matTooltip="Visualizza" color="primary">remove_red_eye
+                        </mat-icon>
+
+
+
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="storicoViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:storicoViewsColumns"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="totalElements" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="5" (page)="onChangePage($event)">
+            </mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

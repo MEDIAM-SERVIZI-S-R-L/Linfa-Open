@@ -1,0 +1,51 @@
+<mat-dialog-content>
+
+    <div>
+        <h3 class="title">
+            Storico invii referto visita {{data.paziente}} del {{data.dataPrestazione | date: 'dd/MM/yyyy'}}
+        </h3> 
+    </div>
+    <div class="table-container">
+        <mat-table [dataSource]="dataSource" multiTemplateDataRows class="table">
+
+            <ng-container matColumnDef="utente">
+                <mat-header-cell *matHeaderCellDef>Utente</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.UtenteInvio}}</mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="completato">
+                <mat-header-cell *matHeaderCellDef>Invio completato</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.InvioCompletato === true" color="primary">done</mat-icon>
+                    <mat-icon *ngIf="element.InvioCompletato === false" color="warn">close</mat-icon>
+                </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="data">
+                <mat-header-cell *matHeaderCellDef>Data invio</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.DataInvio | date: 'dd/MM/yyyy HH:mm'}}</mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="errori">
+                <mat-header-cell *matHeaderCellDef>Errori</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <ul>
+                        <li *ngFor="let errore of element.ErroriInvio">
+                            {{errore.Errore}}
+                        </li>
+                    </ul>
+                </mat-cell>
+            </ng-container>
+        
+        
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        
+        <mat-paginator [pageSize]="10" showFirstLastButtons
+        [pageSizeOptions]="[5, 10, 25, 50]">
+        </mat-paginator>
+    </div>
+
+</mat-dialog-content>
+    

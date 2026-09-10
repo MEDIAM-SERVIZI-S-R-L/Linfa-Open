@@ -1,0 +1,233 @@
+<mat-accordion *ngIf="isLoaded">
+    <mat-expansion-panel hideToggle (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+
+        <mat-expansion-panel-header>
+
+            <div fxLayout="row" class="rowCruscotto" fxLayoutGap="5%" fxLayout.lt-sm="column">
+                <!-- <div>
+          <div class="divPaziente" fxLayout="row" fxLayoutGap.lt-md="5px">
+            <mat-icon matPrefix>person_pin</mat-icon>
+            <span class="patient">
+              {{datiPaziente.paziente}}
+
+            </span>
+          </div>
+        </div> -->
+                <div fxLayout="row" class="rowCruscotto" fxLayout.lt-md="column" fxLayoutAlign="space-around center" fxLayoutAlign.lt-md="space-around start" fxLayout.lt-lg="column" fxLayoutAlign.md="space-around start" fxLayoutGap.lt-md="10px">
+
+
+                    <div fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-md="space-around start" fxLayout.lt-md="column" fxLayout.md="column" fxLayoutGap.lt-md="5px">
+                        <div>
+                            <span class="patient">
+                <mat-icon matPrefix>person_pin</mat-icon>
+
+                {{datiPaziente.paziente}}
+              </span>
+                        </div>
+                        <div> <strong>Codice fiscale: </strong> {{datiPaziente.cf | uppercase}}
+                        </div>
+
+                        <div>
+                            <strong>Data nascita: </strong> {{datiPaziente.dataNascita | date:'dd/MM/yyyy'}}
+
+                        </div>
+                        <div>
+                            <strong>Età: </strong> {{datiPaziente.eta}}
+
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-md="space-around start" fxLayout.lt-sm="column" fxLayoutGap.lt-md="5px">
+                        <div>
+                            <strong>{{!idVisita?'Ultima visita':'Visita'}}</strong> {{datiPaziente.dataPrestazione == null? '-': datiPaziente.dataPrestazione | date:'dd/MM/yyyy HH:mm'}} {{datiPaziente.statoVisita ? " ("+datiPaziente.statoVisita+")": null}}
+
+                        </div>
+                        <div>
+                            <strong>Ambulatorio: </strong> {{datiPaziente.ambulatorio == null? '-': datiPaziente.ambulatorio}}
+                        </div>
+                        <div>
+                            <strong>Reparto: </strong> {{datiPaziente.repartoRichiedente == null || datiPaziente.repartoRichiedente == ''? '-': datiPaziente.repartoRichiedente}}
+
+                        </div>
+                        <div>
+                            <strong>Data presa in carico: </strong> {{datiPaziente == null || datiPaziente.dataPresaInCarico== null? '-': datiPaziente.dataPresaInCarico | date:'dd/MM/yyyy'}}
+                            <!-- <mat-icon matTooltip="Modifica" class="editIco" (click)="editDataPresaInCarico()">
+                edit
+              </mat-icon> -->
+
+
+                            <input matInput type="text" hidden [matDatepicker]="dataPicker" readonly (focus)="dataPicker.open()" [max]="appGen.today" required [(ngModel)]="dataSelezionata" autocomplete="off" (ngModelChange)="editDataPresaInCarico()">
+                            <!-- <mat-datepicker-toggle matSuffix [for]="dataPicker"></mat-datepicker-toggle> -->
+
+                            <mat-datepicker-toggle matSuffix [for]="dataPicker">
+                                <!-- <mat-icon matDatepickerToggleIcon>arrow_drop_down</mat-icon> -->
+                                <mat-icon matTooltip="Modifica" class="editIco" matDatepickerToggleIcon>
+                                    edit
+                                </mat-icon>
+
+                            </mat-datepicker-toggle>
+
+                            <mat-datepicker touchUi #dataPicker></mat-datepicker>
+
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-md="space-around start" fxLayout.lt-sm="column" fxLayoutGap.lt-md="5px" *ngIf="!isFollowup">
+                        <div>
+                            <strong>Altezza: </strong> {{ datiPaziente.altezza == null? '-': datiPaziente.altezza}} cm
+                        </div>
+                        <div>
+                            <strong>Peso rilevato: </strong> {{ datiPaziente.pesoRilevato == null? '-': datiPaziente.pesoRilevato}} kg
+                        </div>
+                        <div>
+                            <strong>Bmi attuale: </strong> {{ datiPaziente.bmiattuale == null? '-': datiPaziente.bmiattuale}}
+                        </div>
+
+                        <div *ngIf="idTipoRichiesta === TipoRichiesta.Cup">
+                            <strong>Numero impegnativa CUP: </strong> {{ datiPaziente.numeroImpegnativa == null? '-': datiPaziente.numeroImpegnativa}}
+                            <mat-icon matTooltip="Modifica" class="editIco" (click)="openModalNumeroImpegnativa($event)" *ngIf="editNumeroImpegnativa">
+                                edit
+                            </mat-icon>
+                        </div>
+                        <!-- <div>
+              <strong>Stato nutrizionale: </strong> {{
+              datiPaziente.malnutrizione == null? '-':
+              datiPaziente.malnutrizione}}
+            </div> -->
+
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-md="space-around start"
+                        fxLayout.lt-sm="column" fxLayoutGap.lt-md="5px">
+                    
+                        <div>
+                            <strong>
+                                <ng-container *ngIf="datiPaziente.caloPonderale3Mesi == 0">Stabilità </ng-container>
+                                <ng-container *ngIf="datiPaziente.caloPonderale3Mesi <0">Aumento </ng-container>
+                    
+                                <ng-container *ngIf="datiPaziente.caloPonderale3Mesi > 0">Calo</ng-container>
+                                ponderale 3 mesi:
+                            </strong> {{datiPaziente.caloPonderale3Mesi == null? '-': (datiPaziente.caloPonderale3Mesi | number:'1.2-2') +
+                            '%'}}
+                        </div>
+                        <div>
+                            <strong>
+                                <ng-container *ngIf="datiPaziente.caloPonderale6Mesi == 0">Stabilità </ng-container>
+                                <ng-container *ngIf="datiPaziente.caloPonderale6Mesi <0">Aumento </ng-container>
+                    
+                                <ng-container *ngIf="datiPaziente.caloPonderale6Mesi > 0">Calo</ng-container>
+                                ponderale 6 mesi:
+                            </strong> {{ datiPaziente.caloPonderale6Mesi == null? '-': (datiPaziente.caloPonderale6Mesi | number:'1.2-2') + '%' }}
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    </div>
+
+
+                <div fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-md="space-around start" fxLayout.lt-sm="column" fxLayoutGap.lt-md="5px">
+                    <button mat-raised-button>
+
+            <ng-container *ngIf="!isFollowup">
+              Storico
+            </ng-container>
+            <ng-container *ngIf="isFollowup">
+              Storico Follow Up
+            </ng-container>
+
+            <mat-icon color="primary" *ngIf="panelOpenState" style="margin:unset !important">keyboard_arrow_up
+            </mat-icon>
+            <mat-icon color="primary" *ngIf="!panelOpenState" style="margin:unset !important">keyboard_arrow_down
+            </mat-icon>
+          </button>
+
+                </div>
+            </div>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="isFollowup">
+            <div class="boxList">
+
+                <!-- <app-storico-followup></app-storico-followup> -->
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!isFollowup">
+
+            <mat-tab-group mat-align-tabs="start" animationDuration="1000ms" md-stretch-tabs>
+
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons">list</mat-icon>
+                        Visite
+
+                        <ng-container *ngIf="count">
+                            ({{count.visite}})
+                        </ng-container>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+
+
+                            <app-lista-storico [isStoricoCruscotto]="isStoricoCruscotto"></app-lista-storico>
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">description</mat-icon>
+                        Note
+                        <ng-container *ngIf="count">
+                            ({{count.note}}) </ng-container>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+                            <app-lista-note-paziente></app-lista-note-paziente>
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">biotech</mat-icon>
+                        Analisi
+
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab" id="analisi">
+                            <app-lista-analisi-paziente></app-lista-analisi-paziente>
+
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="material-icons-outlined">show_chart</mat-icon>
+                        Trend
+
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <div class="containerTab">
+                            <app-peso-bmi [mapToPazientId]="mapToPazientId"></app-peso-bmi>
+
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+
+
+            </mat-tab-group>
+
+
+
+        </ng-container>
+    </mat-expansion-panel>
+</mat-accordion>

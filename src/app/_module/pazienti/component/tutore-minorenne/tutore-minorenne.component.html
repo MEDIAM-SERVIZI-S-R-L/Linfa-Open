@@ -1,0 +1,117 @@
+<form [formGroup]="formTutore" autocomplete="off">
+
+    <mat-card class="linfaCard">
+        <mat-card-title>
+            <h3 class="title">
+                Dati tutore del paziente minorenne
+                <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                    <mat-hint>Si prega di compilare i dati del tutore per il paziente minorenne e compilare il consenso informato</mat-hint>
+                </div>
+            </h3>
+        </mat-card-title>
+        <mat-card-content>
+
+            <div class="container" formArrayName="tutori" fxflexfill>
+
+
+                <div *ngFor="let tutoriForm of tutori.controls; let i = index">
+
+                    <div [formGroupName]="i" id="tutore_{{i}}">
+                        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                            <h4 class="subTitle"><span>Tutore {{i+1}} </span>
+                            </h4>
+                            <button mat-raised-button type="button" color="warn" *ngIf="i>0 && !isRiepilogoVisita" (click)="deleteTutore(i)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+
+
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Nome</mat-label>
+                                <input type="text" matInput formControlName="nome" required autocomplete="off">
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Cognome</mat-label>
+                                <input type="text" matInput formControlName="cognome" required autocomplete="off">
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Codice Fiscale</mat-label>
+                                <input type="text" matInput required formControlName="cf" autocomplete="off" oninput="this.value = this.value.toUpperCase()">
+                                <mat-error *ngIf="!this.tutori.controls[i]['controls'].cf.hasError('required') && this.tutori.controls[i]['controls'].cf.hasError('pattern')">
+                                    <strong>Codice Fiscale</strong> non valido
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Sesso</mat-label>
+                                <mat-select matNativeControl required formControlName="sesso">
+                                    <mat-option *ngFor="let gender of appGen.GenderType" [value]="gender.abbrev">
+                                        {{ gender.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Data di nascita</mat-label>
+                                <input matInput type="text" [matDatepicker]="DataNascitaPicker" readonly [max]="appGen.today" (focus)="DataNascitaPicker.open()" required formControlName="dataNascita" autocomplete="off">
+                                <mat-datepicker-toggle matSuffix [for]="DataNascitaPicker"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi #DataNascitaPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>N° Carta identità</mat-label>
+                                <input type="text" matInput formControlName="cartaIdentita" required autocomplete="off">
+                            </mat-form-field>
+
+
+                        </div>
+
+
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Grado di parentela o Altro</mat-label>
+                                <mat-select matNativeControl formControlName="gradoParentela" required #gradoParentelaselect>
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let gradoParentela of listaGradiParentela" [value]="gradoParentela.id">
+                                        {{ gradoParentela.gradoParentela }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <ng-container *ngIf="tutoriForm.controls.gradoParentela.value == 4">
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Altro grado parentela</mat-label>
+                                    <input type="text" matInput formControlName="altroGradoParentela" required autocomplete="off">
+                                </mat-form-field>
+                            </ng-container>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Telefono</mat-label>
+                                <input type="text" matInput formControlName="telefono" required autocomplete="off" pattern="^((00|\+)39[\. ]??)??3\d{2}[\. ]??\d{6,7}$">
+                            </mat-form-field>
+
+
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                </div>
+                <button mat-raised-button type="button" color="primary" (click)="aggiungi()" *ngIf="numeroTutori==0 && !isRiepilogoVisita">
+          <mat-icon>add</mat-icon>
+          Aggiungi tutore
+        </button>
+            </div>
+
+
+
+
+        </mat-card-content>
+
+        <mat-card-footer *ngIf="!isRiepilogoVisita">
+
+            <button mat-raised-button color="primary" (click)="onSubmit()">
+        <mat-icon>save</mat-icon>
+        Salva
+      </button>
+        </mat-card-footer>
+    </mat-card>
+</form>

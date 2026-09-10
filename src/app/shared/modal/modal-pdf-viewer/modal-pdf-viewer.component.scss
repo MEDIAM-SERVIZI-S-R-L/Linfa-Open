@@ -1,0 +1,74 @@
+.mat-dialog-content {
+    width: 100% !important;
+    height: 480px;
+    overflow: auto;
+}
+
+.boxArea,
+.divider {
+    margin-top: 10px;
+}
+
+.pdfViewer {
+    height: 400px !important;
+}
+
+.pdfViewerSign {
+    height: 410px !important;
+}
+
+@media screen and (min-width: 1720px) {
+    .modal-anteprima-pdf {
+        min-width: 1000px !important;
+        min-height: 700px !important;
+        overflow-y: hidden !important;
+    }
+    .mat-dialog-content {
+        width: 100% !important;
+        height: 700px;
+        overflow-y: hidden !important;
+    }
+    #pdfViewer {
+        height: 500px !important;
+        overflow: hidden !important;
+    }
+    .pdfViewer {
+        height: 500px !important;
+    }
+    .pdfViewerSign {
+        height: 500px !important;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .modal-anteprima-pdf {
+        min-width: 1000px !important;
+        min-height: 450px !important;
+    }
+}
+
+.modal-firma-selezionati .mat-dialog-content {
+    height: unset !important;
+}
+
+.button-mail{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button-no-mail{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.timer-span {
+    color: rgb(22, 22, 22);
+    vertical-align: inherit;
+    font-weight: bold;
+    min-width: 32px;
+    max-width: 32px;
+    float: right;
+}

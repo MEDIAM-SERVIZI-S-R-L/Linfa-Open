@@ -1,0 +1,1317 @@
+<!-- <ng-container *ngIf="isDietaXpaziente && !isRiepilogoVisita  && !isStepAnamnesi && !isAnteprima">
+    <app-cruscotto-paziente> </app-cruscotto-paziente>
+</ng-container> -->
+
+<div class="backBtn" *ngIf="!isRiepilogoVisita && !isStepAnamnesi && !isAnteprima && !isDettaglioPianoNutrizionale">
+    <button (click)="backToPrevious()" title="pulsante per tornare indietro">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+<mat-card *ngIf="isDietaXpaziente && !isStepAnamnesi &&  !riepilogoVisitaAnamnesi && !isAnteprima">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container>Alimentazione naturale - mista</ng-container>
+        </h3>
+
+    </mat-card-title>
+
+    <!-- <mat-hint>Fabbisogno giornaliero calcolato utilizzando la formula di Harris–Benedict sui dati inseriti negli
+        step precedenti, i valori possono essere modificati</mat-hint> -->
+
+        <mat-hint>Fabbisogno nutrizionale giornaliero stimato per il paziente. I valori iniziali sotto riportati
+            rappresentano il metabolismo basale BEE e sono stati calcolati automaticamente mediante l'algoritmo standard di Harris-Benedict</mat-hint>
+    <form [formGroup]="formMacro" style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px;">
+        <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>kcal</mat-label>
+            <input type="text" matInput formControlName="kcal" maxlength="5" DecimalFormatter autocomplete="off"
+                (focusout)="setNewValoreOttimale($event.target.value)">
+            <mat-hint>(die)</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>proteine</mat-label>
+            <input type="text" matInput formControlName="proteine" maxlength="5" DecimalFormatter autocomplete="off">
+            <mat-hint>(g/die)</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>lipidi</mat-label>
+            <input type="text" matInput formControlName="lipidi" maxlength="5" DecimalFormatter autocomplete="off">
+            <mat-hint>(g/die)</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>carboidrati</mat-label>
+            <input type="text" matInput formControlName="carboidrati" maxlength="5" DecimalFormatter autocomplete="off">
+            <mat-hint>(g/die)</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="full-width" fxFlex="30">
+            <mat-label>Apporto Idrico</mat-label>
+            <input type="text" matInput formControlName="apportoIdrico" maxlength="5" DecimalFormatter
+                autocomplete="off">
+            <mat-hint>(ml/die)</mat-hint>
+        </mat-form-field>
+    </form>
+</mat-card>
+
+<mat-card id="mat-card" *ngIf="appGen.configLinfa.TipiVisualizzazioneDieta">
+
+    <div class="upper-div">
+        <h3 class="title">
+            {{Title}}
+        </h3>
+
+        <div class="slide-div">
+            <mat-slide-toggle *ngIf="appGen.configLinfa.TipiVisualizzazioneDieta.xPasti.abilitato"
+                [formControl]="divisioneXPastoForm" [checked]="divisioneXPasti" (change)="statusDivisioneXPasti($event)"
+                [disabled]="isRiepilogo || salvato || isAnteprima" color="primary">
+                Divisione per pasti
+            </mat-slide-toggle>
+
+            <mat-slide-toggle *ngIf="appGen.configLinfa.TipiVisualizzazioneDieta.settimanale.abilitato"
+                [formControl]="dietaSettimanaleForm" [checked]="dietaSettimanale"
+                (toggleChange)="statusDietaSettimanale()" [disabled]="isRiepilogo || salvato || isAnteprima">
+                Settimanale
+            </mat-slide-toggle>
+
+            <mat-slide-toggle *ngIf="appGen.configLinfa.TipiVisualizzazioneDieta.tabelle.abilitato"
+                [formControl]="visualizzazioneTabelleForm" [checked]="visualizzazioneTabelle"
+                (toggleChange)="visualizzazioneTabelle = !visualizzazioneTabelle" color="warn">
+                Visualizzazione delle tabelle
+            </mat-slide-toggle>
+        </div>
+
+    </div>
+
+    <div style="display: flex; flex-direction: row; justify-content: center; margin-bottom: 20px;"
+        *ngIf="visualizzazioneTabelle">
+        <mat-card class="Kcal-card">
+            <mat-card-title class="title" style="display: flex; justify-content: flex-start;">
+                <!-- VALORI NUTRIZIONALI GIORNALIERI ECC.ECC. -->
+
+                <ng-container>
+                    <div style="display: flex; flex-direction: column; width: 100%;">
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%;">
+                            <h3 class="title-valori-nutr">
+                                <span *ngIf="!dietaSettimanale && !divisioneXPasti"> Valori nutrizionali:</span>
+                                <span *ngIf="!dietaSettimanale && divisioneXPasti"> Valori nutrizionali totali
+                                    giornalieri:</span>
+                                <span *ngIf="dietaSettimanale"> Valori nutrizionali totali:</span>
+                            </h3>
+                        </div>
+
+                        <div class="valori-nutrizionali-container" [matTooltip]="dietaSettimanale? 'Valori medi giornalieri' : '' ">
+
+                            <!-- !IMPORTANT, momentaneamente così poi si è pensato che si potrebbe mettere una configurazione per le tolleranze in % e in base a quelle mettere colorazione rosso, arancione,verde -->
+                            <span class="valoriNutrizionaliSpan">
+                                Kcal: <strong> {{kcalTotali}} <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">/ </span> <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">{{formMacro.controls.kcal.value}}
+                                        (die) </span></strong> </span>
+                            <span class="valoriNutrizionaliSpan">
+                                Proteine:
+                                <strong>{{proteineTotali}} g <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">/ </span> <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">{{formMacro.controls.proteine.value}}
+                                        (g/die)</span>
+
+                                </strong>
+                            </span>
+
+                            <span class="valoriNutrizionaliSpan">
+                                Lipidi:
+                                <strong>{{lipidiTotali}} g <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">/ </span> <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">{{formMacro.controls.lipidi.value}}
+                                        (g/die)</span>
+                                </strong>
+                            </span>
+
+                            <span class="valoriNutrizionaliSpan">
+                                Carboidrati:
+                                <strong>{{carboidratiTotali}} g <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">/ </span> <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">{{formMacro.controls.carboidrati.value}}
+                                        (g/die)</span>
+                                </strong>
+                            </span>
+
+                            <span class="valoriNutrizionaliSpan">
+                                Apporto idrico: <strong>{{apportoIdrico}} ml <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">/ </span> <span
+                                        *ngIf="isStepPianoNutrizionale || riepilogoVisitaPianoNutr">{{formMacro.controls.apportoIdrico.value}}
+                                        (ml/die)</span></strong>
+                            </span>
+                        </div>
+                    </div>
+
+                </ng-container>
+            </mat-card-title>
+            <div class="buttons-div" *ngIf="dietaSettimanale && divisioneXPasti">
+                <button mat-raised-button (click)="scrollToElement('Lunedì')">
+                    Lun
+                </button>
+                <button mat-raised-button (click)="scrollToElement('Martedì')">
+                    Mar
+                </button>
+                <button mat-raised-button (click)="scrollToElement('Mercoledì')">
+                    Mer
+                </button>
+                <button mat-raised-button (click)="scrollToElement('Giovedì')">
+                    Gio
+                </button>
+                <button mat-raised-button (click)="scrollToElement('Venerdì')">
+                    Ven
+                </button>
+                <button mat-raised-button (click)="scrollToElement('Sabato')">
+                    Sab
+                </button>
+                <button mat-raised-button (click)="scrollToElement('Domenica')">
+                    Dom
+                </button>
+            </div>
+            <mat-card-content>
+                <!-- CARD KCAL GENERICHE -->
+                <div *ngIf="!divisioneXPasti && !dietaSettimanale">
+                    <span *ngIf="!isStepAnamnesi">
+                        {{kcalTotali}} kcal/ {{kcalDaAssumere}} kcal
+                    </span>
+                    <span *ngIf="isStepAnamnesi">
+                        {{kcalTotali}} kcal
+                    </span>
+                </div>
+
+                <!-- CARD KCAL PER I PASTI ES.COLAZIONE ECC.ECC. -->
+                <div *ngIf="divisioneXPasti && !dietaSettimanale">
+                    <table style="width: -webkit-fill-available;">
+                        <tr style="display: flex; flex-wrap: wrap; width: 100%; gap: 1px; border: none;">
+                            <td *ngFor="let pasto of listaPasti">
+                                {{pasto.nome | titlecase}}: {{pasto.kcal}} kcal
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- CARD KCAL GIORNI SETTIMANA -->
+                <div *ngIf="dietaSettimanale && !divisioneXPasti">
+                    <table style="width: -webkit-fill-available;">
+                        <tr style="display: flex; flex-wrap: wrap; width: 100%; gap: 1px; border: none;">
+                            <td *ngFor="let giorno of listaGiorni">
+                                <span *ngIf="!isStepAnamnesi">
+                                    {{giorno.giorno}}: {{giorno.kcalGiornaliere}}/{{giorno.kcalDaAssumere}}
+                                </span>
+                                <span *ngIf="isStepAnamnesi">
+                                    {{giorno.giorno}}: {{giorno.kcalGiornaliere}}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div *ngIf="dietaSettimanale && divisioneXPasti" style="display: flex; flex-direction: row; justify-content: center;
+                max-height: 144px; overflow-y: auto;">
+                    <!-- TABELLA  DIETA SETTIMANALE A PASTI -->
+                    <table style="width: -webkit-fill-available; border: none;">
+                        <tr *ngFor="let giorno of listaGiorni" #giorno.giorno [id]="giorno.giorno">
+                            <td>
+                                <span class="title" *ngIf="!isStepAnamnesi">{{giorno.giorno}}
+                                    ({{giorno.kcalGiornaliere}}/{{giorno.kcalDaAssumere}})</span>
+                                <span class="title" *ngIf="isStepAnamnesi">{{giorno.giorno}}
+                                    {{giorno.kcalGiornaliere}} kcal</span>
+
+                                <table style="width: -webkit-fill-available; border: none;">
+                                    <tr
+                                        style="display: flex; flex-wrap: wrap; width: 100%; gap: 1px; border: none; padding: 8px;">
+                                        <td *ngFor="let pasto of giorno.pasti">
+                                            {{pasto.nome}}: {{pasto.kcal}} kcal
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+    <div style="width: 100%; display: flex; justify-content: space-between; flex-direction: row;">
+        <mat-form-field style="width: 25%;">
+            <mat-label>Visualizzazione macronutrienti</mat-label>
+            <mat-select [formControl]="visualizzazioneProdotti">
+                <mat-option [value]="1">
+                    Standard
+                </mat-option>
+                <mat-option [value]="4">
+                    Apporto energetico
+                </mat-option>
+                <mat-option [value]="2">
+                    Apporto energetico in %
+                </mat-option>
+                <mat-option [value]="3">
+                    Incidenza dei macronutrienti sul totale della dieta
+                </mat-option>
+            </mat-select>
+            <mat-icon matSuffix class="material-icons-outlined" color="primary"
+                [matTooltip]="buildToolTip(visualizzazioneProdotti.value)">info</mat-icon>
+        </mat-form-field>
+
+        <!-- !DISABILITARE UNA VOLTA SALVATO ANCHE SE POI TORNO INDIETRO -->
+        <button mat-raised-button color="accent" matTooltipPosition="after"
+        *ngIf="isDietaXpaziente && isStepAnamnesi && anamnesiVisitaPrecedente && !isRiepilogoVisita && listaProdottiSelezionati.length <= 0"
+        (click)="importaAnamnesiVisitaPrecedente()">
+        <mat-icon>get_app</mat-icon>
+        Riporta anamnesi
+        </button>
+
+        <button mat-raised-button color="accent" matTooltipPosition="after"
+        *ngIf="isDietaXpaziente && isStepPianoNutrizionale && !isRiepilogoVisita && pianoAlimentarePrecedente && listaProdottiSelezionati.length <= 0"
+        (click)="importaPianoVisitaPrecedente()">
+        <mat-icon>get_app</mat-icon>
+        Riporta Piano nutizionale precedente
+        </button>
+    </div>
+
+
+    <div *ngIf="stepCorrente === stepVisita.Predefinita">
+        <mat-form-field style="width: 30%;">
+            <mat-label>Nome dieta predefinita</mat-label>
+            <input matInput [formControl]="nomeDieta"
+                [required]="stepCorrente === (stepVisita.Predefinita && isNuovaDietaPredefinita) ||
+            (stepVisita.Predefinita && (!proprietaDieta?.creatoDaUtenteLoggato || appGen.isNullOrUndefined(proprietaDieta?.creatoDaUtenteLoggato)))">
+            <!-- <mat-icon matSuffix (click)="statusEditNomeDieta()">mode_edit</mat-icon> -->
+        </mat-form-field>
+    </div>
+
+    <!-- SEZIONE PER DIETA BASE O SOLO SETTIMANALE -->
+    <div *ngIf="!divisioneXPasti && appGen.configLinfa.TipiVisualizzazioneDieta">
+        <div>
+            <div *ngFor="let prodottoSelezionato of listaProdottiSelezionati; let i = index"
+                style="border-bottom: 1px solid #cfcfcf; margin-top: 12px;"
+                [class]="prodottoSelezionato.isInLoading? 'untouchable' : ''">
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <h3 class="subtitle">
+                        Alimento
+                    </h3>
+
+                    <button mat-raised-button type="button" class="deleteBtn" color="warn"
+                        (click)="removeProduct(prodottoSelezionato)"
+                        *ngIf="!prodottoSelezionato.disabilitato && !salvato">
+                        <mat-icon>
+                            delete_forever
+                        </mat-icon>
+                    </button>
+                </div>
+
+                <div [class]="dietaSettimanale? 'div-prodotto-settimana' : 'div-prodotto'" id="{{'principale' + i}}">
+                    <div>
+                        <div class="label-prodotto">
+                            <mat-form-field fxFlex="60">
+                                <mat-label>Prodotto</mat-label>
+                                <mat-select (selectionChange)="getDettaglioProdotto($event, prodottoSelezionato)"
+                                    (openedChange)="checkProductOpened($event, prodottoSelezionato)"
+                                    [matTooltip]="prodottoSelezionato.prodotto"
+                                    [disabled]="prodottoSelezionato.disabilitato || salvato"
+                                    [value]="prodottoSelezionato.id">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="filtroProdotti" placeholderLabel="Cerca"
+                                            noEntriesFoundLabel="Nessun elemento trovato">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <div *ngIf="prodottoSelezionato.isInScelta">
+                                        <mat-option *ngFor="let prodotto of prodottiFiltrati | async"
+                                            [value]="prodotto">
+                                            {{prodotto.prodotto}}
+                                        </mat-option>
+                                    </div>
+                                    <div *ngIf="!prodottoSelezionato.isInScelta">
+                                        <mat-option *ngFor="let prodotto of listaProdotti" [value]="prodotto.id">
+                                            {{prodotto.prodotto}}
+                                        </mat-option>
+                                    </div>
+                                </mat-select>
+                            </mat-form-field>
+
+
+                            <mat-form-field style="margin-left: 4%;" fxFlex="30">
+                                <mat-label>Quantità</mat-label>
+                                <input matInput type="number" required="true"
+                                    (change)="prodottoSelezionato.isFromPrecedente === true? getDettaglioProdotto($event.target.value, prodottoSelezionato, null, true) : calcolaValoriProdotto(prodottoSelezionato, $event.target.value);"
+                                    [value]="prodottoSelezionato.quantita" (focus)="$event.target.select()"
+                                    [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                <span matSuffix>{{prodottoSelezionato.unitaMisura}}</span>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="div-proprieta-prodotto">
+                            <div>
+                                Valori nutrizionali del prodotto:
+                            </div>
+                            <div>
+                                kcal:
+                                <span *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.kcalCalcolate?
+                                    prodottoSelezionato.kcalCalcolate : 0}}</span>
+                                <span *ngIf="visualizzazioneProdotti.value === 2">{{prodottoSelezionato.kcalCalcolate?
+                                    prodottoSelezionato.kcalCalcolate : 0}}</span>
+                                <span *ngIf="visualizzazioneProdotti.value === 3">{{prodottoSelezionato.kcalCalcolate?
+                                    calcolaPercentuale(prodottoSelezionato.kcalCalcolate, kcalTotali) : 0}}</span>
+                                <span *ngIf="visualizzazioneProdotti.value === 4">{{prodottoSelezionato.kcalCalcolate?
+                                    prodottoSelezionato.kcalCalcolate : 0}}</span>
+                            </div>
+                            <div>
+                                Proteine:
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.proteineCalcolate?
+                                    prodottoSelezionato.proteineCalcolate :0}} g</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoSelezionato.proteineCalcolate
+                                    * 4, prodottoSelezionato.kcalCalcolate)}}</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoSelezionato.proteineCalcolate,
+                                    proteineTotali)}}</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoSelezionato.proteineCalcolate,
+                                    'proteine')}}</span>
+                            </div>
+                            <div>
+                                Lipidi:
+                                <span *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.lipidiCalcolati?
+                                    prodottoSelezionato.lipidiCalcolati : 0}} g</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoSelezionato.lipidiCalcolati
+                                    * 9, prodottoSelezionato.kcalCalcolate)}}</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoSelezionato.lipidiCalcolati,
+                                    lipidiTotali)}}</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoSelezionato.lipidiCalcolati,
+                                    'lipidi')}}</span>
+                            </div>
+                            <div>
+                                Carboidrati:
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.carboidaratiCalcolati?
+                                    prodottoSelezionato.carboidaratiCalcolati : 0}} g</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoSelezionato.carboidaratiCalcolati
+                                    * 4, prodottoSelezionato.kcalCalcolate)}}</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoSelezionato.carboidaratiCalcolati,
+                                    carboidratiTotali)}}</span>
+                                <span
+                                    *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoSelezionato.carboidaratiCalcolati,
+                                    'carboidrati')}}</span>
+                            </div>
+                            <div>
+                                Acqua: {{prodottoSelezionato.acquacalcolata? prodottoSelezionato.acquacalcolata : 0}} ml
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container" *ngIf="prodottoSelezionato.isInLoading"></div>
+
+                    <!-- PARTE CHECK PER GIORNI SETTIMANA  -->
+                    <div *ngIf="dietaSettimanale">
+                        <mat-checkbox class="custom-frame" color="primary" style="display: flex; justify-content: flex-end;"
+                        (change)="prodottoPerTuttiIGiorni(prodottoSelezionato); calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                        [checked]="prodottoSelezionato.settimana.lunedi && prodottoSelezionato.settimana.martedi && prodottoSelezionato.settimana.mercoledi && prodottoSelezionato.settimana.giovedi && prodottoSelezionato.settimana.venerdi && prodottoSelezionato.settimana.sabato && prodottoSelezionato.settimana.domenica"
+                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                        Tutti i giorni
+                        </mat-checkbox>
+                        <div class="div-week">
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.lunedi"
+                                (change)="prodottoSelezionato.settimana.lunedi = !prodottoSelezionato.settimana.lunedi; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.lunedi"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Lun
+                            </mat-checkbox>
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.martedi"
+                                (change)="prodottoSelezionato.settimana.martedi = !prodottoSelezionato.settimana.martedi; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.martedi"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Mar
+                            </mat-checkbox>
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.mercoledi"
+                                (change)="prodottoSelezionato.settimana.mercoledi = !prodottoSelezionato.settimana.mercoledi; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.mercoledi"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Mer
+                            </mat-checkbox>
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.giovedi"
+                                (change)="prodottoSelezionato.settimana.giovedi = !prodottoSelezionato.settimana.giovedi; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.giovedi"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Gio
+                            </mat-checkbox>
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.venerdi"
+                                (change)="prodottoSelezionato.settimana.venerdi = !prodottoSelezionato.settimana.venerdi; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.venerdi"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Ven
+                            </mat-checkbox>
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.sabato"
+                                (change)="prodottoSelezionato.settimana.sabato = !prodottoSelezionato.settimana.sabato; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.sabato"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Sab
+                            </mat-checkbox>
+                            <mat-checkbox class="custom-frame" color="primary"
+                                [value]="prodottoSelezionato.settimana.domenica"
+                                (change)="prodottoSelezionato.settimana.domenica = !prodottoSelezionato.settimana.domenica; calcolaKcalXGiorno()"
+                                [checked]="prodottoSelezionato.settimana.domenica"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Dom
+                            </mat-checkbox>
+                        </div>
+                    </div>
+
+                    <mat-checkbox (change)="statusProdottoAlternativo(prodottoSelezionato)"
+                        [checked]="prodottoSelezionato.alternativoAbilitato"
+                        [disabled]="appGen.isNullOrUndefined(prodottoSelezionato.prodotto) || prodottoSelezionato.prodotto.trim === '' || prodottoSelezionato.quantita <= 0 ||
+                            appGen.isNullOrUndefined(prodottoSelezionato.quantita) || prodottoSelezionato.disabilitato || salvato"
+                        [matTooltip]="
+                            appGen.isNullOrUndefined(prodottoSelezionato.prodotto) ||
+                            prodottoSelezionato.prodotto.trim === '' ||
+                            prodottoSelezionato.quantita <= 0 ||
+                            appGen.isNullOrUndefined(prodottoSelezionato.quantita)?
+                            'Impossibile abilitare i prodotti alternativi finchè non sono impostati il prodotto principale e la quantità di esso' : ''">
+                        Alternativo
+                    </mat-checkbox>
+
+                </div>
+
+                <!-- PRODOTTI ALTERNATIVI  -->
+                <div *ngIf="prodottoSelezionato.alternativoAbilitato">
+                    <div class="div-prodotti-alternativi">
+                        <div
+                            *ngFor="let prodottoAlternativoSelezionato of prodottoSelezionato.prodottiAlternativi; let y = index">
+                            <div
+                                style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 12px;">
+                                <h4 class="alimento-alternativo-subtitle">Alimento alternativo</h4>
+
+                                <button mat-raised-button type="button" class="deleteBtn" color="warn"
+                                    (click)="removeProduct(prodottoSelezionato, prodottoAlternativoSelezionato)"
+                                    *ngIf="!prodottoSelezionato.disabilitato && !salvato">
+                                    <mat-icon>
+                                        delete_forever
+                                    </mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="div-prodotto" id="{{'alternativo' + prodottoSelezionato.id + y}}">
+                                <div>
+                                    <div class="label-prodotto">
+                                        <mat-form-field fxFlex="60">
+                                            <mat-label>Prodotto</mat-label>
+                                            <mat-select
+                                                (selectionChange)="getDettaglioProdotto($event, prodottoSelezionato, prodottoAlternativoSelezionato)"
+                                                (openedChange)="checkProductOpened($event, prodottoSelezionato, prodottoAlternativoSelezionato)"
+                                                [matTooltip]="prodottoAlternativoSelezionato.prodotto"
+                                                [disabled]="prodottoSelezionato.disabilitato || salvato"
+                                                [value]="prodottoAlternativoSelezionato.id">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="filtroProdotti"
+                                                        placeholderLabel="Cerca"
+                                                        noEntriesFoundLabel="Nessun elemento trovato">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <div *ngIf="prodottoAlternativoSelezionato.isInScelta">
+                                                    <mat-option *ngFor="let prodotto of prodottiFiltrati | async"
+                                                        [value]="prodotto">
+                                                        {{prodotto.prodotto}}
+                                                    </mat-option>
+                                                </div>
+                                                <div *ngIf="!prodottoAlternativoSelezionato.isInScelta">
+                                                    <mat-option *ngFor="let prodotto of listaProdotti"
+                                                        [value]="prodotto.id">
+                                                        {{prodotto.prodotto}}
+                                                    </mat-option>
+                                                </div>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <mat-form-field style="margin-left: 4%;" fxFlex="30">
+                                            <mat-label>Quantità</mat-label>
+                                            <input matInput type="number"
+                                                (change)="prodottoSelezionato.isFromPrecedente === true? getDettaglioProdotto($event.target.value, prodottoSelezionato, prodottoAlternativoSelezionato, true) : calcolaValoriProdotto(prodottoAlternativoSelezionato, $event.target.value, true)"
+                                                [value]="prodottoAlternativoSelezionato.quantita"
+                                                (focus)="$event.target.select()"
+                                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                            <span matSuffix>{{prodottoAlternativoSelezionato.unitaMisura}}</span>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="div-proprieta-prodotto">
+                                        <div>
+                                            Valori nutrizionali del prodotto:
+                                        </div>
+                                        <div>
+                                            kcal:
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                prodottoAlternativoSelezionato.kcalCalcolate : 0}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 2">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                prodottoAlternativoSelezionato.kcalCalcolate : 0}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 3">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                calcolaPercentuale(prodottoAlternativoSelezionato.kcalCalcolate,
+                                                kcalTotali) : 0}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 4">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                prodottoAlternativoSelezionato.kcalCalcolate : 0}}</span>
+                                        </div>
+                                        <div>
+                                            Proteine:
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.proteineCalcolate?
+                                                prodottoAlternativoSelezionato.proteineCalcolate :0}} g</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoAlternativoSelezionato.proteineCalcolate
+                                                * 4, prodottoAlternativoSelezionato.kcalCalcolate)}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoAlternativoSelezionato.proteineCalcolate,
+                                                proteineTotali)}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoAlternativoSelezionato.proteineCalcolate,
+                                                'proteine')}}</span>
+                                        </div>
+                                        <div>
+                                            Lipidi:
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.lipidiCalcolati?
+                                                prodottoAlternativoSelezionato.lipidiCalcolati : 0}} g</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoAlternativoSelezionato.lipidiCalcolati
+                                                * 9, prodottoAlternativoSelezionato.kcalCalcolate)}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoAlternativoSelezionato.lipidiCalcolati,
+                                                lipidiTotali)}}</span>
+
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoAlternativoSelezionato.lipidiCalcolati,
+                                                'lipidi')}}</span>
+                                        </div>
+                                        <div>
+                                            Carboidrati:
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.carboidaratiCalcolati?
+                                                prodottoAlternativoSelezionato.carboidaratiCalcolati : 0}} g</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoAlternativoSelezionato.carboidaratiCalcolati
+                                                * 4, prodottoAlternativoSelezionato.kcalCalcolate)}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoAlternativoSelezionato.carboidaratiCalcolati,
+                                                carboidratiTotali)}}</span>
+                                            <span
+                                                *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoAlternativoSelezionato.carboidaratiCalcolati,
+                                                'carboidrati')}}</span>
+                                        </div>
+                                        <div>
+                                            Acqua: {{prodottoAlternativoSelezionato.acquacalcolata?
+                                            prodottoAlternativoSelezionato.acquacalcolata : 0}} ml
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; width: 100%;"
+                        *ngIf="!prodottoSelezionato.disabilitato && !salvato">
+                        <div style="margin-top: 16px; margin-bottom: 20px;">
+                            <button mat-raised-button color="accent" type="button" title="aggiungi alimento"
+                                (click)="aggiungiAProdottiAlternativiXProdotto(prodottoSelezionato)">
+                                <mat-icon>add</mat-icon> Alternativo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- *IMPORTANT inserire tutti i possibili fattori -->
+        <div style="display: flex; flex-direction: column; width: 100%;"
+            *ngIf="!isRiepilogo && !salvato && !isRiepilogoVisita && !isPianoNutrizionalevisita && !isAnteprima">
+            <div style="margin-top: 16px;">
+                <button mat-raised-button color="primary" type="button" title="aggiungi alimento"
+                    (click)="aggiungiAProdottiSelezionati()">
+                    <mat-icon>add</mat-icon> Aggiungi alimento
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- SE INVECE SI SCEGLIE L'OPZIONE DELLA DIETA PER PASTI -->
+    <div *ngIf="divisioneXPasti && appGen.configLinfa.TipiVisualizzazioneDieta">
+        <mat-expansion-panel *ngFor="let pasto of listaPasti" (opened)="pasto.expanded  = true"
+            (closed)="pasto.expanded  = false" [expanded]="pasto.expanded" style="margin-top: 8px;">
+            <mat-expansion-panel-header>
+                <mat-panel-title [ngClass]="pasto.expanded? 'pasto' : 'pasto-not-expanded'">
+                    {{pasto.nome | titlecase}}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div>
+                <div *ngFor="let prodottoSelezionato of listaProdottiSelezionati; let i = index">
+                    <div *ngIf="prodottoSelezionato.pasto.id === pasto.id"
+                        style="border-bottom: 1px solid #cfcfcf; margin-top: 12px;"
+                        [class]="prodottoSelezionato.isInLoading? 'untouchable' : ''">
+
+                        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                            <h3 class="subtitle">
+                                Alimento
+                            </h3>
+
+                            <button mat-raised-button type="button" class="deleteBtn" color="warn"
+                                (click)="removeProduct(prodottoSelezionato)"
+                                *ngIf="!prodottoSelezionato.disabilitato && !salvato">
+                                <mat-icon>
+                                    delete_forever
+                                </mat-icon>
+                            </button>
+                        </div>
+
+                        <div [class]="dietaSettimanale? 'div-prodotto-settimana' : 'div-prodotto'"
+                            id="{{'principale' + i}}">
+                            <div>
+                                <div class="label-prodotto">
+                                    <mat-form-field fxFlex="60" *ngIf="pasto.nome !== listaPastiString.LiquidiAssunti &&  pasto.nome !== listaPastiString.Integratori">
+                                        <mat-label>Prodotto</mat-label>
+                                        <mat-select
+                                            (selectionChange)="getDettaglioProdotto($event, prodottoSelezionato)"
+                                            (openedChange)="checkProductOpened($event, prodottoSelezionato)"
+                                            [matTooltip]="prodottoSelezionato.prodotto"
+                                            [disabled]="prodottoSelezionato.disabilitato || salvato"
+                                            [value]="prodottoSelezionato.id">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="filtroProdotti"
+                                                    placeholderLabel="Cerca"
+                                                    noEntriesFoundLabel="Nessun elemento trovato">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <div *ngIf="prodottoSelezionato.isInScelta ">
+                                                <mat-option *ngFor="let prodotto of prodottiFiltrati | async"
+                                                    [value]="prodotto">
+                                                    {{prodotto.prodotto}}
+                                                </mat-option>
+                                            </div>
+                                            <div *ngIf="!prodottoSelezionato.isInScelta">
+                                                <mat-option *ngFor="let prodotto of listaProdotti"
+                                                    [value]="prodotto.id">
+                                                    {{prodotto.prodotto}}
+                                                </mat-option>
+                                            </div>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <!-- *LIQUIDI -->
+                                    <mat-form-field fxFlex="60" *ngIf="pasto.nome === listaPastiString.LiquidiAssunti">
+                                        <mat-label>Prodotto</mat-label>
+                                        <mat-select
+                                            (selectionChange)="getDettaglioProdotto($event, prodottoSelezionato)"
+                                            (openedChange)="checkProductOpened($event, prodottoSelezionato)"
+                                            [matTooltip]="prodottoSelezionato.prodotto"
+                                            [disabled]="prodottoSelezionato.disabilitato || salvato"
+                                            [value]="prodottoSelezionato.id">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="filtroLiquidi"
+                                                    placeholderLabel="Cerca"
+                                                    noEntriesFoundLabel="Nessun elemento trovato">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <div *ngIf="prodottoSelezionato.isInScelta">
+                                                <mat-option *ngFor="let prodotto of liquidiFiltrati | async"
+                                                    [value]="prodotto">
+                                                    {{prodotto.prodotto}}
+                                                </mat-option>
+                                            </div>
+                                            <div *ngIf="!prodottoSelezionato.isInScelta">
+                                                <mat-option *ngFor="let prodotto of listaLiquidi"
+                                                    [value]="prodotto.id">
+                                                    {{prodotto.prodotto}}
+                                                </mat-option>
+                                            </div>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <!-- *INTEGRATORI -->
+                                    <mat-form-field fxFlex="60" *ngIf="pasto.nome === listaPastiString.Integratori">
+                                        <mat-label>Prodotto</mat-label>
+                                        <mat-select
+                                            (selectionChange)="getDettaglioProdotto($event, prodottoSelezionato)"
+                                            (openedChange)="checkProductOpened($event, prodottoSelezionato)"
+                                            [matTooltip]="prodottoSelezionato.prodotto"
+                                            [disabled]="prodottoSelezionato.disabilitato || salvato"
+                                            [value]="prodottoSelezionato.id">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="filtroIntegratori"
+                                                    placeholderLabel="Cerca"
+                                                    noEntriesFoundLabel="Nessun elemento trovato">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <div *ngIf="prodottoSelezionato.isInScelta">
+                                                <mat-option *ngFor="let prodotto of integratoriFiltrati | async"
+                                                    [value]="prodotto">
+                                                    {{prodotto.prodotto}}
+                                                </mat-option>
+                                            </div>
+                                            <div *ngIf="!prodottoSelezionato.isInScelta">
+                                                <mat-option *ngFor="let prodotto of listaIntegratori"
+                                                    [value]="prodotto.id">
+                                                    {{prodotto.prodotto}}
+                                                </mat-option>
+                                            </div>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field style="margin-left: 4%;" fxFlex="30">
+                                        <mat-label>Quantità</mat-label>
+                                        <input matInput type="number"
+                                            (change)="prodottoSelezionato.isFromPrecedente === true? getDettaglioProdotto($event.target.value, prodottoSelezionato, null, true) : calcolaValoriProdotto(prodottoSelezionato, $event.target.value);"
+                                            [value]="prodottoSelezionato.quantita" (focus)="$event.target.select()"
+                                            [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        <span matSuffix>{{prodottoSelezionato.unitaMisura}}</span>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="div-proprieta-prodotto">
+                                    <div>
+                                        Valori nutrizionali del prodotto:
+                                    </div>
+                                    <div>
+                                        kcal:
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.kcalCalcolate?
+                                            prodottoSelezionato.kcalCalcolate : 0}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 2">{{prodottoSelezionato.kcalCalcolate?
+                                            prodottoSelezionato.kcalCalcolate : 0}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 3">{{prodottoSelezionato.kcalCalcolate?
+                                            calcolaPercentuale(prodottoSelezionato.kcalCalcolate, kcalTotali) :
+                                            ''}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 4">{{prodottoSelezionato.kcalCalcolate?
+                                            prodottoSelezionato.kcalCalcolate : 0}}</span>
+
+                                    </div>
+                                    <div>
+                                        Proteine:
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.proteineCalcolate?
+                                            prodottoSelezionato.proteineCalcolate :0}} g</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoSelezionato.proteineCalcolate
+                                            * 4, prodottoSelezionato.kcalCalcolate)}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoSelezionato.proteineCalcolate,
+                                            proteineTotali)}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoSelezionato.proteineCalcolate,
+                                            'proteine')}}</span>
+                                    </div>
+                                    <div>
+                                        Lipidi:
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.lipidiCalcolati?
+                                            prodottoSelezionato.lipidiCalcolati : 0}} g</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoSelezionato.lipidiCalcolati
+                                            * 9, prodottoSelezionato.kcalCalcolate)}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoSelezionato.lipidiCalcolati,
+                                            lipidiTotali)}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoSelezionato.lipidiCalcolati,
+                                            'lipidi')}}</span>
+                                    </div>
+                                    <div>
+                                        Carboidrati:
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 1">{{prodottoSelezionato.carboidaratiCalcolati?
+                                            prodottoSelezionato.carboidaratiCalcolati : 0}} g</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoSelezionato.carboidaratiCalcolati
+                                            * 4, prodottoSelezionato.kcalCalcolate)}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoSelezionato.carboidaratiCalcolati,
+                                            carboidratiTotali)}}</span>
+                                        <span
+                                            *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoSelezionato.carboidaratiCalcolati,
+                                            'carboidrati')}}</span>
+                                    </div>
+                                    <div>
+                                        Acqua: {{prodottoSelezionato.acquacalcolata? prodottoSelezionato.acquacalcolata
+                                        : 0}} ml
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="container" *ngIf="prodottoSelezionato.isInLoading"></div>
+
+
+                            <!-- CHECK SETTIMANA SU DIETA PER OGNI PASTO -->
+                            <div *ngIf="dietaSettimanale" style="display: flex; flex-direction:column; margin-top: -4px;">
+                                <mat-checkbox class="custom-frame" color="primary" style="display: flex; justify-content: flex-end;"
+                                (change)="prodottoPerTuttiIGiorni(prodottoSelezionato); calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                [checked]="prodottoSelezionato.settimana.lunedi && prodottoSelezionato.settimana.martedi && prodottoSelezionato.settimana.mercoledi && prodottoSelezionato.settimana.giovedi && prodottoSelezionato.settimana.venerdi && prodottoSelezionato.settimana.sabato && prodottoSelezionato.settimana.domenica"
+                                [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                Tutti i giorni
+                                </mat-checkbox>
+                                <div class="div-week">
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.lunedi" (change)="prodottoSelezionato.settimana.lunedi = !prodottoSelezionato.settimana.lunedi;
+                                            calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.lunedi"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Lun
+                                    </mat-checkbox>
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.martedi" (change)="prodottoSelezionato.settimana.martedi = !prodottoSelezionato.settimana.martedi;
+                                            calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.martedi"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Mar
+                                    </mat-checkbox>
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.mercoledi" (change)="prodottoSelezionato.settimana.mercoledi = !prodottoSelezionato.settimana.mercoledi;
+                                            calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.mercoledi"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Mer
+                                    </mat-checkbox>
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.giovedi" (change)="prodottoSelezionato.settimana.giovedi = !prodottoSelezionato.settimana.giovedi;
+                                        calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.giovedi"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Gio
+                                    </mat-checkbox>
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.venerdi" (change)="prodottoSelezionato.settimana.venerdi = !prodottoSelezionato.settimana.venerdi;
+                                            calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.venerdi"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Ven
+                                    </mat-checkbox>
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.sabato" (change)="prodottoSelezionato.settimana.sabato = !prodottoSelezionato.settimana.sabato;
+                                            calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.sabato"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Sab
+                                    </mat-checkbox>
+                                    <mat-checkbox class="custom-frame" color="primary"
+                                        [value]="prodottoSelezionato.settimana.domenica" (change)="prodottoSelezionato.settimana.domenica = !prodottoSelezionato.settimana.domenica;
+                                            calcolaKcalXGiorno(); calcolaKcalXGiornoXPasto();"
+                                        [checked]="prodottoSelezionato.settimana.domenica"
+                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                        Dom
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+
+                            <mat-checkbox (change)="statusProdottoAlternativo(prodottoSelezionato, pasto)"
+                                [checked]="prodottoSelezionato.alternativoAbilitato" [disabled]="appGen.isNullOrUndefined(prodottoSelezionato.prodotto) || prodottoSelezionato.prodotto.trim === ''
+                                    || prodottoSelezionato.quantita <= 0 || appGen.isNullOrUndefined(prodottoSelezionato.quantita)
+                                    || prodottoSelezionato.disabilitato || salvato"
+                                [matTooltip]="
+                                    appGen.isNullOrUndefined(prodottoSelezionato.prodotto) ||
+                                    prodottoSelezionato.prodotto.trim === '' ||
+                                    prodottoSelezionato.quantita <= 0 ||
+                                    appGen.isNullOrUndefined(prodottoSelezionato.quantita)?
+                                    'Impossibile abilitare i prodotti alternativi finchè non sono impostati il prodotto principale e la quantità di esso' : ''">
+                                Alternativo
+                            </mat-checkbox>
+                        </div>
+
+                        <!-- PRODOTTI ALTERNATIVI PER DIETA PER PASTO -->
+                        <div *ngIf="prodottoSelezionato.alternativoAbilitato">
+                            <div class="div-prodotti-alternativi">
+                                <div
+                                    *ngFor="let prodottoAlternativoSelezionato of prodottoSelezionato.prodottiAlternativi; let y = index">
+                                    <div
+                                        style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 12px;">
+                                        <h4 class="alimento-alternativo-subtitle">Alternativo</h4>
+
+                                        <button mat-raised-button type="button" class="deleteBtn" color="warn"
+                                            (click)="removeProduct(prodottoSelezionato, prodottoAlternativoSelezionato)"
+                                            *ngIf="!prodottoSelezionato.disabilitato && !salvato">
+                                            <mat-icon>
+                                                delete_forever
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+
+                                    <div class="div-prodotto" id="{{'alternativo' + prodottoSelezionato.id + y}}">
+                                        <div>
+                                            <div class="label-prodotto">
+                                                <mat-form-field fxFlex="60">
+                                                    <mat-label>Prodotto</mat-label>
+                                                    <mat-select
+                                                        (selectionChange)="getDettaglioProdotto($event, prodottoSelezionato, prodottoAlternativoSelezionato)"
+                                                        (openedChange)="checkProductOpened($event, prodottoSelezionato, prodottoAlternativoSelezionato)"
+                                                        [disabled]="prodottoSelezionato.disabilitato || salvato"
+                                                        [matTooltip]="prodottoAlternativoSelezionato.prodotto"
+                                                        [value]="prodottoAlternativoSelezionato.id">
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="filtroProdotti"
+                                                                placeholderLabel="Cerca"
+                                                                noEntriesFoundLabel="Nessun elemento trovato">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <div *ngIf="prodottoAlternativoSelezionato.isInScelta">
+                                                            <mat-option
+                                                                *ngFor="let prodotto of prodottiFiltrati | async"
+                                                                [value]="prodotto">
+                                                                {{prodotto.prodotto}}
+                                                            </mat-option>
+                                                        </div>
+                                                        <div *ngIf="!prodottoAlternativoSelezionato.isInScelta">
+                                                            <mat-option *ngFor="let prodotto of listaProdotti"
+                                                                [value]="prodotto.id">
+                                                                {{prodotto.prodotto}}
+                                                            </mat-option>
+                                                        </div>
+                                                    </mat-select>
+                                                </mat-form-field>
+
+                                                <mat-form-field style="margin-left: 4%;" fxFlex="30">
+                                                    <mat-label>Quantità</mat-label>
+                                                    <input matInput type="number"
+                                                        (change)="prodottoSelezionato.isFromPrecedente === true? getDettaglioProdotto($event.target.value, prodottoSelezionato, prodottoAlternativoSelezionato, true) : calcolaValoriProdotto(prodottoAlternativoSelezionato, $event.target.value, true)"
+                                                        [value]="prodottoAlternativoSelezionato.quantita"
+                                                        (focus)="$event.target.select()"
+                                                        [disabled]="prodottoSelezionato.disabilitato || salvato">
+                                                    <span
+                                                        matSuffix>{{prodottoAlternativoSelezionato.unitaMisura}}</span>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="div-proprieta-prodotto">
+                                                <div>
+                                                    Valori nutrizionali del prodotto:
+                                                </div>
+                                                <div>
+                                                    kcal:
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                        prodottoAlternativoSelezionato.kcalCalcolate : 0}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 2">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                        prodottoAlternativoSelezionato.kcalCalcolate : 0}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 3">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                        calcolaPercentuale(prodottoAlternativoSelezionato.kcalCalcolate,
+                                                        kcalTotali) : ''}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 4">{{prodottoAlternativoSelezionato.kcalCalcolate?
+                                                        prodottoAlternativoSelezionato.kcalCalcolate : 0}}</span>
+                                                </div>
+                                                <div>
+                                                    Proteine:
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.proteineCalcolate?
+                                                        prodottoAlternativoSelezionato.proteineCalcolate :0}} g</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoAlternativoSelezionato.proteineCalcolate
+                                                        * 4, prodottoAlternativoSelezionato.kcalCalcolate)}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoAlternativoSelezionato.proteineCalcolate,
+                                                        proteineTotali)}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoAlternativoSelezionato.proteineCalcolate,
+                                                        'proteine')}}</span>
+                                                </div>
+                                                <div>
+                                                    Lipidi:
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.lipidiCalcolati?
+                                                        prodottoAlternativoSelezionato.lipidiCalcolati : 0}} g</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoAlternativoSelezionato.lipidiCalcolati
+                                                        * 9, prodottoAlternativoSelezionato.kcalCalcolate)}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoAlternativoSelezionato.lipidiCalcolati,
+                                                        lipidiTotali)}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoAlternativoSelezionato.lipidiCalcolati,
+                                                        'lipidi')}}</span>
+                                                </div>
+                                                <div>
+                                                    Carboidrati:
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 1">{{prodottoAlternativoSelezionato.carboidaratiCalcolati?
+                                                        prodottoAlternativoSelezionato.carboidaratiCalcolati : 0}}
+                                                        g</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 2">{{calcolaPercentualeSuBaseProdotto(prodottoAlternativoSelezionato.carboidaratiCalcolati
+                                                        * 4, prodottoAlternativoSelezionato.kcalCalcolate)}}</span>
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 3">{{calcolaPercentuale(prodottoAlternativoSelezionato.carboidaratiCalcolati,
+                                                        carboidratiTotali)}}</span>
+
+                                                    <span
+                                                        *ngIf="visualizzazioneProdotti.value === 4">{{calcolaIncidenzaKcalXProdotto(prodottoAlternativoSelezionato.carboidaratiCalcolati,
+                                                        'carboidrati')}}</span>
+                                                </div>
+                                                <div>
+                                                    Acqua: {{prodottoAlternativoSelezionato.acquacalcolata?
+                                                    prodottoAlternativoSelezionato.acquacalcolata : 0}} ml
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; width: 100%;"
+                                *ngIf="!prodottoSelezionato.disabilitato && !salvato">
+                                <div style="margin-top: 16px; margin-bottom: 20px;">
+                                    <button mat-raised-button color="accent" type="button" title="aggiungi alimento"
+                                        (click)="aggiungiAProdottiAlternativiXProdotto(prodottoSelezionato, pasto); ">
+                                        <mat-icon>add</mat-icon> Alternativo
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div style="display: flex; flex-direction: column; width: 100%;"
+                    *ngIf="!isRiepilogo && !salvato && !isRiepilogoVisita && !isPianoNutrizionalevisita && !isAnteprima">
+                    <div style="margin-top: 16px;">
+                        <button mat-raised-button color="primary" type="button" title="aggiungi alimento"
+                            (click)="aggiungiAProdottiSelezionati(pasto)">
+                            <mat-icon>add</mat-icon> Aggiungi alimento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
+
+    <!-- !NOTE E CONCLUSIONI -->
+    <!-- *NOTE-->
+    <form [formGroup]="formNoteConclusioni" *ngIf="!isAnteprima">
+        <div>
+
+            <!-- NOTE ANMANESI ALIMENTARI-->
+            <mat-card *ngIf="isStepAnamnesi || riepilogoVisitaAnamnesi">
+                <mat-card-title>
+                    <h3 class="title">
+                        Note anamnesi alimentare</h3>
+
+                </mat-card-title>
+                <mat-card-content>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px"
+                        *ngIf="(!authGuard.canAccess(appGen.permesso.ConcludiVisita) || isStepAnamnesi || riepilogoVisitaAnamnesi) || isDaRefertare">
+                        <mat-form-field class="full-width" fxFlex>
+                            <textarea matInput formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                                cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- NOTE PIANO NUTRIZIONALE-->
+            <mat-card
+                *ngIf="(isDietaXpaziente && !isStepAnamnesi && authGuard.canRole(appGen.ruolo.Medico)) || isPianoNutrizionalevisita">
+                <ng-container>
+                    <mat-card-title>
+                        <h3 class="title">
+                            Note</h3>
+                    </mat-card-title>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+                        <mat-form-field class="full-width" fxFlex>
+                            <textarea matInput formControlName="note" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                                cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+            </mat-card>
+
+          <!--  <mat-card *ngIf="(isDietaXpaziente && !isStepAnamnesi) || isPianoNutrizionalevisita">
+                 <ng-container>
+                    <mat-card-title>
+                        <h3 class="title">
+                            Note dietista</h3>
+                    </mat-card-title>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+                        <mat-form-field class="full-width" fxFlex>
+                            <textarea matInput formControlName="noteDietista" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                                cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+                <-- !Info solo per note dietista
+               <div *ngIf="authGuard.canRole(appGen.ruolo.Dietista)">
+                    <span><mat-icon color="primary" class="material-icons-outlined"
+                            style="vertical-align:bottom">info</mat-icon> Le note del dietista non compariranno in alcun
+                        documento per il paziente e saranno utilizzate</span>
+                    <span style="font-weight: bold"> solamente per uso interno</span>
+                    <span>.</span>
+                </div>
+            </mat-card>-->
+            <!--*CONCLUSIONI-->
+            <!-- <mat-card
+                *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita) && !riepilogoVisitaAnamnesi && !isStepAnamnesi && !isDaRefertare && isStepPianoNutrizionale">
+                <mat-card-title>
+                    <h3 class="title"
+                        *ngIf="(authGuard.canAccess(appGen.permesso.ConcludiVisita) && !riepilogoVisitaAnamnesi  && !isStepAnamnesi    && !isDaRefertare) ">
+                        Conclusioni</h3>
+
+                </mat-card-title>
+
+                <div
+                    *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita) && !riepilogoVisitaAnamnesi && !isStepAnamnesi && !isDaRefertare && !isPianoNutrizionalevisita">
+                    <ng-container *ngIf="!isRiepilogoVisita">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+                            <mat-hint>Seleziona una conclusione predefinita oppure digita manualmente</mat-hint>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+                            <mat-form-field class="full-width" fxFlex="65">
+                                <mat-label>Lista conclusioni predefinite</mat-label>
+                                <mat-select matNativeControl formControlName="conclusioniPredefinite"
+                                    (selectionChange)="selectedConclusionePredefinita($event.value)">
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let conclusione of listaConclusioniPredefinite"
+                                        [value]="conclusione.conclusione" [matTooltip]="conclusione.conclusione">
+                                        {{conclusione.conclusione}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <mat-divider></mat-divider>
+                    </ng-container>
+
+                    <angular-editor formControlName="conclusioni" [config]="editorConfig" id="editor"
+                        [required]="isStepPianoNutrizionale && isDietaXpaziente && authGuard.canRole(this.appGen.ruolo.Medico)">
+                    </angular-editor>
+                </div>
+            </mat-card> -->
+            <!-- *DIAGNOSI ANAMNESI ALIMENTARE -->
+            <mat-card
+                *ngIf="((!authGuard.canAccess(appGen.permesso.ConcludiVisita) || isStepAnamnesi || riepilogoVisitaAnamnesi) || isDaRefertare) && authGuard.canRole(appGen.ruolo.Medico)">
+                <mat-card-title>
+                    <h3 class="title" *ngIf="isStepAnamnesi || riepilogoVisitaAnamnesi">Diagnosi nutrizionale</h3>
+                </mat-card-title>
+                <mat-card-content>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="10px">
+                        <mat-form-field class="full-width" fxFlex>
+                            <textarea matInput formControlName="diagnosiNutrizionale" cdkTextareaAutosize
+                                cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                        </mat-form-field>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </form>
+</mat-card>
+
+<ng-container *ngIf="!isRiepilogoVisita && !isAnteprima && !isDettaglioPianoNutrizionale && !isPianoNutrizionalevisita">
+
+    <div class="check-container">
+        <mat-checkbox color="primary" class="checkbox" matTooltip="Compila i documenti senza mostrare le Kcal"
+            [checked]="kcalNonVisibili === true" (change)="statusKcal()"
+            *ngIf="!editProdotti && !authGuard.canRole(appGen.ruolo.Dietista)">
+            Kcal nascoste
+        </mat-checkbox>
+    </div>
+
+    <div [ngClass]="isDietaXpaziente && editProdotti  && !isStepAnamnesi? 'cntrBtnRow-low-bis' : 'cntrBtnRow-low'"
+        fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="30px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end">
+
+        <div class="left-button-div" *ngIf="isDietaXpaziente && !isDettaglioDieta">
+            <button color="accent" mat-raised-button [matMenuTriggerFor]="menu"
+                *ngIf="!editProdotti && authGuard.canAccess(appGen.permesso.ConcludiVisita)">
+                <mat-icon>more_vert</mat-icon>
+                Anteprima documenti
+            </button>
+
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item type="button" (click)="bozzaAnamnesiAlimentare()" >
+                    <mat-icon color="accent">menu_book</mat-icon>
+                    Anamnesi alimentare
+
+                </button>
+                <button mat-menu-item type="button" (click)="bozzaPianoNutrizionale()">
+                    <mat-icon color="accent">receipt_long</mat-icon>
+                    Piano nutrizionale
+
+                </button>
+                <button mat-menu-item type="button" (click)="bozzaReferto()">
+                    <mat-icon color="accent">assignment</mat-icon>
+                    Referto
+
+                </button>
+            </mat-menu>
+        </div>
+
+        <div class="button-div" *ngIf="isDietaXpaziente && !isDettaglioDieta">
+
+            <button mat-raised-button type="button" color="primary" (click)="modificaProdotti()" *ngIf="!editProdotti"
+                title="pulsante per modificare la dieta" style="margin-bottom: 12x">
+                <mat-icon>edit</mat-icon>
+                Modifica
+            </button>
+
+            <button mat-raised-button color="primary" *ngIf="!editProdotti" title="concludi visita"
+                (click)="concludiVisita()">
+
+                <ng-container *ngIf="authGuard.canAccess(appGen.permesso.ConcludiVisita)"> Concludi visita
+                </ng-container>
+                <ng-container *ngIf="!authGuard.canAccess(appGen.permesso.ConcludiVisita)">
+                    <mat-icon>rate_review</mat-icon>
+                    Chiudi, da refertare
+                </ng-container>
+                <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+
+            </button>
+        </div>
+
+        <button mat-raised-button color="accent" (click)="backToPrevious()" title="torna alla lista"
+            *ngIf="isDietaXpaziente && editProdotti  && !isStepAnamnesi" style="float: left !important;">
+            <mat-icon>arrow_back</mat-icon>
+            Torna alla lista
+        </button>
+
+        <button mat-raised-button color="primary" (click)="onSubmit()" *ngIf="!isDietaXpaziente  && !isDettaglioDieta"
+            title="pulsante per salvataggio dieta">
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+
+        <button mat-raised-button color="primary" (click)="onSubmit()" *ngIf="!isDietaXpaziente && isDettaglioDieta"
+            title="pulsante per salvataggio dieta">
+            <mat-icon>save</mat-icon>
+            <ng-container *ngIf="creatoDaUtenteLoggato">Salva</ng-container>
+            <ng-container *ngIf="!creatoDaUtenteLoggato">Salva come nuova</ng-container>
+        </button>
+
+        <button mat-raised-button color="primary" (click)="onSubmit()"
+            title="pulsante per salvataggio dieta per paziente"
+            *ngIf="isDietaXpaziente && editProdotti  && !isStepAnamnesi">
+            <mat-icon>save</mat-icon>
+            Salva e seleziona piano
+        </button>
+
+    </div>
+</ng-container>

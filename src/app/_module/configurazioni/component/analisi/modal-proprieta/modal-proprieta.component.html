@@ -1,0 +1,50 @@
+<mat-icon (click)="closeDialog()" color="primary" class="exit-button">close</mat-icon>
+
+<div class="container">
+    <form [formGroup]="proprietaForm">
+        <span class="note-span">
+            <mat-form-field class="full-width" fxFlex>
+                <mat-label>Descrizione</mat-label>
+                <input type="text" matInput required formControlName="descrizione">
+                <mat-error>Il campo non può essere vuoto</mat-error>
+            </mat-form-field>
+        </span>
+
+        <span class="note-span">
+            <mat-form-field>
+                <mat-label>Tipo campo</mat-label>
+                <mat-select formControlName="tipoCampo" (selectionChange)="cambiaUnitaMisura($event)">
+                    <mat-option [value]="tipoCampo.Boolean">Presente/Assente</mat-option>
+                    <mat-option [value]="tipoCampo.String">Descrittivo</mat-option>
+                    <mat-option [value]="tipoCampo.Number">Range numerico</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </span>
+
+        <span class="note-span">
+            <mat-form-field>
+                <mat-label>Unità di misura</mat-label>
+                <input type="text" matInput required formControlName="unitaMisura">
+                <mat-error>Il campo non può essere vuoto</mat-error>
+            </mat-form-field>
+        </span>
+
+        <span class="note-span">
+            <mat-form-field>
+                <mat-label>Categoria</mat-label>
+                <mat-select formControlName="categoria">
+                    <mat-option *ngFor="let element of categorie"
+                        [value]="element.id">{{element.descrizioneAnalisi}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </span>
+    </form>
+
+
+    <div>
+        <button mat-raised-button class="save-button" color="primary" (click)="saveProprieta()" [disabled]="!proprietaForm.valid">
+            <mat-icon>save</mat-icon>
+            save
+        </button>
+    </div>
+</div>

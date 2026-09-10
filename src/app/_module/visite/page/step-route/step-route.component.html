@@ -1,0 +1,12 @@
+<div class="backBtn" *ngIf="showBackBtn">
+  <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Indietro</span>
+  </button>
+</div>
+
+
+<app-cruscotto-paziente></app-cruscotto-paziente>
+<br/>
+<app-form-referto></app-form-referto>
+<router-outlet #outlet (activate)="appGen.onActivate($event, outlet)"></router-outlet>

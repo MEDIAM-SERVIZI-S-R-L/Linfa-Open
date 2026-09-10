@@ -1,0 +1,126 @@
+<mat-dialog-content>
+
+    <h3 class="title">{{nomeProdotto}}
+        <mat-icon (click)="closeDialog()" color="primary" class="exit-button">close</mat-icon>
+    </h3>
+
+
+    <div [hidden]="selectVisibile === false">
+        <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+            <mat-form-field class="full-width" fxFlex="50">
+                <mat-label>Tipo di alimentazione artificiale</mat-label>
+                <mat-select (selectionChange)="getListaProdotti($event.value)">
+                    <mat-option *ngFor="let tipoAlimentazioneArtificiale of listaTipiAlimentazioneArtificiale"
+                        [value]="tipoAlimentazioneArtificiale.id">
+                        {{tipoAlimentazioneArtificiale.artificiale}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="listaProdotti.length > 0">
+            <mat-form-field class="full-width" fxFlex="50">
+                <mat-label>Prodotto</mat-label>
+                <mat-select (selectionChange)="getProdottoFromId($event.value)">
+                    <mat-option>
+                    <ngx-mat-select-search  [formControl] ="filtroConfezionamenti" placeholderLabel="Cerca" noEntriesFoundLabel="Nessun elemento trovato">
+                    </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let prodotto of listaProdottiFiltrata | async" [value]="prodotto.idProdotto"
+                        [disabled]="prodotto.abilitatoXGara === false"
+                        [style.cursor]="prodotto.abilitatoXGara === true? '' : 'not-allowed'"
+                        [matTooltip]="prodotto.abilitatoXGara === true? '' : 'Una o più confezioni del prodotto sono già associate alla gara'">
+                        {{prodotto.prodotto}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="table-container">
+
+    <div [hidden]="confezionamentiAssenti == false">
+        <h3 class="subtitle">Non ci sono confezionamenti per questo prodotto</h3>
+        <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+            <!-- <button mat-raised-button (click)="goToMiscela()" color="accent" class="btnTopCard">
+                <mat-icon class="material-icons-outlined">science</mat-icon>
+                Vai al prodotto
+            </button> -->
+        </div>
+    </div>
+
+    <div [hidden]="dataSource.data.length <= 0" class="div-tabella">
+
+            <mat-table [dataSource]="dataSource" multiTemplateDataRows>
+                <ng-container matColumnDef="quantita">
+                    <mat-header-cell *matHeaderCellDef>Quantità</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.quantita}} {{element.unitaMisura}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="prezzo">
+                    <mat-header-cell *matHeaderCellDef>Prezzo unitario</mat-header-cell>
+                    <mat-cell *matCellDef="let element">€ {{element.prezzo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="disponibile">
+                    <mat-header-cell *matHeaderCellDef>Disponibile</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-icon *ngIf="element.disponibile === true" color="primary">done</mat-icon>
+                        <mat-icon *ngIf="element.disponibile === false" color="warn">close</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dataCreazione">
+                    <mat-header-cell *matHeaderCellDef>Inserito il: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dataCreazione | date: 'dd/MM/yyyy'}}</mat-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="dataModifica">
+                    <mat-header-cell *matHeaderCellDef>Modificato il: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dataModifica? (element.dataModifica |date: 'dd/MM/yyyy') : '-'}} </mat-cell>
+                </ng-container> -->
+
+                <ng-container matColumnDef="check">
+                    <mat-header-cell *matHeaderCellDef>
+                                Associato
+                                <mat-checkbox
+                                color="primary" fxFlex="30" 
+                                (change)="associaTutti()"
+                                [checked]="confezionamentiNonSelezionati.length <= 0"
+                                style="margin-left: 4px;"
+                                [matTooltip]="confezionamentiNonSelezionati.length <= 0? 'Dissocia tutti' : 'Associa tutti'">
+                                </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="check-cell">
+                        <mat-checkbox color="primary" [checked]="element.associato" fxFlex="30"
+                            (change)="cambiaAssocia(element)"></mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+
+        </div>
+
+        <div class="footer-container">
+            <div class="footer">
+                <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons="true">
+                </mat-paginator>
+            </div>
+
+            <div class="footer-button-div">
+                <button mat-raised-button class="save-button" color="primary" (click)="save()">
+                    <mat-icon>save</mat-icon>
+                    Salva
+                </button>
+
+                <button mat-raised-button (click)="goToMiscela()" color="accent" class="save-button" [disabled]="!idProdotto">
+                    <mat-icon class="material-icons-outlined">science</mat-icon>
+                    Vai al prodotto
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

@@ -1,0 +1,44 @@
+.boxArea {
+    margin-bottom: 60px;
+}
+
+.conclusioniBtn {
+    color: white !important;
+    background: rgb(42 42 42 / 87%) !important;
+}
+
+mat-divider {
+    margin-bottom: 15px;
+}
+
+.btnProsegui {
+    padding-bottom: 55px;
+}
+
+.ctnrList {
+    //  padding-top: 55px;
+    mat-divider {
+        margin-bottom: 60px;
+    }
+}
+
+.btnSave {
+    float: right;
+    div {
+        padding: 10px 0;
+    }
+}
+
+mat-divider {
+    margin: 25px 0;
+}
+
+#proseguiTitle {
+    font-weight: 600;
+    padding: 5px 30px;
+}
+
+mat-expansion-panel {
+    border-radius: 15px !important;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}

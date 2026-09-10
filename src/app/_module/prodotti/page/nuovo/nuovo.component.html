@@ -1,0 +1,32 @@
+<div class="backBtn">
+    <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Indietro</span>
+  </button>
+</div>
+
+<mat-card class="linfaCard" id="main">
+    <mat-card-title>
+        <h3 class="title">{{title}}</h3>
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout.xs="column" fxLayoutGap="5%" fxLayout.lt-sm="column" fxLayout="row wrap">
+            <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Tipologia</mat-label>
+                <mat-select matNativeControl required (selectionChange)="setCategoria($event.value)">
+                    <mat-option *ngFor="let tipo of listaTipiProdotto" [value]="tipo.id">
+                        {{ tipo.tipoProdotto }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="boxArea" *ngIf="!appGen.isNullOrUndefined(idTipologia)">
+
+            <app-form-prodotto [idtipologia]="idTipologia" *ngIf="this.idTipologia !== tipologia.SacchePersonalizzate">
+            </app-form-prodotto>
+            <app-form-sacca *ngIf="this.idTipologia === tipologia.SacchePersonalizzate">
+            </app-form-sacca>
+        </div>
+    </mat-card-content>
+</mat-card>

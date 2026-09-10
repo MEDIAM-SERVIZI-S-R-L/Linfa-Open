@@ -1,0 +1,82 @@
+<mat-card class="linfaCard">
+  <h3 class="title">
+    Proprietà
+  </h3>
+
+  <mat-card-content>
+
+
+
+
+    <div class="filtri">
+      <form [formGroup]="form" autocomplete="off">
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+          <mat-form-field class="full-width" fxFlex>
+            <mat-label> Cerca</mat-label>
+            <input matInput type="text" formControlName="proprieta" autocomplete="off" (input)="getList()">
+          </mat-form-field>
+
+        </div>
+      </form>
+    </div>
+
+
+
+
+    <mat-table id="table" [dataSource]="dataSource" matSortActive="proprieta" [matSortDirection]="sortDirection"
+      (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+
+
+
+      <ng-container matColumnDef="proprieta">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Proprietà</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Proprietà">
+          {{item.proprieta}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="kcal">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Kcal</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Kcal">
+          {{item.kcal}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="quantita">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Quantità</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Quantità">{{item.quantita}}</mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="abilitato">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Abilitato</mat-header-cell>
+        <mat-cell *matCellDef="let item" data-label="Abilitato">
+          <mat-icon color="primary" *ngIf="item.abilitato">done</mat-icon>
+          <mat-icon color="warn" *ngIf="!item.abilitato">close</mat-icon>
+
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="pulsanti">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let item" class="pulsantiTab" style="justify-content:flex-end">
+
+          <mat-icon class="editIco" matTooltip="Modifica" (click)="edit(item)">edit
+          </mat-icon>
+
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+    </mat-table>
+    <mat-paginator [length]="totalElements" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage"
+      (page)="onChangePage($event)" [pageSizeOptions]="[5, 10, 25, 50]">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

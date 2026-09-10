@@ -1,0 +1,281 @@
+<app-stepper [stepCorrente]="step" *ngIf="!isRiepilogoVisita"></app-stepper>
+<div class="backBtn" *ngIf="!isRiepilogoVisita">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+<!-- <div class="divCruscotto" *ngIf="!fromDomiciliare">
+
+    <app-cruscotto-paziente></app-cruscotto-paziente>
+</div>
+
+
+Inserire form per Referto
+<app-form-referto></app-form-referto> -->
+
+<mat-accordion class="a">
+    <mat-expansion-panel>
+        <!--expanded-->
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Anagrafica
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <app-anagrafica [isRiepilogoVisita]="isRiepilogoVisita"></app-anagrafica>
+        </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="appGen.configLinfa.PrivacyAbilitata">
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Consenso informato
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <app-privacy [isRiepilogoVisita]="isRiepilogoVisita"></app-privacy>
+        </ng-template>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Caregivers
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <app-lista-caregiver [riepilogoCaregivers]="isRiepilogoVisita"></app-lista-caregiver>
+        </ng-template>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel>
+        <!--expanded-->
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Valutazione nutrizionale
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <app-valutazione-nutrizionale [isRiepilogoVisita]="isRiepilogoVisita"></app-valutazione-nutrizionale>
+        </ng-template>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Anamnesi alimentare
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <app-new-form-dieta [riepilogoVisitaAnamnesi]="riepilogoVisitaAnamnesi"
+            [isRiepilogoVisita]="isRiepilogoVisita">
+            </app-new-form-dieta>
+        </ng-template>
+
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                <!-- MNA-NRS-Karnofsky-MUST -->
+                Screening Nutrizionale
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <ng-container *ngIf="isStoricoDettaglio">
+                <h3 class="title">Per maggiori dettagli stampare il referto</h3>
+            </ng-container>
+            <ng-container *ngIf="!isStoricoDettaglio">
+                <app-mna-karnofsky [isRiepilogoVisita]="isRiepilogoVisita"></app-mna-karnofsky>
+            </ng-container>
+
+        </ng-template>
+
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Anamnesi
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+            <ng-container *ngIf="isStoricoDettaglio">
+                <h3 class="title">Per maggiori dettagli stampare il referto</h3>
+            </ng-container>
+            <ng-container *ngIf="!isStoricoDettaglio">
+                <app-anamnesi-paziente [isRiepilogoVisita]="isRiepilogoVisita"></app-anamnesi-paziente>
+            </ng-container>
+        </ng-template>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="!this.appGen.isNullOrUndefined(this.idTipoAlimentazione) || isDaRefertare">
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Alimentazione
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <app-artificiale *ngIf="idTipoAlimentazione == tipoAlimentazione.Artificiale" [isDaRefertare]="isDaRefertare" [isRiepilogoStorico]="isRiepilogoVisita"></app-artificiale>
+
+            <app-new-form-dieta *ngIf="idTipoAlimentazione == tipoAlimentazione.NaturaleMista" [isDaRefertare]="isDaRefertare" [isRiepilogoVisita]="isRiepilogoVisita" [riepilogoVisitaPianoNutr]="true"></app-new-form-dieta>
+
+        </ng-template>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                Conclusioni
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <app-concludi-visita [isRiepilogoVisita]="isRiepilogoVisita" [inRiepilogoComponent]="true"></app-concludi-visita>
+
+        </ng-template>
+
+    </mat-expansion-panel>
+
+
+
+
+</mat-accordion>
+<br>
+<div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" *ngIf="!isDomiciliare && isRiepilogoVisita">
+    <button mat-raised-button type="button" color="primary" (click)="openDocumentList()">
+        Mostra documenti visita
+        <mat-icon style="margin:unset !important">folder_special</mat-icon>
+    </button>
+</div>
+
+<mat-divider *ngIf="!fromDomiciliare"></mat-divider>
+
+<ng-container *ngIf="isDaRefertare && authGuard.canAccess(appGen.permesso.ConcludiVisita)">
+    <mat-card>
+        <mat-card-title>
+
+            <h3 class="title">Conclusioni</h3>
+        </mat-card-title>
+        <mat-card-content>
+
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                <mat-hint>Seleziona una conclusione prefefinita oppure digita manualmente</mat-hint>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                <mat-form-field class="full-width" fxFlex="65">
+                    <mat-label>Lista conclusioni predefinite</mat-label>
+                    <mat-select matNativeControl (selectionChange)="selectedConclusionePredefinita($event.value)">
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let conclusione of listaConclusioniPredefinite" [value]="conclusione.conclusione" [matTooltip]="conclusione.conclusione">
+                            {{conclusione.conclusione}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <mat-divider></mat-divider>
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                <angular-editor [(ngModel)]="diagnosiModel" [config]="editorConfig" id="editor"></angular-editor>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+
+    <div class="btnSave" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px" *ngIf="isDaRefertare">
+        <button mat-raised-button color="primary" type="button" (click)="salvaDiagnosi()">
+            Salva
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+    </div>
+</ng-container>
+
+
+
+<mat-checkbox color="primary"
+class="checkbox"
+[checked]="kcalNonVisibili === true"
+(change)="statusKcal()"
+[disabled]="true"
+    *ngIf="!isStoricoDettaglio && !isDaRefertare && authGuard.canRole(appGen.ruolo.Medico) && !isDomiciliare">
+    Kcal nacoste
+</mat-checkbox>
+
+<div class="cntrBtnRow" *ngIf="!isDomiciliare" fxLayout="row" fxLayoutAlign="end"
+fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px"
+fxLayoutAlign="space-between" >
+
+    <button mat-raised-button color="warn" type="button" (click)="prenotaVisita('prenota')" *ngIf="showPrenotaVisita">
+        <mat-icon>cancel</mat-icon>
+        Chiudi calendario
+    </button>
+    <ng-container *ngIf="!showPrenotaVisita">
+        <button mat-raised-button color="primary" type="button" (click)="prenotaVisita('prenota')" *ngIf="!isStoricoDettaglio && isRiepilogoVisita && !isDaRefertare && !isDomiciliare && this.appGen.configLinfa.PrenotaProssimaVisita">
+            <mat-icon>assignment</mat-icon>
+            Prenota prossima visita
+        </button>
+
+
+
+            <button color="primary" class="btnStampDocuments" *ngIf="!isStoricoDettaglio && !isDaRefertare && !authGuard.canRole(appGen.ruolo.Dietista)" mat-raised-button [matMenuTriggerFor]="menu">
+                <mat-icon color="primary">more_vert</mat-icon>
+                Stampa/Invia documenti
+            </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item type="button" (click)="stampaRefertoFarmacia()" *ngIf="showPianoTerapeutico">
+                <mat-icon color="primary">assignment</mat-icon>
+                Piano terapeutico
+            </button>
+
+            <button mat-menu-item type="button" (click)="anteprimaAnamnesiAlimentare()">
+              <mat-icon color="primary">menu_book</mat-icon>
+              Anamnesi alimentare
+          </button>
+
+
+            <button mat-menu-item type="button" (click)="anteprimaPianoNutrizionale()" *ngIf="idTipoAlimentazione == tipoAlimentazione.Artificiale || idTipoAlimentazione == this.tipoAlimentazione.NaturaleMista">
+                <mat-icon color="primary">receipt_long</mat-icon>
+                Piano nutrizionale
+            </button>
+
+            <button mat-menu-item class="btnFooter" type="button" (click)="anteprimaSacche()" *ngIf="showPrescrizioneSacche">
+                <mat-icon color="primary">science</mat-icon>
+                Prescrizione sacche
+            </button>
+
+            <button mat-menu-item type="button" (click)="anteprimaReferto()">
+                <mat-icon color="primary">assignment</mat-icon>
+                Referto
+            </button>
+
+            <button mat-menu-item type="button" (click)="anteprimaPianoNutrizionale(true)"
+            *ngIf="appGen.configLinfa.invioPianoNutrizionaleTramiteMail && (idTipoAlimentazione == tipoAlimentazione.Artificiale || idTipoAlimentazione == this.tipoAlimentazione.NaturaleMista)">
+                <mat-icon color="accent">receipt_long</mat-icon>
+                Invia piano nutrizionale
+            </button>
+
+        </mat-menu>
+        <button mat-raised-button color="accent" (click)="esci()">
+            Esci
+            <mat-icon style="margin: unset !important;">keyboard_arrow_right</mat-icon>
+        </button>
+    </ng-container>
+</div>
+
+
+
+
+<ng-container *ngIf="showPrenotaVisita">
+
+    <mat-divider></mat-divider>
+
+    <div class="cntrCalendar" id="prenota" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+        <app-calendario-disponibilita (emitRichiestaControllo)="closePrenotaControllo()" [fromRiepilogoVisita]="true">
+        </app-calendario-disponibilita>
+    </div>
+</ng-container>

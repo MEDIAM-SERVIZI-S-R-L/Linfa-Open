@@ -1,0 +1,8 @@
+<div class="backBtn" *ngIf="showBackBtn">
+  <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Indietro</span>
+  </button>
+</div>
+
+<router-outlet #outlet (activate)="appGen.onActivate($event, outlet)"></router-outlet>

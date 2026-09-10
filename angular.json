@@ -1,0 +1,905 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "Linfa": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                }
+            },
+            "root": "",
+            "sourceRoot": "src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/Linfa",
+                        "index": "src/index.html",
+                        "main": "src/main.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "allowedCommonJsDependencies": [
+                            "jquery",
+                            "jwt-decode",
+                            "chartjs-plugin-annotation",
+                            "@mattlewis92/dom-autoscroller",
+                            "angular-calendar/date-adapters/date-fns",
+                            "chart.js",
+                            "file-saver"
+                        ],
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets",
+                            "src/assets/icons/gender-female.svg",
+                            "src/assets/icons/gender-male.svg",
+                            "src/assets/icons/gender-other.svg",
+                            "src/assets/_files-configurazioni/intestazione-documenti.json",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                                "output": "/assets/"
+                            },
+                            {
+                              "glob": "**/*",
+                              "input": "./node_modules/@kolkov/angular-editor/assets/",
+                              "output": "./assets/fonts/"
+                            }
+                        ],
+                        "styles": [
+                            "node_modules/angular-calendar/css/angular-calendar.css",
+                            "src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "test": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.test.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "demo": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.demo.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "preprod": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.preprod.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "prod": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.prod.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "asl1": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.asl1.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "asl2": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.asl2.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "6877341-torrette": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.6877341-torrette.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "7mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "007dev": {
+                          "fileReplacements": [{
+                              "replace": "src/environments/environment.ts",
+                              "with": "src/environments/environment.007dev.ts"
+                          }],
+                          "optimization": true,
+                          "outputHashing": "all",
+                          "sourceMap": false,
+                          "namedChunks": false,
+                          "extractLicenses": true,
+                          "vendorChunk": false,
+                          "buildOptimizer": true,
+                          "budgets": [{
+                                  "type": "initial",
+                                  "maximumWarning": "6mb",
+                                  "maximumError": "7mb"
+                              },
+                              {
+                                  "type": "anyComponentStyle",
+                                  "maximumWarning": "6kb",
+                                  "maximumError": "10kb"
+                              }
+                          ]
+                      },
+                      "007test": {
+                        "fileReplacements": [{
+                            "replace": "src/environments/environment.ts",
+                            "with": "src/environments/environment.007test.ts"
+                        }],
+                        "optimization": true,
+                        "outputHashing": "all",
+                        "sourceMap": false,
+                        "namedChunks": false,
+                        "extractLicenses": true,
+                        "vendorChunk": false,
+                        "buildOptimizer": true,
+                        "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "6mb",
+                                "maximumError": "7mb"
+                            },
+                            {
+                                "type": "anyComponentStyle",
+                                "maximumWarning": "6kb",
+                                "maximumError": "10kb"
+                            }
+                        ]
+                    },
+                    "caserta": {
+                        "fileReplacements": [{
+                            "replace": "src/environments/environment.ts",
+                            "with": "src/environments/environment.caserta.ts"
+                        }],
+                        "optimization": true,
+                        "outputHashing": "all",
+                        "sourceMap": false,
+                        "namedChunks": false,
+                        "extractLicenses": true,
+                        "vendorChunk": false,
+                        "buildOptimizer": true,
+                        "budgets": [{
+                                "type": "initial",
+                                "maximumWarning": "6mb",
+                                "maximumError": "7mb"
+                            },
+                            {
+                                "type": "anyComponentStyle",
+                                "maximumWarning": "6kb",
+                                "maximumError": "10kb"
+                            }
+                        ]
+                    },
+                    "casertaSV1": {
+                      "fileReplacements": [{
+                          "replace": "src/environments/environment.ts",
+                          "with": "src/environments/environment.casertaSV1.ts"
+                      }],
+                      "optimization": true,
+                      "outputHashing": "all",
+                      "sourceMap": false,
+                      "namedChunks": false,
+                      "extractLicenses": true,
+                      "vendorChunk": false,
+                      "buildOptimizer": true,
+                      "budgets": [{
+                              "type": "initial",
+                              "maximumWarning": "6mb",
+                              "maximumError": "7mb"
+                          },
+                          {
+                              "type": "anyComponentStyle",
+                              "maximumWarning": "6kb",
+                              "maximumError": "10kb"
+                          }
+                      ]
+                  },
+                  "casertaSV2": {
+                    "fileReplacements": [{
+                        "replace": "src/environments/environment.ts",
+                        "with": "src/environments/environment.casertaSV2.ts"
+                    }],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false,
+                    "buildOptimizer": true,
+                    "budgets": [{
+                            "type": "initial",
+                            "maximumWarning": "6mb",
+                            "maximumError": "7mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "6kb",
+                            "maximumError": "10kb"
+                        }
+                    ]
+                },
+                "benevento": {
+                    "fileReplacements": [{
+                        "replace": "src/environments/environment.ts",
+                        "with": "src/environments/environment.benevento.ts"
+                    }],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false,
+                    "buildOptimizer": true,
+                    "budgets": [{
+                            "type": "initial",
+                            "maximumWarning": "6mb",
+                            "maximumError": "7mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "6kb",
+                            "maximumError": "10kb"
+                        }
+                    ]
+                },
+                "sanmatteoPavia": {
+                  "fileReplacements": [{
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.sanmatteo-pavia.ts"
+                  }],
+                  "optimization": true,
+                  "outputHashing": "all",
+                  "sourceMap": false,
+                  "namedChunks": false,
+                  "extractLicenses": true,
+                  "vendorChunk": false,
+                  "buildOptimizer": true,
+                  "budgets": [{
+                          "type": "initial",
+                          "maximumWarning": "6mb",
+                          "maximumError": "7mb"
+                      },
+                      {
+                          "type": "anyComponentStyle",
+                          "maximumWarning": "6kb",
+                          "maximumError": "10kb"
+                      }
+                  ]
+              },
+              "sanmatteoPaviaTest": {
+                "fileReplacements": [{
+                    "replace": "src/environments/environment.ts",
+                    "with": "src/environments/environment.sanmatteo-pavia-test.ts"
+                }],
+                "optimization": true,
+                "outputHashing": "all",
+                "sourceMap": false,
+                "namedChunks": false,
+                "extractLicenses": true,
+                "vendorChunk": false,
+                "buildOptimizer": true,
+                "budgets": [{
+                        "type": "initial",
+                        "maximumWarning": "6mb",
+                        "maximumError": "7mb"
+                    },
+                    {
+                        "type": "anyComponentStyle",
+                        "maximumWarning": "6kb",
+                        "maximumError": "10kb"
+                    }
+                ]
+            },
+              "ASST-Rhodense": {
+                "fileReplacements": [{
+                    "replace": "src/environments/environment.ts",
+                    "with": "src/environments/environment.ASST-Rhodense.ts"
+                }],
+                "optimization": true,
+                "outputHashing": "all",
+                "sourceMap": false,
+                "namedChunks": false,
+                "extractLicenses": true,
+                "vendorChunk": false,
+                "buildOptimizer": true,
+                "budgets": [{
+                        "type": "initial",
+                        "maximumWarning": "6mb",
+                        "maximumError": "7mb"
+                    },
+                    {
+                        "type": "anyComponentStyle",
+                        "maximumWarning": "6kb",
+                        "maximumError": "10kb"
+                    }
+                ]
+            },
+              "sanGiovanniRoma": {
+                "fileReplacements": [{
+                    "replace": "src/environments/environment.ts",
+                    "with": "src/environments/environment.sanGiovanniRoma.ts"
+                }],
+                "optimization": true,
+                "outputHashing": "all",
+                "sourceMap": false,
+                "namedChunks": false,
+                "extractLicenses": true,
+                "vendorChunk": false,
+                "buildOptimizer": true,
+                "budgets": [{
+                        "type": "initial",
+                        "maximumWarning": "6mb",
+                        "maximumError": "7mb"
+                    },
+                    {
+                        "type": "anyComponentStyle",
+                        "maximumWarning": "6kb",
+                        "maximumError": "10kb"
+                    }
+                ]
+            }
+
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "Linfa:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "Linfa:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "Linfa:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets",
+                            "src/assets/icons/gender-female.svg",
+                            "src/assets/icons/gender-male.svg",
+                            "src/assets/icons/gender-other.svg",
+                            "src/assets/_files-configurazioni/intestazione-documenti.json",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                                "output": "/assets/"
+                            }
+                        ],
+                        "styles": [
+                            "node_modules/angular-calendar/css/angular-calendar.css",
+                            "src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "asl1": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets",
+                            "src/assets/icons/gender-female.svg",
+                            "src/assets/icons/gender-male.svg",
+                            "src/assets/icons/gender-other.svg",
+                            "src/assets/_files-configurazioni/intestazione-documenti.json",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                                "output": "/assets/"
+                            }
+                        ],
+                        "styles": [
+                            "node_modules/angular-calendar/css/angular-calendar.css",
+                            "src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "asl2": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets",
+                            "src/assets/icons/gender-female.svg",
+                            "src/assets/icons/gender-male.svg",
+                            "src/assets/icons/gender-other.svg",
+                            "src/assets/_files-configurazioni/intestazione-documenti.json",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                                "output": "/assets/"
+                            }
+                        ],
+                        "styles": [
+                            "node_modules/angular-calendar/css/angular-calendar.css",
+                            "src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "6877341-torrette": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets",
+                            "src/assets/icons/gender-female.svg",
+                            "src/assets/icons/gender-male.svg",
+                            "src/assets/icons/gender-other.svg",
+                            "src/assets/_files-configurazioni/intestazione-documenti.json",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                                "output": "/assets/"
+                            }
+                        ],
+                        "styles": [
+                            "node_modules/angular-calendar/css/angular-calendar.css",
+                            "src/styles.scss"
+                        ],
+                        "scripts": []
+                    }
+                },
+                "007dev": {
+                  "builder": "@angular-devkit/build-angular:karma",
+                  "options": {
+                      "main": "src/test.ts",
+                      "polyfills": "src/polyfills.ts",
+                      "tsConfig": "tsconfig.spec.json",
+                      "karmaConfig": "karma.conf.js",
+                      "assets": [
+                          "src/favicon.ico",
+                          "src/assets",
+                          "src/assets/icons/gender-female.svg",
+                          "src/assets/icons/gender-male.svg",
+                          "src/assets/icons/gender-other.svg",
+                          "src/assets/_files-configurazioni/intestazione-documenti.json",
+                          {
+                              "glob": "**/*",
+                              "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                              "output": "/assets/"
+                          }
+                      ],
+                      "styles": [
+                          "node_modules/angular-calendar/css/angular-calendar.css",
+                          "src/styles.scss"
+                      ],
+                      "scripts": []
+                  }
+              },
+              "007test": {
+                "builder": "@angular-devkit/build-angular:karma",
+                "options": {
+                    "main": "src/test.ts",
+                    "polyfills": "src/polyfills.ts",
+                    "tsConfig": "tsconfig.spec.json",
+                    "karmaConfig": "karma.conf.js",
+                    "assets": [
+                        "src/favicon.ico",
+                        "src/assets",
+                        "src/assets/icons/gender-female.svg",
+                        "src/assets/icons/gender-male.svg",
+                        "src/assets/icons/gender-other.svg",
+                        "src/assets/_files-configurazioni/intestazione-documenti.json",
+                        {
+                            "glob": "**/*",
+                            "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                            "output": "/assets/"
+                        }
+                    ],
+                    "styles": [
+                        "node_modules/angular-calendar/css/angular-calendar.css",
+                        "src/styles.scss"
+                    ],
+                    "scripts": []
+                }
+            },
+            "caserta": {
+                "builder": "@angular-devkit/build-angular:karma",
+                "options": {
+                    "main": "src/test.ts",
+                    "polyfills": "src/polyfills.ts",
+                    "tsConfig": "tsconfig.spec.json",
+                    "karmaConfig": "karma.conf.js",
+                    "assets": [
+                        "src/favicon.ico",
+                        "src/assets",
+                        "src/assets/icons/gender-female.svg",
+                        "src/assets/icons/gender-male.svg",
+                        "src/assets/icons/gender-other.svg",
+                        "src/assets/_files-configurazioni/intestazione-documenti.json",
+                        {
+                            "glob": "**/*",
+                            "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                            "output": "/assets/"
+                        }
+                    ],
+                    "styles": [
+                        "node_modules/angular-calendar/css/angular-calendar.css",
+                        "src/styles.scss"
+                    ],
+                    "scripts": []
+                }
+            },
+
+     "casertaSV1": {
+      "builder": "@angular-devkit/build-angular:karma",
+      "options": {
+          "main": "src/test.ts",
+          "polyfills": "src/polyfills.ts",
+          "tsConfig": "tsconfig.spec.json",
+          "karmaConfig": "karma.conf.js",
+          "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/assets/icons/gender-female.svg",
+              "src/assets/icons/gender-male.svg",
+              "src/assets/icons/gender-other.svg",
+              "src/assets/_files-configurazioni/intestazione-documenti.json",
+              {
+                  "glob": "**/*",
+                  "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                  "output": "/assets/"
+              }
+          ],
+          "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
+              "src/styles.scss"
+          ],
+          "scripts": []
+      }
+  },
+  "casertaSV2": {
+    "builder": "@angular-devkit/build-angular:karma",
+    "options": {
+        "main": "src/test.ts",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "tsconfig.spec.json",
+        "karmaConfig": "karma.conf.js",
+        "assets": [
+            "src/favicon.ico",
+            "src/assets",
+            "src/assets/icons/gender-female.svg",
+            "src/assets/icons/gender-male.svg",
+            "src/assets/icons/gender-other.svg",
+            "src/assets/_files-configurazioni/intestazione-documenti.json",
+            {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+            }
+        ],
+        "styles": [
+            "node_modules/angular-calendar/css/angular-calendar.css",
+            "src/styles.scss"
+        ],
+        "scripts": []
+    }
+},
+"benevento": {
+    "builder": "@angular-devkit/build-angular:karma",
+    "options": {
+        "main": "src/test.ts",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "tsconfig.spec.json",
+        "karmaConfig": "karma.conf.js",
+        "assets": [
+            "src/favicon.ico",
+            "src/assets",
+            "src/assets/icons/gender-female.svg",
+            "src/assets/icons/gender-male.svg",
+            "src/assets/icons/gender-other.svg",
+            "src/assets/_files-configurazioni/intestazione-documenti.json",
+            {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+            }
+        ],
+        "styles": [
+            "node_modules/angular-calendar/css/angular-calendar.css",
+            "src/styles.scss"
+        ],
+        "scripts": []
+    }
+},
+"sanmatteoPavia": {
+  "builder": "@angular-devkit/build-angular:karma",
+  "options": {
+      "main": "src/test.ts",
+      "polyfills": "src/polyfills.ts",
+      "tsConfig": "tsconfig.spec.json",
+      "karmaConfig": "karma.conf.js",
+      "assets": [
+          "src/favicon.ico",
+          "src/assets",
+          "src/assets/icons/gender-female.svg",
+          "src/assets/icons/gender-male.svg",
+          "src/assets/icons/gender-other.svg",
+          "src/assets/_files-configurazioni/intestazione-documenti.json",
+          {
+              "glob": "**/*",
+              "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+              "output": "/assets/"
+          }
+      ],
+      "styles": [
+          "node_modules/angular-calendar/css/angular-calendar.css",
+          "src/styles.scss"
+      ],
+      "scripts": []
+  }
+},
+"sanmatteoPaviaTest": {
+    "builder": "@angular-devkit/build-angular:karma",
+    "options": {
+        "main": "src/test.ts",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "tsconfig.spec.json",
+        "karmaConfig": "karma.conf.js",
+        "assets": [
+            "src/favicon.ico",
+            "src/assets",
+            "src/assets/icons/gender-female.svg",
+            "src/assets/icons/gender-male.svg",
+            "src/assets/icons/gender-other.svg",
+            "src/assets/_files-configurazioni/intestazione-documenti.json",
+            {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+            }
+        ],
+        "styles": [
+            "node_modules/angular-calendar/css/angular-calendar.css",
+            "src/styles.scss"
+        ],
+        "scripts": []
+    }
+  },
+  "ASST-Rhodense": {
+    "builder": "@angular-devkit/build-angular:karma",
+    "options": {
+        "main": "src/test.ts",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "tsconfig.spec.json",
+        "karmaConfig": "karma.conf.js",
+        "assets": [
+            "src/favicon.ico",
+            "src/assets",
+            "src/assets/icons/gender-female.svg",
+            "src/assets/icons/gender-male.svg",
+            "src/assets/icons/gender-other.svg",
+            "src/assets/_files-configurazioni/intestazione-documenti.json",
+            {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+            }
+        ],
+        "styles": [
+            "node_modules/angular-calendar/css/angular-calendar.css",
+            "src/styles.scss"
+        ],
+        "scripts": []
+    }
+  },
+"sanGiovanniRoma": {
+  "builder": "@angular-devkit/build-angular:karma",
+  "options": {
+      "main": "src/test.ts",
+      "polyfills": "src/polyfills.ts",
+      "tsConfig": "tsconfig.spec.json",
+      "karmaConfig": "karma.conf.js",
+      "assets": [
+          "src/favicon.ico",
+          "src/assets",
+          "src/assets/icons/gender-female.svg",
+          "src/assets/icons/gender-male.svg",
+          "src/assets/icons/gender-other.svg",
+          "src/assets/_files-configurazioni/intestazione-documenti.json",
+          {
+              "glob": "**/*",
+              "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+              "output": "/assets/"
+          }
+      ],
+      "styles": [
+          "node_modules/angular-calendar/css/angular-calendar.css",
+          "src/styles.scss"
+      ],
+      "scripts": []
+  }
+},
+
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "tsconfig.app.json",
+                            "tsconfig.spec.json",
+                            "e2e/tsconfig.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "e2e/protractor.conf.js",
+                        "devServerTarget": "Linfa:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "Linfa:serve:production"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "Linfa",
+    "cli": {
+        "analytics": false
+    }
+}

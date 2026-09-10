@@ -1,0 +1,116 @@
+<mat-card class="linfaCard">
+
+    <div fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px" class="cntrBtnRow">
+        <button mat-raised-button color="primary" matTooltipPosition="after" class="btnTopCard"
+            routerLink="nuovo-utente">
+            <mat-icon>add_circle_outline</mat-icon>
+            Nuovo utente
+        </button>
+    </div>
+
+    <mat-card-title>
+
+        <h3 class="title">Utenti applicativi</h3>
+
+
+
+    </mat-card-title>
+    <mat-card-content>
+
+        <div class="filtri">
+            <form [formGroup]="formFiltriUtenti" autocomplete="off">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="0px">
+
+
+                    <mat-form-field class="full-width" fxFlex="30">
+                        <mat-label>Cerca</mat-label>
+
+                        <input matInput formControlName="TestoRicerca">
+
+                    </mat-form-field>
+
+                    <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%"
+                        fxLayoutGap.lt-md="10px">
+                        <button mat-raised-button color="primary" matTooltipPosition="after" (click)="cerca()">
+                            <mat-icon>search</mat-icon>
+                            Cerca
+                        </button>
+                        <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearFiltri()">
+                            <mat-icon>remove_circle_outline</mat-icon>
+                            Resetta
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <ng-container *ngIf="nessunUtenteTrovato">
+            <h1>Nessun utente trovato</h1>
+        </ng-container>
+
+        <ng-container *ngIf="!nessunUtenteTrovato">
+
+            <mat-table id="table" [dataSource]="utentiDataSource" matSortActive="username" matSortDirection="asc"
+                (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+                <ng-container matColumnDef="matricola">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Matricola</mat-header-cell>
+                    <mat-cell *matCellDef="let utente"
+                        data-label="Matricola">{{appGen.isNullOrUndefined(utente.matricola) ?
+                        '-':utente.matricola}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="username">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Username</mat-header-cell>
+                    <mat-cell *matCellDef="let utente" data-label="Username" (click)="dettaglio(utente.idUtente)"
+                        matTooltip="Visualizza utente">{{utente.nomeUtente }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="nome">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+                    <mat-cell *matCellDef="let utente" data-label="Nome">{{utente.cognome }}
+                        {{utente.nome }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipiUtente">
+                    <mat-header-cell *matHeaderCellDef>Tipo utente</mat-header-cell>
+                    <mat-cell *matCellDef="let utente" data-label="Ruolo">{{utente.tipiUtente}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ldap">
+                    <mat-header-cell *matHeaderCellDef>Utente LDAP</mat-header-cell>
+                    <mat-cell *matCellDef="let utente" data-label="Ruolo">{{utente.utenteLDAP? utente.utenteLDAP :
+                        ''}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="utenteRemoto">
+                    <mat-header-cell *matHeaderCellDef>Utente firma digitale</mat-header-cell>
+                    <mat-cell *matCellDef="let utente" data-label="Ruolo">{{utente.utenteRemoto? utente.utenteRemoto :
+                        ''}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let utente" style="justify-content:flex-end">
+
+                        <mat-icon class="material-icons-outlined" (click)="impersonifica(utente.idUtente)"
+                            *ngIf="authGuard.canAccess(appGen.permesso.ImpersonificaUtente)"
+                            matTooltip="Impersonifica utente" color="accent">exit_to_app
+                        </mat-icon>
+
+                        <mat-icon class="material-icons-outlined" [routerLink]="['dettaglio', utente.idUtente]"
+                            matTooltip="Visualizza utente" color="primary">remove_red_eye
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="utentiViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:utentiViewsColumns"></mat-row>
+            </mat-table>
+
+
+            <mat-paginator [length]="totalElements" [pageIndex]="pageSelected" showFirstLastButtons
+                [pageSize]="itemsForPage" (page)="onChangePage($event)" [pageSizeOptions]="[5, 10, 25, 50]">
+            </mat-paginator>
+        </ng-container>
+    </mat-card-content>
+
+</mat-card>

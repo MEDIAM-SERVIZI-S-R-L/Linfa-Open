@@ -1,0 +1,40 @@
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.mat-column-nomeTabella{
+    flex: 0 0 70% !important;
+}
+
+.mat-column-button{
+    display: flex;
+    justify-content: flex-end;
+    padding-left: 16px;
+}
+
+.message{
+    font-weight: bold;
+}
+
+.elenco-configurazioni{
+    background-color: #00afa6;
+}
+
+.custom-loader{
+        animation: none;
+        border-width: 0;
+}
+
+// ::ng-deep .custom-frame {
+//     & .mat-checkbox-background, .mat-checkbox-frame {
+//       border-radius: 100% !important;
+//     }
+//   }
+
+//   mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+//     width: 23px !important;
+//     height: 23px !important;
+// }

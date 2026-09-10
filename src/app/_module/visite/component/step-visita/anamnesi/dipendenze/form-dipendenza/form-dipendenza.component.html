@@ -1,0 +1,94 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova dipendenza</ng-container>
+            <ng-container *ngIf="isRiepilogo">Dipendenza</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formDipendenza" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Dipendenza</mat-label>
+                            <mat-select matNativeControl required formControlName="dipendenza" (selectionChange)="selectDipendenza($event.value)">
+                                <mat-option *ngFor="let tipo of listaDipendenze" [value]="tipo.id">
+                                    {{ tipo.dipendenza }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Descrizione</mat-label>
+                            <input type="text" matInput formControlName="descrizione" [required]="required" autocomplete="off" maxlength="200">
+                            <mat-hint>Specificare con tipo di alcol/farmaci/stupefacenti ecc.</mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Quantità</mat-label>
+                            <input type="text" matInput formControlName="quantita" digitOnly maxLength="4" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Misura</mat-label>
+                            <mat-select matNativeControl formControlName="misura">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let tipo of listaMisura" [value]="tipo.id">
+                                    {{ tipo.unitaMisura }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Dal</mat-label>
+                            <input matInput type="text" (focus)="DalPicker.open()" [matDatepicker]="DalPicker" [max]="appGen.today" formControlName="dal" autocomplete="off" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="DalPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DalPicker></mat-datepicker>
+
+                            <mat-datepicker-toggle matSuffix (click)="clearDate($event,1)">
+                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-hint>Compilare se Ex Dipendente</mat-hint>
+
+                        </mat-form-field>
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Al</mat-label>
+                            <input matInput type="text" (focus)="AlPicker.open()" [matDatepicker]="AlPicker" [max]="appGen.today" formControlName="al" autocomplete="off" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="AlPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #AlPicker></mat-datepicker>
+
+                            <mat-datepicker-toggle matSuffix (click)="clearDate($event,2)">
+                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                            </mat-datepicker-toggle>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px" fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

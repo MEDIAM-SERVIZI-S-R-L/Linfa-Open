@@ -1,0 +1,267 @@
+.addBtn {
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+
+h4.subTitle,
+h4.Title {
+    margin-bottom: unset !important;
+}
+
+@media screen and (min-width: 600px) {
+    .totaliProdotto {
+        align-items: center;
+    }
+}
+
+.btnProd {
+    margin-bottom: 20px;
+}
+
+.ctnrProdottoAlternativo {
+    margin: 15px 0;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+mat-divider {
+    margin: 25px 0;
+    position: relative !important;
+    border: 0.5px solid #e1e1e1;
+}
+
+.mat-card-title {
+    margin-bottom: unset !important;
+}
+
+.checkboxCust {
+    max-width: 100% !important;
+    margin-right: unset !important;
+    margin: 10px 0 10px 0;
+}
+
+.titleAlternativo {
+    margin: 15px 0 0 0;
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btnAlternativo {
+    // height: 30px !important;
+    // min-width: 45px !important;
+    // width: 50px;
+    // line-height: 0 !important;
+    // padding: 0 !important;
+    // mat-icon {
+    //     margin: 0 !important;
+    // }
+}
+
+.mat-tab-body-content {
+    overflow: hidden !important;
+}
+
+:host ::ng-deep .mat-tab-body-wrapper {
+    overflow: hidden !important;
+    .mat-tab-body-content {
+        overflow: hidden !important;
+    }
+}
+
+.backBtn {
+    margin-top: 25px;
+}
+
+.title {
+    span {
+        color: #00afa6;
+        font-weight: 600;
+        font-size: larger;
+    }
+}
+
+h4.title {
+    color: #00afa6;
+    font-weight: 600;
+    font-size: large;
+}
+
+a {
+    cursor: pointer;
+}
+
+.divProdottoAlternativo {
+    padding: 7px 0;
+    button {
+        background-color: #ffa558;
+        color: white;
+    }
+}
+
+.marginCustom {
+    margin: -4px 1.5% 0 0 !important;
+}
+
+.deleteBtn {
+    // width: 55px !important;
+    // min-width: 45px !important;
+    height: 30px !important;
+    padding: unset !important;
+    line-height: 10px !important;
+    mat-icon {
+        margin: unset !important;
+    }
+}
+
+// .valoriNutrizionaliSpan{
+// min-width: 40px;
+// }
+
+.titleAlimentoAlternativo {
+    font-size: small;
+    color: black;
+    font-weight: 600;
+}
+
+::ng-deep.mat-tab-label,
+::ng-deep.mat-tab-label-active {
+    min-width: 120px !important;
+    padding: 0 20px !important;
+}
+
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+    .custom-slider .ngx-slider .ngx-slider-bar {
+        // background: grey;
+        height: 5px;
+    }
+    .ngx-slider-span .ngx-slider-bar .ngx-slider-selection,
+    .custom-slider .ngx-slider .ngx-slider-selection {
+        background: #00afa6 !important;
+    }
+    .custom-slider .ngx-slider .ngx-slider-pointer {
+        width: 8px;
+        height: 16px;
+        top: auto;
+        /* to remove the default positioning */
+        bottom: 0;
+        background-color: #333;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .custom-slider .ngx-slider .ngx-slider-pointer:after {
+        display: none;
+    }
+    .custom-slider .ngx-slider .ngx-slider-bubble {
+        bottom: 14px;
+    }
+    .custom-slider .ngx-slider .ngx-slider-limit {
+        font-weight: bold;
+        // color: orange;
+    }
+    .custom-slider .ngx-slider .ngx-slider-tick {
+        width: 2px;
+        height: 8px;
+        margin-left: 4px;
+        border-radius: 0;
+        background: #616161; //#ffe4d1;
+        top: -1px;
+    }
+    .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+        background: #00afa6;
+    }
+
+    .secondSliders .ngx-slider .ngx-slider-selection {
+        background: #ffa558 !important;
+    }
+}
+
+.risultatiSlider {
+    margin-top: 10px;
+}
+
+ngx-slider {
+    margin-bottom: 50px;
+}
+
+.sliders {
+    // margin-right: 10%;
+    mat-label {
+        font-weight: 600;
+        color: #55637d;
+    }
+}
+
+.boxArea {
+    margin: 20px 0;
+}
+
+.cntrBtnRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end !important;
+    gap: 16px;    
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.cntrBtnRow-low-bis{
+    display: flex;
+    flex-direction: row;
+    //justify-content: space-between !important;
+    gap: 16px;    
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+
+.cntrBtnRow-low {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between !important;
+    gap: 16px;    
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.check-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 36px;
+    width: 100%;
+    margin-right: 0px !important;   
+    .checkbox{
+        padding-left: 1%;
+    }
+}
+
+.left-button-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important;
+}
+
+.button-div{
+    width: 25%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end !important;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    transform: scale(0.55);
+    vertical-align: middle;
+}

@@ -1,0 +1,56 @@
+<mat-card>
+
+    <mat-card-content>
+        <h4 class="subTitle"><span>Fabbisogno giornaliero calcolato per il paziente</span></h4>
+        <form [formGroup]="formValoriDieta">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex>
+                    <mat-label>Kcal</mat-label>
+                    <input type="text" matInput [required]="editProdotti" digitOnly maxlength="4" formControlName="kcal" autocomplete="off">
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex>
+                    <mat-label>Proteine</mat-label>
+                    <input type="text" matInput [required]="editProdotti" digitOnly maxlength="4" formControlName="proteine" autocomplete="off">
+                    <span class="suffix" matSuffix>g/die</span>
+
+                </mat-form-field>
+                <!-- <mat-form-field class="full-width" fxFlex>
+                    <mat-label>Azoto</mat-label>
+                    <input type="text" matInput [required]="editProdotti" digitOnly maxlength="4" formControlName="azoto" autocomplete="off">
+                    <span class="suffix" matSuffix>g/die</span>
+
+                </mat-form-field> -->
+
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <mat-form-field class="full-width" fxFlex>
+                    <mat-label>Lipidi</mat-label>
+                    <input type="text" matInput [required]="editProdotti" digitOnly maxlength="4" formControlName="lipidi" autocomplete="off">
+                    <span class="suffix" matSuffix>g/die</span>
+
+                </mat-form-field>
+
+                <mat-form-field class="full-width" fxFlex>
+                    <mat-label>Carboidrati</mat-label>
+                    <input type="text" matInput [required]="editProdotti" digitOnly maxlength="4" formControlName="carboidrati" autocomplete="off">
+                    <span class="suffix" matSuffix>g/die</span>
+
+                </mat-form-field>
+                <mat-form-field class="full-width" fxFlex>
+                    <mat-label>Apporto idrico</mat-label>
+                    <input type="text" matInput [required]="editProdotti" digitOnly maxlength="4" formControlName="apportoIdrico" autocomplete="off">
+                    <span class="suffix" matSuffix>ml/die</span>
+
+                </mat-form-field>
+            </div>
+
+        </form>
+    </mat-card-content>
+    <!-- <button mat-raised-button color="accent" (click)="onSubmit()" style="margin-left: 20px;float:left">
+    <mat-icon>save</mat-icon>
+    Salva
+  </button> -->
+
+</mat-card>

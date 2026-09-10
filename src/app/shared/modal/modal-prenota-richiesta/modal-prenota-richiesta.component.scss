@@ -1,0 +1,58 @@
+.selectPaziente {
+  padding-top: 15px;
+}
+
+.mat-dialog-content {
+  margin-bottom: 20px;
+  max-height: 80%;
+  min-height: 80%;
+  height: 80%;
+}
+
+.container {
+  height: 100%;
+}
+
+.boxArea {
+  margin-top: 50px;
+}
+
+#table {
+  height: calc(100% - 165px);
+  overflow: auto;
+}
+
+h3.title {
+  font-weight: bold;
+  color: #00afa6;
+  font-size: 20px;
+  margin: 10px 0px;
+}
+
+h5.title {
+  font-weight: bold;
+  //color: #00afa6;
+  // color: #ffa558;
+  font-size: 17px;
+  margin: 10px 0px;
+}
+
+
+.my-input:disabled {
+  display:none;
+}
+
+#form{
+  margin-top:30px
+}
+
+.center-text{
+  width: 70%;
+  text-align: center;
+}
+
+.button-div{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

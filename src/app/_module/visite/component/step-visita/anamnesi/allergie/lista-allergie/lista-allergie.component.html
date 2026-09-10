@@ -1,0 +1,60 @@
+<ng-container *ngIf="allergieDataSource.data.length <= 0 && isRiepilogoVisita">
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <h3 class="title">Nessun dato presente</h3>
+    </div>
+</ng-container>
+<mat-card class="linfaCard" [class]="allergieDataSource.data.length <= 0 ? 'hideBox': ''">
+    <div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column"
+        fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after"
+            (click)="nuovaAllergia()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Aggiungi
+        </button>
+
+    </div>
+    <ng-container *ngIf="allergieDataSource.data.length > 0">
+
+        <mat-card-content>
+
+            <mat-table id="table" [dataSource]="allergieDataSource">
+
+                <ng-container matColumnDef="tipo">
+                    <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                    <mat-cell *matCellDef="let allergia" data-label="Tipo">{{allergia.tipo }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dettaglio">
+                    <mat-header-cell *matHeaderCellDef>Dettaglio</mat-header-cell>
+                    <mat-cell *matCellDef="let allergia" data-label="Dettaglio">{{allergia.dettaglio}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="descrizione">
+                    <mat-header-cell *matHeaderCellDef>Descrizione</mat-header-cell>
+                    <mat-cell *matCellDef="let allergia" data-label="Descrizione">{{allergia.descrizione ==
+                        null?'-':allergia.descrizione}}</mat-cell>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let allergia" style="justify-content:flex-end">
+
+                        <mat-icon class="material-icons-outlined" *ngIf="!isRiepilogoVisita"
+                            matTooltip="Visualizza / Modifica" (click)="dettaglioAllergia(allergia.id)" color="primary">
+                            edit
+                        </mat-icon>
+                        <mat-icon *ngIf="!isRiepilogoVisita" matTooltip="Elimina allergia" (click)="delete(allergia.id)"
+                            color="warn">delete
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="allergieViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:allergieViewsColumns"></mat-row>
+            </mat-table>
+
+        </mat-card-content>
+    </ng-container>
+</mat-card>

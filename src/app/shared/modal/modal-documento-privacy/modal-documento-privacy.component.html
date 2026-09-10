@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>
+    Documento consenso informato
+</h1>
+
+<div mat-dialog-content>
+    <div id="pdfViewer">
+
+        <app-pdf-viewer [pdfFile]="pdfFile"></app-pdf-viewer>
+    </div>
+
+
+    <div mat-dialog-actions id="btnModal">
+
+
+        <button mat-raised-button color="warn" (click)="onDismiss()">Chiudi</button>
+        <button mat-raised-button color="primary" (click)="stampa()">Stampa</button>
+
+    </div>

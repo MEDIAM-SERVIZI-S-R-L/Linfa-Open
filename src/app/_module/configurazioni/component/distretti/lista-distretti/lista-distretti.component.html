@@ -1,0 +1,78 @@
+<mat-card class="linfaCard">
+
+  <div class="container">
+
+    <h3 class="title">Distretti</h3>
+
+    <mat-card-content>
+
+      <div class="filtri">
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Cerca</mat-label>
+          <input matInput type="text" #input [formControl]="filtroDistretti">
+        </mat-form-field>
+      </div>
+
+      <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after"
+          (click)="addDistretto()" >
+          <mat-icon>add</mat-icon>
+          Nuovo distretto
+        </button>
+      </div>
+
+      <div *ngIf="dataSource.data.length <= 0">
+        <p *ngIf="!ricercaEffettuata">Non sono presenti distretti al momento</p>
+        <p *ngIf="ricercaEffettuata">Non sono presenti corrispondenti alla ricerca</p>
+      </div>
+
+      <mat-table [dataSource]="dataSource" multiTemplateDataRows id="table" *ngIf="dataSource?.data.length > 0">
+
+        <ng-container matColumnDef="descrizione">
+          <mat-header-cell *matHeaderCellDef>Descrizione</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.descrizione}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="approvazione">
+          <mat-header-cell *matHeaderCellDef>Approvazione automatica</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon *ngIf="element.approvazioneAutomatica === true" [ngStyle]="{'color': '#00afa6'}">done</mat-icon>
+            <mat-icon *ngIf="element.approvazioneAutomatica === false" [ngStyle]="{'color': '#d33'}">close</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="mediciAssociati">
+          <mat-header-cell *matHeaderCellDef>N° medici associati</mat-header-cell>
+          <mat-cell *matCellDef="let element"
+          [matTooltip]="getToolTip(element)"
+          matTooltipPosition="right"
+          (click)="editDistretto(element)">
+            {{element.arrayMediciAssociati?.length}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="button">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element" class="buttons">
+
+            <mat-icon class="material-icons-outlined" matTooltip="Modifica" color="black" style="margin: 12px;"
+              (click)="editDistretto(element)">edit</mat-icon>
+
+            <mat-icon color="warn" class="material-icons-outlined" matTooltip="Elimina"
+              (click)="deleteDistretto(element)">delete_outline</mat-icon>
+
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row class="caselle" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons [pageSize]="10">
+      </mat-paginator>
+    </mat-card-content>
+
+  </div>
+
+</mat-card>

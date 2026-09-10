@@ -1,0 +1,93 @@
+<div id="loginPage">
+
+</div>
+<div id="loginOwerflow">
+    <div id="loginBox">
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+
+            <mat-card>
+                <mat-card-header>
+
+                    <div class="appLogo">
+                        <img src="./assets/img/logo/logo-linfa-a@2x.webp" width="150" height="120" alt="logo linfa" />
+
+                    </div>
+
+                </mat-card-header>
+                <mat-card-content (capsLock)="capsOn=$event">
+                    <div class="input-row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field fxFlex>
+
+                            <mat-label>
+                                <mat-icon color="primary" class="material-icons-outlined">person</mat-icon>
+                                Username
+
+                            </mat-label>
+                            <input matInput type="text" required formControlName="username" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="input-row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                        fxLayoutGap.lt-md="0px">
+                        <mat-form-field fxFlex>
+                            <mat-label>
+                                <mat-icon color="primary" class="material-icons-outlined">lock</mat-icon>
+                                Password
+                            </mat-label>
+                            <input matInput [type]="!showPassword ? 'password' : 'text'" #password required
+                                id="password" formControlName="password" autocomplete="off">
+
+
+
+                            <span matSuffix *ngIf="password.value" class="iconShow" matTooltip="Mostra password"
+                                [hidden]="showPassword" (click)="toggleShow()">
+                                <mat-icon class="material-icons-outlined" color="primary"> visibility</mat-icon>
+                            </span>
+                            <span matSuffix *ngIf="password.value" class="iconShow" matTooltip="Nascondi password"
+                                [hidden]="!showPassword" (click)="toggleShow()">
+                                <mat-icon class="material-icons-outlined" color="primary">visibility_off</mat-icon>
+                            </span>
+
+
+                        </mat-form-field>
+                    </div>
+
+                    <label *ngIf="capsOn">BLOC MAIUSC è attivato</label>
+
+                    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px"
+                        fxLayoutAlign="end">
+                        <button mat-raised-button color="primary">Login
+                            <mat-icon>login</mat-icon>
+                        </button>
+                    </div>
+
+
+                </mat-card-content>
+
+                <p fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px"
+                    fxLayoutAlign="space-between center" style="cursor: pointer;height: 25px;">
+                    <span fxLayoutAlign="start" (click)="openDispositivo()" id="medical">
+                        <img src="./assets/icons/dispositivo-medico/ce.png" /><img
+                            src="./assets/icons/dispositivo-medico/md.png" />
+                    </span>
+                    <span fxLayoutAlign="end" class="mediamFooter">
+                        <a href='http://www.mediam.it' target="_blank"><img src="./assets/img/mediam_small.webp"
+                                alt="logo mediam"></a>
+                    </span>
+                </p>
+            </mat-card>
+
+
+        </form>
+
+
+
+    </div>
+    <div id="loginInfoBox">
+        <img id="loginBoxImg" src="./assets/img/login/disegno2.webp" alt="sfondo login">
+    </div>
+
+</div>

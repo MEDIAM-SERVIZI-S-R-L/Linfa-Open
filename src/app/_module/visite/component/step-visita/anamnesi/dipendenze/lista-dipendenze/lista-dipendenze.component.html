@@ -1,0 +1,70 @@
+<ng-container *ngIf="dipendenzeDataSource.data.length <= 0 && isRiepilogoVisita">
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <h3 class="title">Nessun dato presente</h3>
+    </div>
+</ng-container>
+<mat-card class="linfaCard" [class]="dipendenzeDataSource.data.length <= 0 ? 'hideBox': ''">
+    <div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column"
+        fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after"
+            (click)="nuovaDipendenza()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Aggiungi
+        </button>
+
+    </div>
+    <ng-container *ngIf="dipendenzeDataSource.data.length > 0">
+
+        <mat-card-content>
+            <mat-table id="table" [dataSource]="dipendenzeDataSource">
+
+                <ng-container matColumnDef="tipologiaDipendenza">
+                    <mat-header-cell *matHeaderCellDef>Tipo dipendenza</mat-header-cell>
+                    <mat-cell *matCellDef="let dipendenza" data-label="Tipo dipendenza">{{dipendenza.dipendenza }}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="descrizione">
+                    <mat-header-cell *matHeaderCellDef>Descrizione</mat-header-cell>
+                    <mat-cell *matCellDef="let dipendenza" data-label="Nome">
+
+                        <span class="truncate-text">{{dipendenza.descrizione == '' ?
+                            '-':dipendenza.descrizione }}</span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="periodo">
+                    <mat-header-cell *matHeaderCellDef>Dal Al</mat-header-cell>
+                    <mat-cell *matCellDef="let dipendenza" data-label="Dal Al">{{dipendenza.dal| date: 'dd/MM/yyyy'}} -
+                        {{dipendenza.al| date: 'dd/MM/y'}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="quantita">
+                    <mat-header-cell *matHeaderCellDef>Quantità</mat-header-cell>
+                    <mat-cell *matCellDef="let dipendenza" data-label="Quantità">{{dipendenza.quantita == null ?
+                        '-':dipendenza.quantita}} {{dipendenza.unitaMisura}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="pulsantiTab" *matCellDef="let dipendenza" style="justify-content:flex-end">
+
+
+                        <mat-icon class="material-icons-outlined" *ngIf="!isRiepilogoVisita"
+                            matTooltip="Visualizza / Modifica dipendenza" (click)="dettaglioDipendenza(dipendenza.id)"
+                            color="primary">edit
+                        </mat-icon>
+                        <mat-icon *ngIf="!isRiepilogoVisita" matTooltip="Elimina dipendenza"
+                            (click)="delete(dipendenza.id)" color="warn">
+                            delete
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="dipendenzeViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:dipendenzeViewsColumns"></mat-row>
+            </mat-table>
+        </mat-card-content>
+    </ng-container>
+</mat-card>

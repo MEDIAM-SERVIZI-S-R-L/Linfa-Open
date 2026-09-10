@@ -1,0 +1,67 @@
+<mat-card class="linfaCard">
+  <mat-card-title>
+    <h3 class="title">
+      <ng-container *ngIf="!isRiepilogo">Nuova anamnesi patologica prossima</ng-container>
+      <ng-container *ngIf="isRiepilogo">Dettaglio anamnesi patologica prossima</ng-container>
+    </h3>
+
+  </mat-card-title>
+  <mat-card-content>
+    <div class="container">
+      <form [formGroup]="formAnamnesiPatologicaProssima" autocomplete="off">
+        <div class="container" fxflexfill>
+          <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field class="full-width" fxFlex>
+              <mat-label>Macro patologia</mat-label>
+              <mat-select matNativeControl formControlName="macroPatologia" required
+                (selectionChange)="macroSelezionata($event.value)">
+                <mat-option *ngFor="let macro of listaMacroPatologie" [value]="macro.id">
+                  {{ macro.macroPatologia }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <ng-container *ngIf="listaPatologie.length > 0">
+              <mat-form-field class="full-width" fxFlex>
+                <mat-label>Patologia</mat-label>
+                <mat-select matNativeControl formControlName="patologia" required
+                  (selectionChange)="patologiaSelezionata($event.value)">
+                  <mat-option *ngFor="let patologia of listaPatologie" [value]="patologia.id">
+                    {{ patologia.patologia }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+
+            <mat-form-field class="full-width" fxFlex="30" *ngIf="showCampoAltro">
+              <mat-label>Altro</mat-label>
+              <input matInput type="text" formControlName="altro" autocomplete="off">
+            </mat-form-field>
+          </div>
+          <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+            <mat-form-field class="full-width" fxFlex>
+              <mat-label>Descrizione</mat-label>
+              <textarea matInput formControlName="descrizione" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="5"></textarea>
+
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </mat-card-content>
+  <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px"
+    fxLayoutGap.lt-md="10px">
+
+    <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+      <mat-icon>save</mat-icon>
+      Salva ed aggiungi
+    </button>
+    <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+      <mat-icon>save</mat-icon>
+      Salva ed esci
+    </button>
+  </div>
+</mat-card>

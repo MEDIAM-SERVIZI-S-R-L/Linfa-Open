@@ -1,0 +1,51 @@
+table {
+    float: left;
+    border-collapse: collapse;
+    width: 100%;
+    // margin-top: 25px;
+}
+
+table td,
+table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+td {
+    width: 50%;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #00afa6;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.title {
+    background-color: gray !important;
+}
+
+.modal-body {
+    overflow-y: auto;
+    max-height: 450px;
+}
+
+.tableOverflow {
+    overflow-y: auto;
+}
+
+.cntrImg {
+    position: -webkit-sticky; //safari
+    position: sticky;
+    top: 0;
+}

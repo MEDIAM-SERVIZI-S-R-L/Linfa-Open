@@ -1,0 +1,409 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container>Valutazione Nutrizionale</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formValutazioneNutrizionale" autocomplete="off" (ngSubmit)="onSubmit()">
+                <div class="container" fxflexfill>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px" style="margin-bottom:10px">
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="isRiepilogoVisita || showEta">
+                            <mat-label>Età</mat-label>
+                            <input type="text" matInput formControlName="eta" OnlyNumber="true" autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Altezza</mat-label>
+                            <input type="text" matInput formControlName="altezza" required OnlyNumber="true" autocomplete="off" maxlength="3">
+                            <span matSuffix class="suffix">cm</span>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30" *ngIf="isRiepilogoVisita">
+                            <mat-label>Patologia</mat-label>
+                            <input type="text" matInput formControlName="patologia" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Peso rilevato</mat-label>
+                            <input type="text" matInput formControlName="pesoRilevato"
+                                required DecimalFormatter autocomplete="off" maxlength="5"
+                                (focusout)="rilevazionePeso()">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Peso benessere
+                            </mat-label>
+                            <input type="text" matInput formControlName="pesoDaRaggiungere" maxlength="5" required DecimalFormatter autocomplete="off">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                    </div>
+
+
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px" style="margin-bottom:20px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Peso abituale</mat-label>
+                            <input type="text" matInput formControlName="pesoAbituale" maxlength="5" DecimalFormatter autocomplete="off">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Peso ultimi 3 mesi</mat-label>
+                            <input type="text" matInput formControlName="pesoultimi3mesi" maxlength="5" DecimalFormatter autocomplete="off">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Peso ultimi 6 mesi</mat-label>
+                            <input type="text" matInput formControlName="pesoultimi6mesi" maxlength="5" DecimalFormatter autocomplete="off">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+                                                
+                        <mat-form-field class="full-width" fxFlex="30"
+                        [matTooltip]="valoreMinModificato === true? 'Il valore è stato aggiornato in base al peso rilevato' :  ''">
+                            <mat-label>Peso minimo raggiunto</mat-label>
+                            <input type="text" matInput formControlName="pesoMinRaggiunto" maxlength="5" DecimalFormatter autocomplete="off"
+                            (focusout)="rilevazionePeso('min')">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30"
+                        [matTooltip]="valoreMaxModificato === true? 'Il valore è stato aggiornato in base al peso rilevato' :  ''">
+                            <mat-label>Peso massimo raggiunto</mat-label>
+                            <input type="text" matInput formControlName="pesoMaxRaggiunto" maxlength="5" DecimalFormatter autocomplete="off"
+                            (focusout)="rilevazionePeso('max')">
+                            <span matSuffix class="suffix">kg</span>
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Data inizio patologia</mat-label>
+                            <input matInput type="text" [matDatepicker]="DataInizioPatologiaPicker" [formControl]="dataInizioPatologiaFormControl" (focus)="DataInizioPatologiaPicker.open()" autocomplete="off" [max]="appGen.today">
+                            <mat-datepicker-toggle matSuffix [for]="DataInizioPatologiaPicker"></mat-datepicker-toggle>
+
+                            <mat-datepicker startView="multi-year" (yearSelected)="chosenYearHandler($event)" (monthSelected)="chosenMonthHandler($event, DataInizioPatologiaPicker)" touchUi #DataInizioPatologiaPicker></mat-datepicker>
+                            <mat-datepicker-toggle matSuffix (click)="clearDate($event)">
+                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                            </mat-datepicker-toggle>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                        <mat-checkbox color="primary" formControlName="piagheDecubito" fxFlex="30">
+                            Piaghe decubito </mat-checkbox>
+                        <mat-checkbox color="primary" formControlName="allettato" #allettato fxFlex="30">Allettato
+                        </mat-checkbox>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Lato misurazione</mat-label>
+                            <mat-select matNativeControl formControlName="latoMisurazione">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let lato of appGen.LatoMisurazione" [value]="lato.abbrev">
+                                    {{ lato.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Plica Bicipitale</mat-label>
+                            <input type="text" matInput formControlName="bicipitale" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Plica Tricipitale</mat-label>
+                            <input type="text" matInput formControlName="tricipitale" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Plica Sottoscapolare</mat-label>
+                            <input type="text" matInput formControlName="sottoscapolare" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Plica Sovrailiaca</mat-label>
+                            <input type="text" matInput formControlName="sovrailiaca" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Braccio</mat-label>
+                            <input type="text" matInput formControlName="braccio" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Polpaccio</mat-label>
+                            <input type="text" matInput formControlName="polpaccio" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Lunghezza ulna</mat-label>
+                            <input type="text" matInput formControlName="lunghezzaUlna" DecimalFormatter autocomplete="off" maxlength="5">
+                            <span matSuffix class="suffix">cm</span>
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Circonferenza addominale</mat-label>
+                            <input type="text" matInput formControlName="circAddominale" maxlength="6" DecimalFormatter autocomplete="off">
+                            <span matSuffix class="suffix">cm</span>
+
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Circonferenza polso</mat-label>
+                            <input type="text" matInput formControlName="circPolso" maxlength="6" DecimalFormatter autocomplete="off">
+                            <span matSuffix class="suffix">cm</span>
+
+                        </mat-form-field>
+                    </div>
+
+
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Diuresi</mat-label>
+                            <mat-select matNativeControl formControlName="diuresi">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let diuresi of listaDiuresi" [value]="diuresi.id">
+                                    {{ diuresi.diuresi }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Alvo</mat-label>
+                            <mat-select matNativeControl formControlName="alvo">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let alvo of listaAlvo" [value]="alvo.id">
+                                    {{ alvo.alvo }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div fxFlex>
+                            <mat-form-field class="full-width" fxFlex>
+                                <mat-label>Tipo feci</mat-label>
+                                <mat-select matNativeControl formControlName="tipoFeci">
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let tipo of ListaBristolChart" [value]="tipo.id">
+                                        {{ tipo.tipo }} - {{tipo.condizione}}
+                                    </mat-option>
+                                </mat-select>
+
+
+                            </mat-form-field>
+                            <mat-icon matTooltip="Scala Bristol Chart" class="infoIco" (click)="openBristolChart()" color="primary">
+                                info_outline</mat-icon>
+                        </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Ritmo sonno/veglia</mat-label>
+                            <mat-select matNativeControl formControlName="ritmoSonnoVeglia">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let ritmo of listaRitmoSonnoVeglia" [value]="ritmo.id">
+                                    {{ ritmo.ritmoSonnoVeglia }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Attività</mat-label>
+                            <mat-select matNativeControl formControlName="attivita">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let attivita of listaAttivita" [value]="attivita.id">
+                                    {{ attivita.attivita }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Tipo alimentazione attuale</mat-label>
+                            <mat-select matNativeControl formControlName="tipoAlimentazioneAttuale">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let tipo of listaTipoAlimentazioneAttuale" [value]="tipo.id">
+                                    {{ tipo.alimentazioneVisita }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Disfagia</mat-label>
+
+                            <mat-select matNativeControl formControlName="disfagia" (selectionChange)="cambioDisfagia($event)">
+                                <mat-option [value]="null"></mat-option>
+                                <mat-option *ngFor="let disfagia of listaDisfagia" [value]="disfagia.id">
+                                    {{ disfagia.disfagia }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Grado disfagia</mat-label>
+                            <mat-select matNativeControl formControlName="gradoDisfagia">
+                                <mat-option [value]="null"></mat-option>
+                                <mat-option *ngFor="let grado of listaGradiDisfagia" [value]="grado.id">
+                                    {{ grado.gradoDisfagia }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Consistenza pasto</mat-label>
+                            <mat-select matNativeControl formControlName="consistenzaPasto">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let consistenza of listaConsistenzaPasto" [value]="consistenza.id">
+                                    {{ consistenza.consistenzaPasto }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>RZ</mat-label>
+                            <input type="text" matInput formControlName="rz" maxlength="6" DecimalFormatter autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>XC</mat-label>
+                            <input type="text" matInput formControlName="xc" maxlength="6" DecimalFormatter autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Impedenza</mat-label>
+                            <input type="text" matInput formControlName="impedenza" maxlength="6" DecimalFormatter autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>WH</mat-label>
+                            <input type="text" matInput formControlName="wh" maxlength="10" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="65">
+                            <mat-label>Note</mat-label>
+                            <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="6" type="text" matInput formControlName="note" autocomplete="off"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                    <ng-container *ngIf="showResult">
+
+
+                        <mat-divider></mat-divider>
+
+                        <mat-card class="mat-elevation-z8 boxValutazioni">
+                            <div fxLayout="row wrap" class="valutazioni" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+                                <div>
+                                    <h3>Bmi attuale:
+                                        <span class="resValutazioni"> {{valutazione.bmiattuale}} </span>
+                                    </h3>
+                                </div>
+
+                                <!-- <div>
+                                    <h3>Stato nutrizionale:
+                                        <span class="resValutazioni"> {{valutazione.malnutrizione}} </span>
+                                    </h3>
+                                </div> -->
+
+                                <div>
+
+                                </div>
+                                <!-- </div>
+
+
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px"> -->
+                                <!-- <div>
+                                    <h3>
+                                        <ng-container *ngIf="valutazione.caloPonderale == 0">Stabilità </ng-container>
+                                        <ng-container *ngIf="valutazione.caloPonderale <0">Aumento </ng-container>
+                                        <ng-container *ngIf="valutazione.caloPonderale > 0">Calo</ng-container>
+                                        ponderale al {{valutazione.dataCaloPonderale | date: 'dd/MM/yyyy'}}:
+                                        <span class="resValutazioni"> {{caloPonderaleVal}}%
+
+                                            <mat-icon color="warn" *ngIf="valutazione.caloPonderale > 0">
+                                                arrow_downward</mat-icon>
+                                            <mat-icon color="primary" *ngIf="valutazione.caloPonderale < 0">
+                                                arrow_upward</mat-icon>
+                                        </span>
+                                    </h3>
+                                </div> -->
+                                <div *ngIf="valutazione.caloPonderale3Mesi !== null">
+                                    <h3>
+                                        <ng-container *ngIf="valutazione.caloPonderale3Mesi == 0">Stabilità
+                                        </ng-container>
+                                        <ng-container *ngIf="valutazione.caloPonderale3Mesi <0">Aumento </ng-container>
+                                        <ng-container *ngIf="valutazione.caloPonderale3Mesi > 0">Calo</ng-container>
+                                        ponderale ultimi 3 mesi:
+                                        <span class="resValutazioni"> {{ caloPonderale3MesiVal | number:'1.2-2'}}%
+
+                                            <mat-icon color="warn" *ngIf="valutazione.caloPonderale3Mesi > 0">
+                                                arrow_downward</mat-icon>
+                                            <mat-icon color="primary" *ngIf="valutazione.caloPonderale3Mesi < 0">
+                                                arrow_upward</mat-icon>
+                                        </span>
+                                    </h3>
+                                </div>
+                                <div *ngIf="valutazione.caloPonderale6Mesi !== null">
+                                    <h3>
+                                        <ng-container *ngIf="valutazione.caloPonderale6Mesi == 0">Stabilità
+                                        </ng-container>
+                                        <ng-container *ngIf="valutazione.caloPonderale6Mesi <0">Aumento </ng-container>
+                                        <ng-container *ngIf="valutazione.caloPonderale6Mesi > 0">Calo</ng-container>
+                                        ponderale ultimi 6 mesi:
+                                        <span class="resValutazioni"> {{ caloPonderale6MesiVal | number:'1.2-2'}}%
+                                            <mat-icon color="warn" *ngIf="valutazione.caloPonderale6Mesi > 0">
+                                                arrow_downward</mat-icon>
+                                            <mat-icon color="primary" *ngIf="valutazione.caloPonderale6Mesi < 0">
+                                                arrow_upward</mat-icon>
+                                        </span>
+                                    </h3>
+                                </div>
+
+
+                            </div>
+
+
+                        </mat-card>
+                    </ng-container>
+
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="primary" (click)="onSubmit()" class="btnFooterCard">
+            <mat-icon>save</mat-icon>
+            <ng-container *ngIf="!isRiepilogoVisita && !showResult"> Salva e continua</ng-container>
+            <ng-container *ngIf="!isRiepilogoVisita && showResult"> Salva</ng-container>
+        </button>
+
+
+    </div>
+</mat-card>

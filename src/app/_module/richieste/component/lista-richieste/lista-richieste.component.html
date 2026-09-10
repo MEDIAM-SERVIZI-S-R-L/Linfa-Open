@@ -1,0 +1,751 @@
+<div class="backBtn" *ngIf="isFromDashboard">
+  <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Indietro</span>
+  </button>
+</div>
+
+<mat-card class="linfaCard">
+<!--*IMPORTANT: Disabilito pulsante nuova richiesta se non sono Reparto o distretto per adesso-->
+  <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column"
+    fxLayoutGap.lt-md="0px">
+    <button mat-raised-button color="primary" matTooltipPosition="after" *ngIf="authGuard.canRole(appGen.ruolo.Distretto) || authGuard.canRole(appGen.ruolo.Reparto)"
+      class="btnTopCard"
+      [routerLink]="authGuard.canRole(appGen.ruolo.Reparto)?'nuova-orderentry':authGuard.canRole(appGen.ruolo.Distretto)?'nuova-distrettuale':'nuova'">
+      <mat-icon>add_circle_outline</mat-icon>
+      {{authGuard.canRole(appGen.ruolo.Reparto)?'Richiesta Order Entry':authGuard.canRole(appGen.ruolo.Distretto) ?'Richiesta Distrettuale':'Nuova richiesta'}}
+    </button>
+  </div>
+
+
+  <mat-card-title>
+    <h3 class="title">
+
+      <ng-container [ngSwitch]="queryId">
+
+        <ng-container *ngSwitchCase="DatQuery.Cup">
+          Nuove richieste CUP
+        </ng-container>
+        <ng-container *ngSwitchCase="DatQuery.Interne">
+          Nuove richieste interne
+        </ng-container>
+        <ng-container *ngSwitchCase="12">
+          Nuove richieste esterne
+        </ng-container>
+        <ng-container *ngSwitchCase="DatQuery.OrderEntry">
+          Nuove richieste interne (OE)
+        </ng-container>
+
+        <ng-container *ngSwitchCase="DatQuery.Distretto">
+          Nuove richieste Distrettuale
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          Richieste
+        </ng-container>
+      </ng-container>
+    </h3>
+
+
+
+  </mat-card-title>
+  <mat-card-content>
+
+
+    <mat-accordion *ngIf="richiesteDataSource.data.length > 0 && !authGuard.canRole(appGen.ruolo.Administrator)">
+      <mat-expansion-panel class="accordionFiltri">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="accordionFiltriTitle">
+            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+            Filtri ricerca
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filtri">
+          <form [formGroup]="formFiltriRichieste" autocomplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+              fxLayoutGap.lt-md="0px">
+              <mat-form-field fxFlex>
+                <mat-label>Codice fiscale</mat-label>
+                <input matInput type="text" formControlName="cf">
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                <mat-label>Cognome</mat-label>
+                <input matInput type="text" formControlName="cognome">
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <mat-label>Nome</mat-label>
+                <input matInput type="text" formControlName="nome">
+              </mat-form-field>
+            </div>
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+              fxLayoutGap.lt-md="0px" *ngIf="!authGuard.canRole(appGen.ruolo.Distretto)">
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Data prestazione</mat-label>
+                <input matInput type="text" [matDatepicker]="dataPrestazionePicker"
+                  readonly (focus)="dataPrestazionePicker.open()"
+                  formControlName="dataPrestazione" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="dataPrestazionePicker">
+                </mat-datepicker-toggle>
+                <mat-datepicker touchUi #dataPrestazionePicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Tipo richiesta</mat-label>
+                <mat-select matNativeControl formControlName="tipoRichiesta">
+                  <mat-option *ngFor="let tipo of listaTipiRichieste" [value]="tipo.id">
+                    {{ tipo.tipoRichiesta }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Stato richiesta</mat-label>
+                <mat-select matNativeControl formControlName="stato">
+                  <mat-option *ngFor="let stato of appGen.StatoRichieste"
+                    [value]="stato.id">
+
+                    {{ stato.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+              fxLayoutGap.lt-md="0px" *ngIf="!authGuard.canRole(appGen.ruolo.Distretto)">
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Priorità</mat-label>
+                <mat-select matNativeControl formControlName="priorita">
+                  <mat-option *ngFor="let priorita of listaUrgenze" [value]="priorita.id">
+                    {{ priorita.priorita }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Medico</mat-label>
+                <mat-select matNativeControl formControlName="medico">
+                  <mat-option *ngFor="let medico of listaMedici"
+                    [value]="medico.idUtente">
+                    {{ medico.nome }} {{ medico.cognome }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Ambulatorio</mat-label>
+                <mat-select matNativeControl formControlName="ambulatorio">
+                  <mat-option *ngFor="let ambulatorio of listaAmbulatori"
+                    [value]="ambulatorio.id">
+                    {{ ambulatorio.descr }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+
+            <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%"
+              fxLayoutGap.lt-md="10px">
+
+              <button mat-raised-button color="primary" matTooltipPosition="after"
+                (click)="search()">
+                <mat-icon>search</mat-icon>
+                Cerca
+              </button>
+
+              <button mat-raised-button color="warn" matTooltipPosition="after"
+                (click)="clearSearch()">
+                <mat-icon>remove_circle_outline</mat-icon>
+                Resetta
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div *ngIf="authGuard.canRole(appGen.ruolo.Administrator)">
+      <span>A questo utente non è consentito visualizzare le richieste</span>
+    </div>
+    <div *ngIf="richiesteDataSource.data.length > 0 && !authGuard.canRole(appGen.ruolo.Administrator)">
+    <mat-table id="table" [dataSource]="richiesteDataSource" matSortActive="dataRichiesta"
+      matSortDirection="desc" (matSortChange)="sortData($event)" matSort
+      matSortDisableClear>
+
+
+      <ng-container *ngIf="authGuard.canRole(appGen.ruolo.Reparto)">
+
+        <ng-container matColumnDef="dataCreazione">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Inserita</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Data">
+            {{richiesta.dataCreazione ? (richiesta.dataCreazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dataPrestazione">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Pianificata</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Data">
+            {{richiesta.dataPrestazione ? (richiesta.dataPrestazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="paziente">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Paziente"
+            (click)="dettaglioPaziente(richiesta.idPaziente)"
+            [matTooltip]="richiesta.idPaziente ? 'Anagrafica paziente' : ''">
+
+            <mat-icon *ngIf="richiesta.sesso == 'M'" class="gender" svgIcon="male">
+            </mat-icon>
+            <mat-icon *ngIf="richiesta.sesso == 'F'" class="gender" svgIcon="female">
+            </mat-icon>
+            <mat-icon *ngIf="richiesta.sesso == 'A'" class="gender" svgIcon="other">
+            </mat-icon>
+
+
+            <div>
+              <div style="font-weight: bold;">{{richiesta.cognome}} {{richiesta.nome }}
+              </div>
+              <div style="width: 100%;font-size:12px">{{richiesta.cf}}</div>
+            </div>
+
+          </mat-cell>
+
+        </ng-container>
+
+        <ng-container matColumnDef="repartoDegenza">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Reparto Degenza
+          </mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="eparto Degenza">
+            {{richiesta.repartoDegenza ? richiesta.repartoDegenza:'-' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="postoDegenza">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Posto Degenza
+          </mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Posto Degenza">
+            {{richiesta.postoDegenza ? richiesta.postoDegenza:'-' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="stato">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Stato </mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Stato"
+            [ngSwitch]="richiesta.stato">
+            {{richiesta.stato }}
+
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="medico">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Medico</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Medico">
+            {{richiesta.medico?richiesta.medico:'-'}}
+
+          </mat-cell>
+
+        </ng-container>
+
+
+        <ng-container matColumnDef="pulsanti">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell class="pulsantiTab" *matCellDef="let richiesta"
+            style="justify-content:flex-end">
+
+
+
+
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon color="primary">more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="dettaglio(richiesta)">
+                <mat-icon class="material-icons-outlined">
+                  remove_red_eye
+                </mat-icon>
+                <span> Apri la richiesta </span>
+
+              </button>
+
+
+              <ng-container
+                *ngIf=" (authGuard.canRole(appGen.ruolo.Reparto) || authGuard.canRole(appGen.ruolo.Distretto) ) && richiesta.idStatoRichiesta ==statoRichiesta.DaAccettare">
+                <!-- visibile solo al utente reparto e distretto: se la richiesta nel stato DaAccettare possono anullare la richiesta -->
+
+                <button mat-menu-item (click)="annullaVisita(richiesta)">
+                  <mat-icon class="material-icons-outlined" color="warn">
+                    delete
+                  </mat-icon>
+                  <span> Annulla richiesta esterna </span>
+                </button>
+              </ng-container>
+
+            </mat-menu>
+
+          </mat-cell>
+        </ng-container>
+        <!-- fine celle per Reparto-->
+      </ng-container>
+
+      <ng-container *ngIf="authGuard.canRole(appGen.ruolo.Distretto)">
+        <!-- celle per Distretto-->
+
+
+        <ng-container matColumnDef="dataCreazione">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Inserita</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Data">
+            {{richiesta.dataCreazione ? (richiesta.dataCreazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="dataPrestazione">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Pianificata</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Data">
+            {{richiesta.dataPrestazione ? (richiesta.dataPrestazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="paziente">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente</mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Paziente"
+            (click)="dettaglioPaziente(richiesta.idPaziente)"
+            [matTooltip]="richiesta.idPaziente ? 'Anagrafica paziente' : ''">
+
+            <mat-icon *ngIf="richiesta.sesso == 'M'" class="gender" svgIcon="male">
+            </mat-icon>
+            <mat-icon *ngIf="richiesta.sesso == 'F'" class="gender" svgIcon="female">
+            </mat-icon>
+            <mat-icon *ngIf="richiesta.sesso == 'A'" class="gender" svgIcon="other">
+            </mat-icon>
+
+
+            <div>
+              <div style="font-weight: bold;">{{richiesta.cognome}} {{richiesta.nome }}
+              </div>
+              <div style="width: 100%;font-size:12px">{{richiesta.cf}}</div>
+            </div>
+
+          </mat-cell>
+
+        </ng-container>
+
+
+        <ng-container matColumnDef="stato">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Stato </mat-header-cell>
+          <mat-cell *matCellDef="let richiesta" data-label="Stato"
+            [ngSwitch]="richiesta.stato">
+            {{richiesta.stato }}
+
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="pulsanti">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell class="pulsantiTab" *matCellDef="let richiesta"
+            style="justify-content:flex-end">
+
+
+
+
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon color="primary">more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="dettaglio(richiesta)">
+                <mat-icon class="material-icons-outlined">
+                  remove_red_eye
+                </mat-icon>
+                <span> Apri la richiesta </span>
+              </button>
+
+              <button mat-menu-item (click)="pianoNutrizionale(richiesta)">
+                <mat-icon class="material-icons-outlined">
+                  assignment
+                </mat-icon>
+                <span> Piano terapeutico</span>
+              </button>
+
+              <ng-container
+                *ngIf=" (authGuard.canRole(appGen.ruolo.Reparto) || authGuard.canRole(appGen.ruolo.Distretto) ) && richiesta.idStatoRichiesta ==statoRichiesta.DaAccettare">
+                <!-- visibile solo al utente reparto e distretto: se la richiesta nel stato DaAccettare possono anullare la richiesta -->
+
+                <button mat-menu-item (click)="annullaVisita(richiesta)">
+                  <mat-icon class="material-icons-outlined" color="warn">
+                    delete
+                  </mat-icon>
+                  <span> Annulla richiesta esterna </span>
+                </button>
+              </ng-container>
+
+            </mat-menu>
+
+          </mat-cell>
+        </ng-container>
+        <!-- fine celle per distretto-->
+      </ng-container>
+
+      <ng-container
+        *ngIf="authGuard.canRole(appGen.ruolo.Medico) || authGuard.canRole(appGen.ruolo.Dietista) || authGuard.canRole(appGen.ruolo.Amministrativo)">
+        <ng-container [ngSwitch]="queryId">
+
+          <!-- le visualazioanizie del dato nelle tabelle diverso per il tipo della richiesta-->
+          <ng-container *ngSwitchCase="DatQuery.OrderEntry">
+            <!-- Richieste Order Entry-->
+
+            <ng-container matColumnDef="dataCreazione">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Inserita
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Data">
+                {{richiesta.dataCreazione ? (richiesta.dataCreazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataPrestazione">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Pianificata
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Data">
+                {{richiesta.dataPrestazione ? (richiesta.dataPrestazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="paziente">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Paziente"
+                (click)="dettaglioPaziente(richiesta.idPaziente)"
+                [matTooltip]="richiesta.idPaziente ? 'Anagrafica paziente' : ''">
+
+                <mat-icon *ngIf="richiesta.sesso == 'M'" class="gender" svgIcon="male">
+                </mat-icon>
+                <mat-icon *ngIf="richiesta.sesso == 'F'" class="gender" svgIcon="female">
+                </mat-icon>
+                <mat-icon *ngIf="richiesta.sesso == 'A'" class="gender" svgIcon="other">
+                </mat-icon>
+
+
+                <div>
+                  <div style="font-weight: bold;">{{richiesta.cognome}}
+                    {{richiesta.nome }}
+                  </div>
+                  <div style="width: 100%;font-size:12px">{{richiesta.cf}}</div>
+                </div>
+
+              </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="repartoDegenza">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Reparto Degenza
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="reparto Degenza">
+
+                <div>
+                  <div style="font-weight: bold;">{{richiesta.repartoDegenza ? richiesta.repartoDegenza:'-'}}
+                  </div>
+                  <div style="width: 100%;font-size:12px">{{richiesta.ospedaleDegenza}}</div>
+                </div>
+
+
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="postoDegenza">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Posto Degenza
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Posto Degenza">
+                {{richiesta.postoDegenza ? richiesta.postoDegenza:'-' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="stato">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Stato </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Stato"
+                [ngSwitch]="richiesta.stato">
+                {{richiesta.stato }}
+                <mat-icon
+                *ngIf="(!authGuard.canRole(appGen.ruolo.Reparto) && !authGuard.canRole(appGen.ruolo.Distretto)) && richiesta.idStatoRichiesta == statoRichiesta.DaAccettare && richiesta.daCompletare"
+                color="accent"
+                matTooltip="Mancano i campi obbligatori nella richiesta. Prima si proseguire si deve modificarla">
+                warning</mat-icon>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="medico">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Medico</mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Medico">
+                {{richiesta.medico?richiesta.medico:'-'}}
+
+              </mat-cell>
+
+            </ng-container>
+
+
+            <ng-container matColumnDef="pulsanti">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell class="pulsantiTab" *matCellDef="let richiesta"
+                style="justify-content:flex-end">
+
+
+
+
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon color="primary">more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="dettaglio(richiesta)">
+                    <mat-icon class="material-icons-outlined">
+                      remove_red_eye
+                    </mat-icon>
+                    <span> Apri la richiesta </span>
+
+                  </button>
+
+                  <ng-container>
+                    <button mat-menu-item (click)="accettaRichiesta(richiesta)"
+                    *ngIf="authGuard.canRole(appGen.ruolo.Medico) && richiesta.idStatoRichiesta == statoRichiesta.DaAccettare && !richiesta.daCompletare">
+                    <mat-icon class="material-icons-outlined" color="primary">
+                      done
+                    </mat-icon>
+                    <span> Accetta richiesta </span>
+                  </button>
+                  <button mat-menu-item (click)="accettaEInizia(richiesta)"
+                    *ngIf="authGuard.canRole(appGen.ruolo.Medico) && richiesta.idStatoRichiesta == statoRichiesta.DaAccettare && !richiesta.daCompletare  && authGuard.canAccess(this.appGen.permesso.ModuloVisite)">
+                    <mat-icon class="material-icons-outlined" color="primary">
+                      reply
+                    </mat-icon>
+                    <span> Accetta e inizia visita </span>
+                  </button>
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf=" (authGuard.canRole(appGen.ruolo.Reparto) || authGuard.canRole(appGen.ruolo.Distretto) ) && richiesta.idStatoRichiesta ==statoRichiesta.DaAccettare">
+                    <!-- visibile solo al utente reparto e distretto: se la richiesta nel stato DaAccettare possono anullare la richiesta -->
+
+                    <button mat-menu-item (click)="annullaVisita(richiesta)">
+                      <mat-icon class="material-icons-outlined" color="warn">
+                        delete
+                      </mat-icon>
+                      <span> Annulla richiesta esterna </span>
+                    </button>
+                  </ng-container>
+
+
+
+                </mat-menu>
+
+              </mat-cell>
+            </ng-container>
+            <!-- End Richieste Order Entry-->
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            <ng-container matColumnDef="dataPrestazione">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Data</mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Data">
+                {{richiesta.dataPrestazione ? (richiesta.dataPrestazione | date: 'dd/MM/yyyy HH:mm'):'-' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="paziente">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Paziente"
+                (click)="dettaglioPaziente(richiesta.idPaziente)"
+                [matTooltip]="richiesta.idPaziente ? 'Anagrafica paziente' : ''">
+
+                <mat-icon *ngIf="richiesta.sesso == 'M'" class="gender" svgIcon="male">
+                </mat-icon>
+                <mat-icon *ngIf="richiesta.sesso == 'F'" class="gender" svgIcon="female">
+                </mat-icon>
+                <mat-icon *ngIf="richiesta.sesso == 'A'" class="gender" svgIcon="other">
+                </mat-icon>
+
+
+                {{richiesta.cognome}} {{richiesta.nome }}
+
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cf">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Codice Fiscale
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Codice fiscale">
+                {{richiesta.cf}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="prestazione">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Prestazione
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Prestazione">
+                {{richiesta.tipoPrestazione ? richiesta.tipoPrestazione : '-'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="tipo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Provenienza">
+                {{richiesta.tipoRichiesta}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="stato">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Stato </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Stato"
+                [ngSwitch]="richiesta.stato">
+                {{richiesta.stato }}
+                <mat-icon
+                  *ngIf="(!authGuard.canRole(appGen.ruolo.Reparto) && !authGuard.canRole(appGen.ruolo.Distretto)) && richiesta.idStatoRichiesta == statoRichiesta.DaAccettare && richiesta.daCompletare"
+                  color="accent"
+                  matTooltip="Mancano i campi obbligatori nella richiesta. Prima si proseguire si deve modificarla">
+                  warning</mat-icon>
+              </mat-cell>
+            </ng-container>
+            <!-- <ng-container matColumnDef="priorita">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header>Priorità</mat-header-cell>
+                      <mat-cell *matCellDef="let richiesta" data-label="Priorità"
+                          [ngStyle]="!appGen.isNullOrUndefined(richiesta.priorita) && {'cursor':'pointer'}"
+                          [matTooltip]="richiesta.priorita" [ngClass]="richiesta.priorita">
+                          {{richiesta.acronimoPriorita}}
+                      </mat-cell>
+                  </ng-container> -->
+
+
+
+
+            <ng-container matColumnDef="medico">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Medico</mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Medico">
+                {{richiesta.medico}}
+
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="dietista">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Dietista
+              </mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Dietista">
+                {{richiesta.dietista}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="ambulatorio">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Sede</mat-header-cell>
+              <mat-cell *matCellDef="let richiesta" data-label="Sede">
+                {{richiesta.ambulatorio}}
+              </mat-cell>
+            </ng-container>
+            <!-- <ng-container matColumnDef="richiedente">
+                      <mat-header-cell *matHeaderCellDef>Richiedente</mat-header-cell>
+                      <mat-cell *matCellDef="let richiesta" data-label="Richiedente">{{richiesta.utenteRichiesta}}</mat-cell>
+                  </ng-container> -->
+
+            <ng-container matColumnDef="pulsanti">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell class="pulsantiTab" *matCellDef="let richiesta"
+                style="justify-content:flex-end">
+
+                <!-- <mat-icon class="material-icons-outlined"
+                              [routerLink]="['dettaglio/richiesta', richiesta.idRichiesta]" matTooltip="Apri la richiesta"
+                              color="primary">remove_red_eye</mat-icon>
+                          <mat-icon (click)="ModificaRichiesta(richiesta.idRichiesta)"
+                              *ngIf="richiesta.idStatoRichiesta == statoRichiesta.Accettata"
+                              matTooltip="Cambia medico o ambulatorio" class="editIco">mode_edit</mat-icon>
+
+                          <mat-icon (click)="annullaVisita(richiesta)"
+                              *ngIf="richiesta.idStatoRichiesta ==statoRichiesta.DaAccettare || richiesta.idStatoRichiesta == statoRichiesta.Accettata"
+                              matTooltip="Annulla richiesta" color="warn">delete</mat-icon>
+                          <mat-icon (click)="infoCancellazione(richiesta)"
+                              *ngIf="richiesta.idStatoRichiesta ==statoRichiesta.Cancellata" matTooltip="Info cancellazione"
+                              color="primary"> info_outline</mat-icon> -->
+
+
+
+
+
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon color="primary">more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="dettaglio(richiesta)">
+                    <mat-icon class="material-icons-outlined">
+                      remove_red_eye
+                    </mat-icon>
+                    <span> Apri la richiesta </span>
+
+                  </button>
+
+                  <button mat-menu-item
+                    *ngIf="richiesta.idStatoRichiesta == statoRichiesta.Accettata && authGuard.canAccess(this.appGen.permesso.ModuloVisite)"
+                    (click)="compilaVisita(richiesta.idRichiesta)">
+                    <mat-icon class="material-icons-outlined" color="primary">reply
+                    </mat-icon>
+                    <span> Inizia visita</span>
+                  </button>
+
+                  <button mat-menu-item (click)="accettaRichiesta(richiesta)"
+                    *ngIf="richiesta.idStatoRichiesta == statoRichiesta.DaAccettare && !richiesta.daCompletare">
+                    <mat-icon class="material-icons-outlined" color="primary">
+                      done
+                    </mat-icon>
+                    <span> Accetta richiesta </span>
+                  </button>
+                  <button mat-menu-item (click)="accettaEInizia(richiesta)"
+                    *ngIf="richiesta.idStatoRichiesta == statoRichiesta.DaAccettare && !richiesta.daCompletare  && authGuard.canAccess(this.appGen.permesso.ModuloVisite)">
+                    <mat-icon class="material-icons-outlined" color="primary">
+                      reply
+                    </mat-icon>
+                    <span> Accetta e inizia visita </span>
+                  </button>
+                  <button mat-menu-item (click)="ModificaRichiesta(richiesta.idRichiesta)"
+                    *ngIf="richiesta.idStatoRichiesta == statoRichiesta.Accettata">
+                    <mat-icon class="material-icons-outlined">
+                      edit
+                    </mat-icon>
+                    <span> Cambia medico o sede </span>
+                  </button>
+
+                  <button mat-menu-item (click)="annullaVisita(richiesta)"
+                    *ngIf="(!authGuard.canRole(appGen.ruolo.Reparto) && !authGuard.canRole(appGen.ruolo.Distretto)) &&(richiesta.idStatoRichiesta ==statoRichiesta.DaAccettare || richiesta.idStatoRichiesta == statoRichiesta.Accettata)">
+                    <mat-icon class="material-icons-outlined" color="warn">
+                      delete
+                    </mat-icon>
+                    <span> Annulla richiesta </span>
+                  </button>
+                  <button mat-menu-item (click)="infoCancellazione(richiesta)"
+                    *ngIf="richiesta.idStatoRichiesta ==statoRichiesta.Cancellata">
+                    <mat-icon class="material-icons-outlined" color="warn">
+                      info_outline
+                    </mat-icon>
+                    <span> Info cancellazione </span>
+                  </button>
+
+                  <ng-container
+                    *ngIf=" (authGuard.canRole(appGen.ruolo.Reparto) || authGuard.canRole(appGen.ruolo.Distretto) ) && richiesta.idStatoRichiesta ==statoRichiesta.DaAccettare">
+                    <!-- visibile solo al utente reparto e distretto: se la richiesta nel stato DaAccettare possono anullare la richiesta -->
+
+                    <button mat-menu-item (click)="annullaVisita(richiesta)">
+                      <mat-icon class="material-icons-outlined" color="warn">
+                        delete
+                      </mat-icon>
+                      <span> Annulla richiesta esterna </span>
+                    </button>
+                  </ng-container>
+
+                </mat-menu>
+
+              </mat-cell>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="richiesteViewsColumns"></mat-header-row>
+      <mat-row *matRowDef="let row;columns:richiesteViewsColumns"></mat-row>
+    </mat-table>
+
+
+    <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected"
+      showFirstLastButtons [pageSize]="itemsForPage" (page)="onChangePage($event)"
+      [pageSizeOptions]="[5, 10, 25, 50]">
+    </mat-paginator>
+  </div>
+  </mat-card-content>
+</mat-card>

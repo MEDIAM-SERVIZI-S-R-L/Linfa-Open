@@ -1,0 +1,419 @@
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+    width: -webkit-fill-available;
+  }
+
+  .title-valori-nutr{
+    span{
+      font-weight: bold;
+      color: #00afa6;
+      font-size: 20px;
+      width: -webkit-fill-available;
+      margin: -4px 1.5% 0 0 !important;
+    }
+  }
+
+
+  ::ng-deep .mat-badge-content {
+      z-index: 5;
+      height: 150px;
+      width: 150px;
+    }
+  
+
+
+  .pasto{
+    font-weight: bold;
+    color: #ffa558;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .pasto-not-expanded{
+    width: fit-content;
+    max-width: fit-content;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .subtitle {
+    font-weight: 600;
+    font-size: 16px;
+    color: #00afa6;
+    margin-bottom: 20px;
+  }
+
+  .alimento-alternativo-subtitle{
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: #ffa558;
+  }
+
+
+  .upper-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .slide-div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 20%;
+  }
+
+  .valori-nutrizionali-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .valoriNutrizionaliSpan{
+    color: #a3a3a3;
+    font-weight: bold;
+    strong{
+      //color: #00afa6;
+      font-size: 16px;
+      span{
+        color: #00afa6;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .div-prodotto{
+    width: 98%;
+    padding: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20%;
+    align-items: baseline;
+    .nome-prodotto{
+      font-weight: bold;
+      font-size: 18px;
+    }
+  }
+
+  .div-prodotto-settimana{
+    width: 98%;
+    padding: 4px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+    .nome-prodotto{
+      font-weight: bold;
+      font-size: 18px;
+    }
+  }
+
+  .div-prodotti-alternativi{
+    max-height: 29vh;
+    overflow-y: auto;
+    margin-left: 8px;
+  }
+
+  .label-prodotto{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+
+
+  .div-proprieta-prodotto{
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .Kcal-card{
+    width: 100%;
+    padding: 20px;  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  tr, td {
+    border: 1px solid black;
+  }
+
+  td{
+    padding: 4px 12px 4px 12px;
+    width: 20%;
+  }
+
+  .giorno-title{
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 16px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+
+  .buttons-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+    padding-top: 8px;
+    button{
+      background-color: transparent;
+      padding: 0px 12px 0px 12px;
+      font-weight: bold;
+      color: #00afa6;
+      border: none;
+      box-shadow: none;
+    }
+    button:hover{
+      color: #ffa558;
+    }
+  }
+
+  ::ng-deep .custom-frame {
+    & .mat-checkbox-background, .mat-checkbox-frame {
+      border-radius: 70% !important;
+    }
+  }
+
+  .div-week{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .deleteBtn {
+    height: 30px !important;
+    padding: unset !important;
+    line-height: 10px !important;
+    margin-right: 12px;
+    mat-icon {
+        margin: unset !important;
+    }
+}
+
+.button-div{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end !important;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.untouchable{
+  pointer-events: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+.left-button-div{
+  display: flex;
+  flex-direction: column;
+  justify-content: center !important;
+}
+
+.button-div{
+  width: 25%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end !important;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cntrBtnRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end !important;
+  gap: 16px;    
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.cntrBtnRow-low-bis{
+  display: flex;
+  flex-direction: row;
+  //justify-content: space-between !important;
+  gap: 16px;    
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+
+.cntrBtnRow-low {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between !important;
+  gap: 16px;    
+  align-items: baseline !important;
+  flex-wrap: wrap;
+}
+
+/*#region  LOADING PANEL */
+  .container {
+    --uib-size: 80px;
+    --uib-color: #00afa6;
+    --uib-speed: 1.5s;
+    --uib-dot-size: calc(var(--uib-size) * 0.4);
+    position: absolute;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--uib-size);
+    width: var(--uib-size);
+    animation: rotate calc(var(--uib-speed) * 1.667) infinite linear;
+    z-index: 10001;
+  }
+
+  .container::before,
+  .container::after {
+    content: '';
+    position: absolute;
+    height: var(--uib-dot-size);
+    width: var(--uib-dot-size);
+    border-radius: 50%;
+    background-color: var(--uib-color);
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+  }
+
+  .container::before {
+    animation: orbit var(--uib-speed) linear infinite;
+  }
+
+  .container::after {
+    animation: orbit var(--uib-speed) linear calc(var(--uib-speed) / -2) infinite;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes orbit {
+    0% {
+      transform: translateX(calc(var(--uib-size) * 0.25)) scale(0.73684);
+      opacity: 0.65;
+    }
+    5% {
+      transform: translateX(calc(var(--uib-size) * 0.235)) scale(0.684208);
+      opacity: 0.58;
+    }
+    10% {
+      transform: translateX(calc(var(--uib-size) * 0.182)) scale(0.631576);
+      opacity: 0.51;
+    }
+    15% {
+      transform: translateX(calc(var(--uib-size) * 0.129)) scale(0.578944);
+      opacity: 0.44;
+    }
+    20% {
+      transform: translateX(calc(var(--uib-size) * 0.076)) scale(0.526312);
+      opacity: 0.37;
+    }
+    25% {
+      transform: translateX(0%) scale(0.47368);
+      opacity: 0.3;
+    }
+    30% {
+      transform: translateX(calc(var(--uib-size) * -0.076)) scale(0.526312);
+      opacity: 0.37;
+    }
+    35% {
+      transform: translateX(calc(var(--uib-size) * -0.129)) scale(0.578944);
+      opacity: 0.44;
+    }
+    40% {
+      transform: translateX(calc(var(--uib-size) * -0.182)) scale(0.631576);
+      opacity: 0.51;
+    }
+    45% {
+      transform: translateX(calc(var(--uib-size) * -0.235)) scale(0.684208);
+      opacity: 0.58;
+    }
+    50% {
+      transform: translateX(calc(var(--uib-size) * -0.25)) scale(0.73684);
+      opacity: 0.65;
+    }
+    55% {
+      transform: translateX(calc(var(--uib-size) * -0.235)) scale(0.789472);
+      opacity: 0.72;
+    }
+    60% {
+      transform: translateX(calc(var(--uib-size) * -0.182)) scale(0.842104);
+      opacity: 0.79;
+    }
+    65% {
+      transform: translateX(calc(var(--uib-size) * -0.129)) scale(0.894736);
+      opacity: 0.86;
+    }
+    70% {
+      transform: translateX(calc(var(--uib-size) * -0.076)) scale(0.947368);
+      opacity: 0.93;
+    }
+    75% {
+      transform: translateX(0%) scale(1);
+      opacity: 1;
+    }
+    80% {
+      transform: translateX(calc(var(--uib-size) * 0.076)) scale(0.947368);
+      opacity: 0.93;
+    }
+    85% {
+      transform: translateX(calc(var(--uib-size) * 0.129)) scale(0.894736);
+      opacity: 0.86;
+    }
+    90% {
+      transform: translateX(calc(var(--uib-size) * 0.182)) scale(0.842104);
+      opacity: 0.79;
+    }
+    95% {
+      transform: translateX(calc(var(--uib-size) * 0.235)) scale(0.789472);
+      opacity: 0.72;
+    }
+    100% {
+      transform: translateX(calc(var(--uib-size) * 0.25)) scale(0.73684);
+      opacity: 0.65;
+    }
+  }
+
+/*#endregion LOADING PANEL */

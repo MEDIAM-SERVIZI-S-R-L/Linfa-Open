@@ -1,0 +1,43 @@
+<mat-table [dataSource]="dataSource" multiTemplateDataRows>
+
+    <ng-container matColumnDef="tipo">
+        <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Tipo">
+            <ng-container *ngIf="prodotto.tipo == tipoAggiunta.Vitamine">Vitamina</ng-container>
+            <ng-container *ngIf="prodotto.tipo == tipoAggiunta.Oligoelementi">Oligoelemento</ng-container>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="aggiunta">
+        <mat-header-cell *matHeaderCellDef>Aggiunta</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Aggiunta">
+            {{prodotto.aggiunta }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="quantita">
+        <mat-header-cell *matHeaderCellDef>Quantità</mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" data-label="Quantità">
+
+            <mat-form-field class="full-width" fxFlex="90" appearance="fill">
+                <input type="number" digitOnly matInput [value]="prodotto.quantita" [readonly]="isRiepilogo" [disabled]="isRiepilogo" maxlength="6" autocomplete="off" (blur)="editQuantita(prodotto,$event.currentTarget)" maxLength="4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <span matSuffix class="suffix">ml</span>
+            </mat-form-field>
+
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="pulsanti">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let prodotto" class="pulsantiTab" style="justify-content:flex-end">
+
+            <mat-icon (click)="deleteProdotto(prodotto)" *ngIf="!isRiepilogo" matTooltip=" Rimuovi quantità" color="warn">
+                delete
+            </mat-icon>
+
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+    <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+</mat-table>

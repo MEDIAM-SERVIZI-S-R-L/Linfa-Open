@@ -1,0 +1,104 @@
+<div class="sidenav-app" [class.sidenav-is-mobile]="mobileQuery.matches">
+    <mat-sidenav-container class="sidenav-container">
+
+        <mat-sidenav #snav opened [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+            [ngClass]="snav.opened?'openedSide':'closedSide'" [style.width.px]="snav.opened?240:0">
+            <mat-nav-list style="padding-bottom: 10vh;">
+                <a (click)="goToHome()">
+                    <img class="logo" alt="logo linfa" [style.width.px]="snav.opened?115:24"
+                        [src]="snav.opened? './assets/img/logo/logo-linfa-b@2x.webp': './assets/img/logo/piittogramma-linfa@2x.webp'">
+                </a>
+                <!--MENU-->
+                <app-menu [data]='snav.opened' (closeMenu)="closeMenuOnClick()"></app-menu>
+
+            </mat-nav-list>
+                <div style="margin-top:20px; display: flex;justify-content: center;" class="footer">
+                  <p>
+                    <span>
+                        <mat-icon color="primary" style="width: 15px;height: 15px;font-size:13px">public</mat-icon> <small style="font-size:13px">{{Environment.appVersion}}</small> 
+                    </span>
+                    <span *ngIf="authGuard.canRole(appGen.ruolo.Administrator)">
+                        , <mat-icon color="primary" style="width: 15px;height: 15px;font-size:13px">memory</mat-icon> <small style="font-size:13px">{{Environment.appVersion}}</small> 
+                    </span>
+                    <span *ngIf="authGuard.canRole(appGen.ruolo.Administrator)">
+                        , <mat-icon color="primary" style="width: 15px;height: 15px;font-size:13px">monitor</mat-icon> <small style="font-size:13px">{{Environment.appVersion}}</small>
+                    </span>
+                  </p>
+                </div>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <mat-toolbar>
+
+                <!--DESTKOP-->
+                <mat-toolbar-row *ngIf="!mobileQuery.matches">
+                    <img class="logo" alt="logo linfa" [style.width.px]="!snav.opened?24:0"
+                        [src]="snav.opened? './assets/img/logo/logo-linfa-b@2x.webp': './assets/img/logo/piittogramma-linfa@2x.webp'"
+                        routerLink="dashboard">
+
+                    <button mat-icon-button color="primary" (click)="snav.toggle()">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+                    <button mat-icon-button class="noteBtn" color="primary" (click)="insertNote()"
+                        matTooltip="Inserisci note paziente" *ngIf="authGuard.canRole(appGen.ruolo.Medico)|| authGuard.canRole(appGen.ruolo.Dietista)">
+                        <mat-icon>note_add</mat-icon>
+                    </button>
+                    <button mat-icon-button class="noteBtn" color="primary" (click)="nuovaRichiesta()"
+                    matTooltip="Nuova richiesta" *ngIf="authGuard.canRole(appGen.ruolo.Distretto)|| authGuard.canRole(appGen.ruolo.Reparto)">
+                    <mat-icon class="material-icons-outlined">library_add</mat-icon>
+                </button>
+                    <span class="spaceBox"></span>
+                    <div class="userBox">
+                        <small style="text-transform: capitalize">{{ theClock | date: 'EEEE, d MMMM yyyy HH:mm'
+                            }}</small>
+                    </div>
+                    <div class="userBox">
+                        <small>{{appGen.username}}</small>
+                        <button mat-button (click)="appGen.logout()"> <span *ngIf="!mobileQuery.matches">Logout</span>
+                            <mat-icon color="warn">power_settings_new</mat-icon>
+                        </button>
+                        <span class="avatar" routerLink="profilo">
+                            <img src="./assets/img/profile.webp" alt="icona profilo" />
+                        </span>
+
+                    </div>
+                </mat-toolbar-row>
+
+
+                <!--MOBILE-->
+                <mat-toolbar-row *ngIf="mobileQuery.matches" fxLayout="row" fxLayoutAlign="space-between center">
+
+                    <div>
+                        <mat-icon color="primary" (click)="snav.toggle()" class="material-icons-outlined">
+                            menu
+                        </mat-icon>
+
+
+                        <mat-icon class="noteMobileBtn" color="primary" (click)="insertNote()"
+                            matTooltip="Inserisci note paziente" *ngIf="authGuard.canRole(appGen.ruolo.Medico)|| authGuard.canRole(appGen.ruolo.Dietista)"> note_add</mat-icon>
+
+                    </div>
+                    <img id="logoMobile" alt="logo linfa mobile" [style.width.px]="45"
+                        [src]="'./assets/img/logo/piittogramma-linfa@2x.webp'" routerLink="dashboard">
+                    <span class="avatar" routerLink="profilo">
+                        <img src="./assets/img/profile.webp" alt="icona profilo mobile" />
+                    </span>
+
+
+                </mat-toolbar-row>
+
+
+
+            </mat-toolbar>
+
+            <div class="ctnrMain">
+
+                <router-outlet #outlet (activate)="onActivate($event, outlet)"></router-outlet>
+
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+    <mat-icon color="primary" (click)="snav.toggle()" *ngIf="mobileQuery.matches && snav.opened" id="iconMenuMobile"
+        class="material-icons-outlined">
+        close</mat-icon>
+</div>

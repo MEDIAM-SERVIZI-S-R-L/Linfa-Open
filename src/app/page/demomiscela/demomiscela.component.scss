@@ -1,0 +1,33 @@
+.btnFooter {
+    top: 35px;
+}
+
+#demo {
+    margin: 30px !important
+}
+
+.boxArea {
+    padding-top: 30px;
+}
+
+.btnButtonSacche {
+    margin: 20px 0;
+}
+
+@media screen and (max-width: 600px) {
+    .cntrBtnUpload {
+        margin: 15px 0;
+        input,
+        button {
+            width: 100%;
+        }
+    }
+}
+
+mat-error {
+    padding-top: 10px;
+    font-size: 18px;
+    strong {
+        font-size: 18px;
+    }
+}

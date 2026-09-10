@@ -1,0 +1,32 @@
+.filtri {
+    padding-bottom: 15px;
+}
+
+.btnFiltri button {
+    margin: 5px;
+}
+
+.cntrCruscotto {
+    padding-bottom: 10px !important;
+}
+
+.backBtn {
+    margin-top: 25px;
+}
+
+mat-header-cell span {
+    text-transform: unset;
+}
+
+.mat-column-dieta {
+    cursor: pointer;
+}
+
+@media screen and (min-width: 1101px) {
+    .mat-column-dieta {
+        padding-right: 40px;
+    }
+}
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+@import "/src/theme/table-responsive.scss";

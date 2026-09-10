@@ -1,0 +1,68 @@
+<h1 mat-dialog-title class="title">
+  Configurazione
+</h1>
+
+<div mat-dialog-content>
+
+  <div class="container">
+
+    <form [formGroup]="form" autocomplete="off">
+
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3%" fxLayoutGap.lt-md="0px" style="align-items: center;">
+
+        <mat-form-field class="full-width" fxFlex="50">
+          <mat-label>Proprietà</mat-label>
+          <input type="text" matInput formControlName="proprieta" autocomplete="off" required>
+        </mat-form-field>
+        <mat-checkbox color="primary" formControlName="abilitato" fxFlex="10">Abilitato</mat-checkbox>
+
+      </div>
+
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Categoria</mat-label>
+          <mat-select matNativeControl formControlName="categoria">
+            <mat-option>---</mat-option>
+            <mat-option *ngFor="let categoria of categorie" 
+            [disabled]="categoria.abilitato === false"
+            [value]="categoria.id">
+              {{categoria.categoriaConfigurazione}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Descrizione</mat-label>
+          <textarea matInput formControlName="descrizione" required cdkTextareaAutosize cdkAutosizeMinRows="3"
+            cdkAutosizeMaxRows="5"></textarea>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px" class="lower-div">
+
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Valore</mat-label>
+
+          <textarea matInput formControlName="valore" required cdkTextareaAutosize cdkAutosizeMinRows="3"
+            cdkAutosizeMaxRows="5"></textarea>
+
+        </mat-form-field>
+
+      </div>
+    </form>
+  </div>
+
+</div>
+
+
+<div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+  fxLayoutGap.lt-md="10px">
+  <button mat-raised-button color="warn" (click)="onDismiss()">Annulla</button>
+
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    <mat-icon>save</mat-icon>
+    Salva
+  </button>
+</div>

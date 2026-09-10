@@ -1,0 +1,127 @@
+<mat-card class="linfaCard">
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px" *ngIf="this.authGuard.canAccess(this.appGen.permesso.ModificaProdotti)">
+        <button mat-raised-button color="primary" matTooltipPosition="after" class="btnTopCard" (click)="nuovo()">
+      <mat-icon>add_circle_outline</mat-icon>
+      Nuovo AFMS
+    </button>
+    </div>
+    <mat-card-title>
+        <h3 class="title">
+            AFMS
+        </h3>
+
+
+    </mat-card-title>
+
+    <mat-card-content>
+
+        <mat-accordion>
+            <mat-expansion-panel class="accordionFiltri">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="accordionFiltriTitle">
+                        <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                        Filtri ricerca
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="filtri">
+                    <form [formGroup]="formFiltri" autocomplete="off">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Nome AFMS</mat-label>
+                                <input matInput type="text" formControlName="Prodotto">
+
+                            </mat-form-field>
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Tipologia</mat-label>
+                                <mat-select matNativeControl #TipiProdotto formControlName="TipiProdotto" (selectionChange)="tipoProdotto($event)">
+                                    <mat-option *ngFor="let tipoprodotto of listaTipiProdotto" [value]="tipoprodotto.id">
+                                        {{ tipoprodotto.tipoProdotto }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+
+                            <mat-form-field class="full-width" fxFlex="30" *ngIf="showTipoAlimentazione">
+                                <mat-label>Tipo nutrizione artificiale</mat-label>
+                                <mat-select matNativeControl formControlName="TipoAlimentazioneArtificiale">
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let tipoAlimentazione of listaTipoAlimentazioneArtificiale" [value]="tipoAlimentazione.id">
+                                        {{tipoAlimentazione.artificiale}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px%" fxLayoutGap.lt-md="10px">
+                            <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                <mat-icon>search</mat-icon>
+                Cerca
+              </button>
+
+                            <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                <mat-icon>remove_circle_outline</mat-icon>
+                Resetta
+              </button>
+                        </div>
+                    </form>
+                </div>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+        <div [hidden]="dataSource.data.length<=0">
+
+            <mat-table id="table" [dataSource]="dataSource" matSortActive="prodotto" matSortDirection="asc" (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+
+                <ng-container matColumnDef="prodotto">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>AFMS</mat-header-cell>
+                    <mat-cell *matCellDef="let prodotto" data-label="prodotto" matTooltip="Dettaglio prodotto" (click)="dettaglio(prodotto)">{{prodotto.prodotto}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                    <mat-cell *matCellDef="let prodotto" data-label="Tipo">{{prodotto.tipoProdotto}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="artificiale">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo artificiale</mat-header-cell>
+                    <mat-cell *matCellDef="let prodotto" data-label="Tipo artificiale">
+                        {{prodotto.artificiale == null ? '-':prodotto.artificiale}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let prodotto" class="pulsantiTab" style="justify-content:flex-end">
+
+                        <mat-icon matTooltip="Modifica" class="editIco" (click)="dettaglio(prodotto)" *ngIf="authGuard.canAccess(this.appGen.permesso.ModificaProdotti)">edit
+                        </mat-icon>
+
+                        <mat-icon matTooltip="Elimina" color="warn" (click)="delete(prodotto)" *ngIf="authGuard.canAccess(this.appGen.permesso.ModificaProdotti)">
+                            delete
+                        </mat-icon>
+
+                        <mat-icon matTooltip="Clicca per ulteriori informazioni sulla miscela" class="infoIco" color="primary" (click)="getInfo(prodotto)">info_outline
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage" (page)="onChangePage($event)" [pageSizeOptions]="[5, 10, 25, 50]">
+            </mat-paginator>
+        </div>
+
+        <ng-container *ngIf="dataSource.data.length <=0">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                <h4 class="subTitle"><span>Cerca un AFMS attraverso i filtri </span></h4>
+            </div>
+        </ng-container>
+
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,12 @@
+::ng-deep ngx-extended-pdf-viewer #viewerContainer .pdfViewer .page {
+    margin: auto !important;
+}
+
+.body-print {
+    place-content: stretch center;
+}
+@media print {
+    .body-print {
+        place-content: stretch start;
+    }
+}

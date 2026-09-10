@@ -1,0 +1,198 @@
+<mat-card class="linfaCard">
+
+  <h3 class="title">
+    Prodotti-Gare
+  </h3>
+
+  <mat-card-content>
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+      <mat-form-field class="full-width" fxFlex="30">
+        <mat-label>Gara</mat-label>
+        <mat-select matNativeControl required (selectionChange)="selectedGara($event.value)">
+          <mat-option *ngFor="let item of listaGare" [value]="item">
+            {{ item.gara }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="button" (click)="modalProdotto(gara,true)" *ngIf="gara">
+        Aggiungi
+      </button>
+    </div>
+
+
+    <mat-accordion *ngIf="this.gara">
+      <mat-expansion-panel class="accordionFiltri">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="accordionFiltriTitle">
+            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+            Filtri ricerca
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filtri">
+          <form [formGroup]="formFiltri" autocomplete="off">
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+              <mat-form-field class="full-width" fxFlex="30">
+                <mat-label>Nome prodotto</mat-label>
+                <input matInput type="text" formControlName="prodotto">
+
+              </mat-form-field>
+
+              <mat-form-field class="full-width" fxFlex>
+                <mat-label>Tipo nutrizione artificiale</mat-label>
+                <mat-select matNativeControl formControlName="tipoArtificiale">
+                  <mat-option *ngFor="let tipoAlimentazione of listaTipoAlimentazioneArtificiale"
+                    [value]="tipoAlimentazione.id">
+                    {{tipoAlimentazione.artificiale}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+            <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+              <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                <mat-icon>search</mat-icon>
+                Cerca
+              </button>
+              <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                <mat-icon>remove_circle_outline</mat-icon>
+                Resetta
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
+    <ng-container *ngIf="dataSource.data.length >0">
+
+      <mat-table id="table" [dataSource]="dataSource" matSortActive="prodotto" [matSortDirection]="sortDirection"
+        (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+
+        <ng-container matColumnDef="prodotto">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Prodotto</mat-header-cell>
+          <mat-cell *matCellDef="let item" data-label="Prodotto">
+            {{item.prodotto}}</mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="gara">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Gara</mat-header-cell>
+          <mat-cell *matCellDef="let item" data-label="Gara">
+            {{item.gara}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="abilitato">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Abilitato</mat-header-cell>
+          <mat-cell *matCellDef="let item" data-label="Abilitato">
+
+            <mat-icon color="primary" *ngIf="item.abilitato">done</mat-icon>
+            <mat-icon color="warn" *ngIf="!item.abilitato">close</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="pulsanti">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item" class="pulsantiTab" style="justify-content:flex-end">
+
+            <mat-icon class="editIco" matTooltip="Modifica" (click)="modalProdotto(item,false)">edit
+            </mat-icon>
+
+            <mat-icon class="material-icons-outlined" color="warn" (click)="deleteProdotto(item)">
+              delete
+            </mat-icon>
+
+          </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *matHeaderRowDef="viewsColumns"></mat-header-row>
+        <mat-row *matRowDef="let row;columns:viewsColumns"></mat-row>
+      </mat-table>
+      <mat-paginator [length]="totalElements" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage"
+        (page)="onChangePage($event)" [pageSizeOptions]="[5, 10, 25, 50]">
+      </mat-paginator>
+
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<ng-container *ngIf="gara">
+  <mat-card>
+
+    <div class="input-row-confezionamenti" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+    fxLayoutGap.lt-md="0px">
+    <h3 class="title">
+      Confezionamenti-Gare : {{gara.gara}}
+    </h3>
+
+    <button mat-raised-button color="primary" type="button" *ngIf="gara" (click)="addConfezionamentoXGara(gara)">
+      Aggiungi
+    </button>
+  </div>
+
+  <ng-container *ngIf="dataSourceConfezionamenti.data.length > 0">
+
+
+    <mat-table 
+    [dataSource]="dataSourceConfezionamenti"
+    id="tableConfezionamenti">
+
+      <ng-container matColumnDef="prodotto">
+        <mat-header-cell *matHeaderCellDef>Prodotto</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.prodotto}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="artificiale">
+        <mat-header-cell *matHeaderCellDef>Tipo di nutrizione</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.artificiale}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="confezionamenti">
+
+        <mat-header-cell *matHeaderCellDef>Confezioni associate alla gara</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <ul  class="lista">
+              <li *ngFor="let item of element.confezionamenti"
+              [style]="item.disponibile? '' : 'color: #d3d3d3; cursor: pointer'"
+              [matTooltip]="item.disponibile? '' : 'Confezionamento momentaneamente non disponibile'"
+              [matTooltipShowDelay]="500">
+                {{item.quantita}} {{item.unitaMisura}}
+              </li>
+            </ul>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="buttons">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="pulsantiTab" style="justify-content:flex-end">
+
+          <mat-icon class="editIco" matTooltip="Modifica" (click)="editConfezionamentoXGara(element)">edit
+          </mat-icon>
+
+          <mat-icon class="material-icons-outlined" color="primary"
+            matTooltip="Dissocia tutti i confezionamenti dalla gara" (click)="dissociaConfezioniXGara(element)">
+            link_off
+          </mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns" class="hr"></mat-header-row>
+      <mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"
+    [length]="totalElementsConfezionamenti" [pageIndex]="pageSelectedConfezionamenti" showFirstLastButtons
+    [pageSize]="itemsForPageConfezionamenti"
+    (page)="onChangePageXConfezionamenti($event)">
+    </mat-paginator>
+  </ng-container>
+  </mat-card>
+</ng-container>

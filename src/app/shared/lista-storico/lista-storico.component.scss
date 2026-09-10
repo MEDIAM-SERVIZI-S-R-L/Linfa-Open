@@ -1,0 +1,22 @@
+.filtri {
+    padding-bottom: 15px;
+}
+
+.btnFiltri button {
+    margin: 5px;
+}
+
+.nomePaziente {
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+@import "/src/theme/table-responsive.scss";

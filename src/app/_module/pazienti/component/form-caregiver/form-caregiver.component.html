@@ -1,0 +1,112 @@
+<div class="backBtn" *ngIf="!isDettaglio">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isDettaglio">Nuovo caregiver</ng-container>
+            <ng-container *ngIf="isDettaglio">Caregiver</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formCaregiver" autocomplete="off" (ngSubmit)="onSubmit()">
+                <div class="container" fxflexfill>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Nome</mat-label>
+                            <input type="text" matInput required formControlName="Nome" maxlength="250" autocomplete="off">
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Cognome</mat-label>
+                            <input type="text" matInput required formControlName="Cognome" maxlength="250" autocomplete="off">
+
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Codice Fiscale</mat-label>
+                            <input type="text" matInput id="cfInput" formControlName="CF" maxlength="16" autocomplete="off">
+
+                            <mat-error *ngIf="!formCaregiverControls['CF'].hasError('required') && formCaregiverControls['CF'].hasError('pattern')">
+                                <strong>Codice Fiscale</strong> non valido
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+
+
+
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Sesso</mat-label>
+                            <mat-select matNativeControl formControlName="Sesso">
+                                <mat-option *ngFor="let gender of appGen.GenderType" [value]="gender.abbrev">
+                                    {{ gender.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Grado di parentela o Altro</mat-label>
+                            <mat-select matNativeControl formControlName="GradoParentela">
+                                <mat-option></mat-option>
+                                <mat-option *ngFor="let gradoParentela of listaGradiParentela" [value]="gradoParentela.id">
+                                    {{ gradoParentela.gradoParentela }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Telefono</mat-label>
+                            <input type="text" matInput required formControlName="Telefono" [OnlyNumber]="true" maxlength="30" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Email</mat-label>
+                            <input type="text" matInput formControlName="Email" maxlength="200" autocomplete="off">
+                        </mat-form-field>
+                        
+                    </div>
+
+                    <div>
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Note disponibilità</mat-label>
+                            <textarea matInput 
+                            #input 
+                            formControlName="NoteDisponibilita" 
+                            maxlength="500" 
+                            autocomplete="off"
+                            cdkTextareaAutosize cdkAutosizeMinRows="3"
+                            cdkAutosizeMaxRows="5"></textarea>
+                            <mat-hint align="end">{{input.value.length}}/500</mat-hint>
+                        </mat-form-field>
+                    </div>
+
+
+
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+
+
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit()">
+            <mat-icon>save</mat-icon>
+            Salva
+        </button>
+    </div>
+</mat-card>

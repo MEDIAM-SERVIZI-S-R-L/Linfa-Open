@@ -1,0 +1,87 @@
+<div class="divCruscotto">
+
+    <app-cruscotto-paziente></app-cruscotto-paziente>
+</div>
+
+<mat-divider *ngIf="!isRiepilogo"></mat-divider>
+
+<div *ngIf="!isRiepilogo">
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column">
+
+        <h3 class="subTitle">
+            Dati relativa all'ultima visita effettuata il <strong [innerHTML]="appGen.isNullOrUndefined(visitaPadre) ? '-' : visitaPadre.dataVisita"></strong>
+        </h3>
+
+
+
+    </div>
+    <app-riepilogo [fromDomiciliare]="fromDomiciliare"></app-riepilogo>
+
+    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column">
+        <button mat-raised-button type="button" color="primary" (click)="openDocumentList()">
+      Mostra documenti
+      <mat-icon style="margin:unset !important">folder_special</mat-icon>
+    </button>
+    </div>
+
+    <mat-divider></mat-divider>
+</div>
+
+
+
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            Considerazioni
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="form" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <!-- <mat-label>Descrizione</mat-label> -->
+                            <textarea matInput required formControlName="considerazioni" cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="6"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+    </mat-card-content>
+
+    <ng-container *ngIf="!isRiepilogo">
+        <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+            <button mat-raised-button color="primary" (click)="onSubmit()" class="btnFooterCard" *ngIf="edit">
+        <mat-icon>save</mat-icon>
+        Salva
+      </button>
+
+            <button mat-raised-button type="button" color="primary" (click)="modifica()" class="btnFooterCard" *ngIf="!edit">
+        Modifica
+        <mat-icon style="margin:unset !important">edit</mat-icon>
+      </button>
+
+            <button mat-raised-button color="primary" (click)="concludiVisita()" class="btnFooterCard" *ngIf="!edit">
+        Concludi visita
+        <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+      </button>
+        </div>
+    </ng-container>
+
+
+</mat-card>
+
+<div *ngIf="isRiepilogo">
+    <mat-divider></mat-divider>
+
+    <button mat-raised-button color="accent" (click)="esci()">
+    Esci
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </button>
+</div>

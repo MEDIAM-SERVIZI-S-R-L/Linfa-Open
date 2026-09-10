@@ -1,0 +1,197 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title nomePaziente">Storico: {{paziente}}
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+
+
+        <div>
+
+
+            <mat-accordion>
+                <mat-expansion-panel class="accordionFiltri">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="accordionFiltriTitle">
+                            <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                            Filtri ricerca
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+
+                    <div class="filtri">
+                        <form [formGroup]="formFiltriStorico" autocomplete="off">
+
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                                <mat-form-field class="full-width" fxFlex="30">
+                                    <mat-label>Data visita</mat-label>
+                                    <input matInput type="text" [matDatepicker]="dataVisitaPicker" [max]="appGen.today" formControlName="dataVisita" autocomplete="off">
+                                    <mat-datepicker-toggle matSuffix [for]="dataVisitaPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker touchUi #dataVisitaPicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+                                <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                                    <mat-icon>search</mat-icon>
+                                    Cerca
+                                </button>
+                                <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                                    <mat-icon>remove_circle_outline</mat-icon>
+                                    Resetta
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+
+
+        <div>
+
+            <mat-table id="table" [dataSource]="storicoDataSource" matSortActive="data" matSortDirection="desc" (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+                <ng-container matColumnDef="tipoPrestazione">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo prestazione</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Tipo prestazione">{{storico.tipoPrestazione }}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="alimentazioneVisita">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Alimentazione</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Alimentazione" [ngClass]="storico.alimentazioneVisita">
+                        {{storico.alimentazioneVisita== null ?'-':storico.alimentazioneVisita}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="data">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Data visita</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Data visita">{{storico.dataPrestazione| date: 'dd/MM/yyyy HH:mm' }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="dataEffettuata">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Effettuata </mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Effettuata">{{storico.dataEffettuata == null ?'-': storico.dataEffettuata| date: 'dd/MM/yyyy' }}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="motivo">
+                    <mat-header-cell *matHeaderCellDef>Motivo</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Motivo">{{storico.motivoRichiesta}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="priorita">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Priorità</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Priorità" [ngStyle]="!appGen.isNullOrUndefined(storico.priorita) && {'cursor':'pointer'}" [matTooltip]="storico.priorita" [ngClass]="storico.priorita">
+                        {{storico.acronimoPriorita}}
+                    </mat-cell>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="medico">
+                    <mat-header-cell *matHeaderCellDef>Medico</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="medico">{{storico.medico}}</mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let storico" class="pulsantiTab" style="justify-content:flex-end">
+
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon color="primary">more_vert</mat-icon>
+                        </button>
+
+                        <mat-menu #menu="matMenu">
+
+                                <button mat-menu-item (click)="stampaReferto(storico.id,storico.idDocumentoReferto)" *ngIf="storico.idTipoPrestazione !=tipoPrestazione.VisitaDomicilio">
+                                    <mat-icon class="material-icons-outlined" color="primary">assignment
+                                    </mat-icon>
+                                    <span> Referto </span>
+                                </button>
+
+                                <button mat-menu-item [matMenuTriggerFor]="pianiNutrizionali"  *ngIf="storico.idTipoPrestazione !== tipoPrestazione.VisitaDomicilio && storico.idTipoAlimentazione !== null">
+                                <mat-icon class="material-icons-outlined" color="primary">receipt_long
+                                </mat-icon>
+                                Piano nutrizionale
+                            </button>
+
+                            <mat-menu #pianiNutrizionali="matMenu">
+            
+                            <button mat-menu-item (click)="pianoNutrizionale(storico.id)" *ngIf="storico.idTipoPrestazione !== tipoPrestazione.VisitaDomicilio && storico.idTipoAlimentazione !== null">
+                                <mat-icon class="material-icons-outlined" color="primary">receipt_long
+                                </mat-icon>
+                                <span> Piano nutrizionale </span>
+                            </button>
+
+                            <button mat-menu-item (click)="pianoNutrizionaleConKcalNascoste(storico.id)" *ngIf="storico.idTipoPrestazione !== tipoPrestazione.VisitaDomicilio && storico.idTipoAlimentazione !== null">
+                                <mat-icon class="material-icons-outlined" color="accent">receipt_long
+                                </mat-icon>
+                                <span matTooltip="Piano nutrizionale kcal nascoste"> Piano nutrizionale kcal nascoste</span>
+                            </button>
+
+                            </mat-menu>    
+
+                            <button mat-menu-item (click)="anteprimaSacche(storico.id)" *ngIf="storico.idTipoPrestazione !== tipoPrestazione.VisitaDomicilio && storico.sacche && storico.idTipoAlimentazione == tipoAlimentazione.Artificiale">
+                                <mat-icon class="material-icons-outlined" color="primary">science
+                                </mat-icon>
+                                <span> Prescrizione sacche </span>
+                            </button>
+
+
+                            <button mat-menu-item [matMenuTriggerFor]="anamnesi" *ngIf="storico.idTipoPrestazione !=tipoPrestazione.VisitaDomicilio">
+                                <mat-icon class="material-icons-outlined" color="primary">menu_book
+                                </mat-icon>
+                                Anamnesi alimentare
+                            </button>
+
+                            <mat-menu #anamnesi="matMenu">
+
+                                <button mat-menu-item (click)="anamnesiAlimentare(storico.id)" *ngIf="storico.idTipoPrestazione !=tipoPrestazione.VisitaDomicilio">
+                                    <mat-icon class="material-icons-outlined" color="primary">menu_book
+                                    </mat-icon>
+                                    <span> Anamnesi alimentare</span>
+                                </button>
+
+                                
+                            <button mat-menu-item (click)="anamnesiAlimentareConKcalNascoste(storico.id)" *ngIf="storico.idTipoPrestazione !=tipoPrestazione.VisitaDomicilio">
+                                <mat-icon class="material-icons-outlined" color="accent">menu_book
+                                </mat-icon>
+                                <span matTooltip="Anamnesi alimentare kcal nascoste"> Anamnesi alimentare kcal nascoste</span>
+                            </button>
+                            </mat-menu>
+
+                            <button mat-menu-item *ngIf="!isStoricoCruscotto" (click)="dettaglioVisita(storico)">
+
+                                <mat-icon class="material-icons-outlined" color="primary">remove_red_eye
+                                </mat-icon>
+                                <span> Dettaglio visita </span>
+                            </button>
+
+                            <button mat-menu-item (click)="openDocumentList(storico.id, storico.dataPrestazione)" *ngIf="storico.showDocumenti">
+                              <mat-icon class="material-icons-outlined" color="primary">folder_special
+                              </mat-icon>
+                              <span> Documenti </span>
+                          </button>
+
+                        </mat-menu>
+
+
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="storicoViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:storicoViewsColumns"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="10" (page)="onChangePage($event)">
+            </mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

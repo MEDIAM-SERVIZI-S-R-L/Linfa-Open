@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>
+    Bristol stool chart
+</h1>
+
+<div mat-dialog-content>
+
+
+    <mat-table id="table" [dataSource]="dataSource" >
+
+        <ng-container matColumnDef="immagine">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let tipo" data-label="">
+
+
+                <img width="80" src='{{ "./assets/img/bristol-chart/" + tipo.id + ".webp" }}' alt="immagine bristol chart">
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="tipo">
+            <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+            <mat-cell *matCellDef="let tipo" data-label="Tipo">{{tipo.tipo }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="descrizione">
+            <mat-header-cell *matHeaderCellDef>Descrizione</mat-header-cell>
+            <mat-cell *matCellDef="let tipo" data-label="Descrizione">{{tipo.descrizione }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="condizione">
+            <mat-header-cell *matHeaderCellDef>Condizione</mat-header-cell>
+            <mat-cell *matCellDef="let tipo" data-label="Condizione">{{tipo.condizione }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pulsanti">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell class="pulsantiTab" *matCellDef="let tipo" style="justify-content:flex-end">
+
+                <mat-radio-button color="primary" fxFlex="30" *ngIf="!isRiepilogoVisita" [checked]="tipo.id == rigaSelezionata" (change)="selectRiga(tipo.id)" >
+                </mat-radio-button>
+
+                <!-- <mat-radio-button color="primary" fxFlex="30" [checked]="tipo.id == rigaSelezionata" *ngIf="isRiepilogoVisita" ></mat-radio-button> -->
+
+
+
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="dataViewsColumns"></mat-header-row>
+        <mat-row *matRowDef="let row;columns:dataViewsColumns" (click)="selectRiga(row.id)"></mat-row>
+    </mat-table>
+
+
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button color="warn" (click)="onDismiss()">Chiudi</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" (click)="conferma()" *ngIf="!isRiepilogoVisita">Conferma</button>
+</div>

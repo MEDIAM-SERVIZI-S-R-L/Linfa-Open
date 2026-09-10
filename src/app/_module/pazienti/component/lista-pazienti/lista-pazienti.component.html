@@ -1,0 +1,174 @@
+<div class="backBtn" *ngIf="isFromDashboard">
+    <button mat-raised-button routerLink="/app/dashboard" class="backBtn">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        indietro
+    </button>
+</div>
+
+<mat-card class="linfaCard">
+
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap.lt-md="0px">
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after" routerLink="step/paziente">
+            <mat-icon>add_circle_outline</mat-icon>
+            Nuovo paziente
+        </button>
+    </div>
+    <mat-card-title>
+        <h3 class="title">Pazienti</h3>
+
+
+    </mat-card-title>
+
+    <mat-card-content>
+
+        <mat-accordion>
+            <mat-expansion-panel class="accordionFiltri">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="accordionFiltriTitle">
+                        <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                        Filtri ricerca
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="filtri">
+                    <form [formGroup]="formFiltriPazienti" autocomplete="off">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                            <mat-form-field fxFlex>
+                                <mat-label>Codice fiscale</mat-label>
+                                <input matInput type="text" formControlName="cf">
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex>
+                                <mat-label>Cognome</mat-label>
+                                <input matInput type="text" formControlName="cognome">
+                            </mat-form-field>
+                            <mat-form-field fxFlex>
+                                <mat-label>Nome</mat-label>
+                                <input matInput type="text" formControlName="nome">
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Data nascita</mat-label>
+                                <input matInput type="text" [matDatepicker]="dataNascitaPicker" readonly (focus)="dataNascitaPicker.open()" [max]="appGen.today" formControlName="dataNascita" autocomplete="off">
+                                <mat-datepicker-toggle matSuffix [for]="dataNascitaPicker"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi #dataNascitaPicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="btnFiltri" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px"> <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                                <mat-icon>search</mat-icon>
+                                Cerca
+                            </button>
+                            <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                                <mat-icon>remove_circle_outline</mat-icon>
+                                Resetta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+
+
+
+
+
+        <mat-table id="table" [dataSource]="pazientiDataSource" matSortActive="paziente" matSortDirection="asc" (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+            <ng-container matColumnDef="paziente">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Paziente</mat-header-cell>
+                <mat-cell *matCellDef="let paziente" data-label="Paziente" (click)="dettaglioPaziente(paziente.idPaziente)" matTooltip="Clicca per il dettaglio">
+                    <mat-icon *ngIf="paziente.sesso == 'M'" class="gender" svgIcon="male"></mat-icon>
+                    <mat-icon *ngIf="paziente.sesso == 'F'" class="gender" svgIcon="female"></mat-icon>
+                    <mat-icon *ngIf="paziente.sesso == 'A'" class="gender" svgIcon="other"></mat-icon>
+                    {{paziente.cognome}} {{paziente.nome }}
+
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="cf">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Codice Fiscale</mat-header-cell>
+                <mat-cell *matCellDef="let paziente" data-label="Codice Fiscale">{{paziente.cf}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataUltimaVisita">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Data ultima visita</mat-header-cell>
+                <mat-cell *matCellDef="let paziente" data-label="Data ultima visita">{{paziente.dataUltimaVisita == null ? '-' : paziente.dataUltimaVisita| date: 'dd/MM/yyyy HH:mm' }}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="privacy" *ngIf="this.appGen.configLinfa.PrivacyAbilitata">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Consenso informato</mat-header-cell>
+                <mat-cell *matCellDef="let paziente" [ngStyle]="!appGen.isNullOrUndefined(paziente.livelloPrivacy) && {'cursor':'pointer'}" [matTooltip]="appGen.isNullOrUndefined(paziente.livelloPrivacy) ? '': 'valido fino al '+paziente.validitaPrivacy" data-label="Consenso informato">
+                    {{paziente.livelloPrivacy == null ? '-' :paziente.livelloPrivacy}}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="pulsanti">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let paziente" class="pulsantiTab" style="justify-content:flex-end">
+
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon color="primary">more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item *ngIf="paziente.storico" (click)="storicoVisite(paziente.idPaziente)">
+                            <mat-icon class="material-icons-outlined storicoIcon">
+                                content_paste
+                            </mat-icon>
+                            <span> Storico visite </span>
+                        </button>
+                        <button mat-menu-item *ngIf="paziente.note" (click)="notePaziente(paziente.idPaziente)">
+                            <mat-icon class="material-icons-outlined storicoIcon">description
+                            </mat-icon>
+                            <span> Note </span>
+                        </button>
+
+                        <!-- <button mat-menu-item *ngIf="paziente.followup"
+                            (click)="goToFollowUp(paziente.idPaziente, paziente.idVisita)">
+                            <mat-icon class="material-icons-outlined" color="accent">pie_chart
+                            </mat-icon>
+                            <span> FollowUp </span>
+                        </button> -->
+
+                        <button mat-menu-item *ngIf="paziente.documenti" (click)="openDocumentList(paziente.idPaziente, paziente.nome,paziente.cognome)">
+                            <mat-icon class="material-icons-outlined" color="primary">
+                                folder_special
+                            </mat-icon>
+                            <span> Documenti </span>
+                        </button>
+                        <button mat-menu-item (click)="getCredenzialiStampa(paziente.idPaziente)" *ngIf="this.appGen.configLinfa.CredenzialiAbilitate">
+                            <mat-icon class="material-icons-outlined" color="primary">lock</mat-icon>
+                            <span> Credenziali paziente </span>
+                        </button>
+                        <button mat-menu-item (click)="dettaglioCaregivers(paziente.idPaziente)">
+                            <mat-icon class="material-icons-outlined" color="primary">people
+                            </mat-icon>
+                            <span> Dettaglio caregivers </span>
+                        </button>
+                        <button mat-menu-item (click)="pianiNutrizionali(paziente.idPaziente)">
+                            <mat-icon class="material-icons-outlined" color="primary">assignment</mat-icon>
+                            <span> Piani nutrizionali </span>
+                        </button>
+                        <button mat-menu-item (click)="dettaglioPaziente(paziente.idPaziente)">
+                            <mat-icon class="material-icons-outlined" color="primary">remove_red_eye</mat-icon>
+                            <span> Dettaglio paziente </span>
+                        </button>
+
+                    </mat-menu>
+
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="pazientiViewsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row;columns:pazientiViewsColumns"></mat-row>
+        </mat-table>
+        <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="itemsForPage" [pageSizeOptions]="[5, 10, 25, 50]" (page)="onChangePage($event)">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

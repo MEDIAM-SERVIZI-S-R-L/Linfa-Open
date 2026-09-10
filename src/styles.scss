@@ -1,0 +1,293 @@
+// @import 'material-icons/iconfont/material-icons.css';
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "~@angular/material" as mat;
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+// @import 'material-icons/iconfont/material-icons.css';
+@import "material-icons/iconfont/filled.css";
+@import "material-icons/iconfont/outlined.css";
+
+$mat-green-palette: (
+    50: #e0f5f4,
+    100: #b3e7e4,
+    200: #80d7d3,
+    300: #4dc7c1,
+    400: #26bbb3,
+    500: #00afa6,
+    600: #00a89e,
+    700: #009f95,
+    800: #00968b,
+    900: #00867b,
+    A100: #b3fff7,
+    A200: #80fff2,
+    A400: #4dffed,
+    A700: #33ffeb,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+$mat-gray-palette: (
+    50: #f4f6f7,
+    100: #e5e9ea,
+    200: #d3dadd,
+    300: #c1cbcf,
+    400: #b4bfc4,
+    500: #a7b4ba,
+    600: #9fadb3,
+    700: #96a4ab,
+    800: #8c9ca3,
+    900: #7c8c94,
+    A100: #ffffff,
+    A200: #eaf8fe,
+    A400: #b6e8ff,
+    A700: #9ce1ff,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #000000,
+        800: #000000,
+        900: #000000,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+$mat-red-palette: (
+    50: #ffebeb,
+    100: #ffcdcd,
+    200: #ffacac,
+    300: #ff8a8a,
+    400: #ff7171,
+    500: #ff5858,
+    600: #ff5050,
+    700: #ff4747,
+    800: #ff3d3d,
+    900: #ff2d2d,
+    A100: #ffffff,
+    A200: #ffffff,
+    A400: #ffd9d9,
+    A700: #ffbfbf,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #ffffff,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+
+$mat-arancione: (
+    50: #fff4eb,
+    100: #ffe4cd,
+    200: #ffd2ac,
+    300: #ffc08a,
+    400: #ffb371,
+    500: #ffa558,
+    600: #ff9d50,
+    700: #ff9347,
+    800: #ff8a3d,
+    900: #ff792d,
+    A100: #ffffff,
+    A200: #ffffff,
+    A400: #ffe6d9,
+    A700: #ffd5bf,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+$Linfa-primary: mat.define-palette(mat.$green-palette);
+$Linfa-accent: mat.define-palette($mat-arancione);
+// The warn palette is optional (defaults to red).
+$Linfa-warn: mat.define-palette(mat.$red-palette);
+$Linfa-background: mat.define-palette(mat.$green-palette);
+$Linfa-foreground: mat.define-palette(mat.$green-palette, mat.$gray-palette);
+// Create the theme object (a Sass map containing all of the palettes).
+$Linfa-theme: mat.define-light-theme($Linfa-primary, $Linfa-accent, $Linfa-warn);
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($Linfa-theme);
+// @import "~ng-pick-datetime/assets/style/picker.min.css";
+
+/* You can add global styles to this file, and also import other style files */
+
+$desktop: 960px;
+$tablet: 768px;
+$mobile-large: 640px;
+$mobile: 480px;
+$mobile-small: 300px;
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+mat-label {
+    font-size: 16px !important;
+}
+
+mat-form-field.mat-form-field-should-float mat-label {
+    font-size: 17px !important;
+}
+
+.hide {
+    display: none;
+}
+
+::ng-deep .mat-sort-header-arrow {
+    transform: none !important;
+    opacity: 1 !important;
+}
+@media screen and (max-width: 600px) {
+    .modal-custom {
+        min-width: 300px !important;
+    }
+    .modal-note {
+        min-width: 350px !important;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1010px) {
+    .modal-anteprima-pdf {
+        min-width: 550px !important;
+        min-height: 450px !important;
+    }
+    .modal-firma-selezionati .mat-dialog-content {
+        height: unset !important;
+    }
+    .modal-custom {
+        min-width: 500px !important;
+    }
+    .modal-note {
+        min-width: 550px !important;
+        // min-height: 450px !important;
+    }
+}
+
+@media screen and (min-width: 1010px) {
+    .modal-custom {
+        min-width: 600px !important;
+    }
+
+    .modal-note {
+        min-width: 800px !important;
+        // min-height: 450px !important;
+    }
+    .modal-prenota-richieste {
+        min-width: 1000px !important;
+        min-height: 450px !important;
+    }
+    .modal-crea-sacca {
+        min-width: 1000px !important;
+        min-height: 450px !important;
+    }
+    .modal-prenota-controllo {
+        min-width: 600px !important;
+    }
+    .modal-anteprima-pdf {
+        min-width: 1000px !important;
+        min-height: 450px !important;
+    }
+    .modal-firma-selezionati .mat-dialog-content {
+        height: unset !important;
+    }
+    .modal-info-prodotti {
+        min-width: 700px !important;
+    }
+    .modal-lista-documenti {
+        min-width: 900px !important;
+        // overflow: auto;
+        max-height: 600px;
+    }
+    .modal-prodotti-custom {
+        min-width: 700px !important;
+    }
+}
+
+#btnModal {
+    float: right !important;
+    padding: 15px 0 !important;
+}
+
+.mat-form-field-label {
+    overflow: unset !important;
+}
+
+.mat-select-disabled .mat-select-arrow {
+    visibility: hidden;
+}
+.mat-form-field-appearance-legacy.mat-form-field-readonly .mat-form-field-underline {
+    background-color: green;
+}
+
+.mat-select-disabled .mat-select-value,
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+    color: black !important;
+}
+
+mat-cell > span.truncate-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+@import "./theme/linfa.scss";

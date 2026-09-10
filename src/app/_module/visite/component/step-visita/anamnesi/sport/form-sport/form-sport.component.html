@@ -1,0 +1,72 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova attività motoria</ng-container>
+            <ng-container *ngIf="isRiepilogo">Dettaglio attività motoria</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formSport" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Attività</mat-label>
+                            <input matInput type="text" formControlName="attivita" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Frequenza</mat-label>
+                            <input matInput type="text" formControlName="frequenza" maxlength="50" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+
+                            <mat-label>Durata</mat-label>
+                            <mat-select matNativeControl formControlName="durata">
+                                <mat-option *ngFor="let item of orariDurata" [value]="item">
+                                    {{ item }} minuti
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Intensità</mat-label>
+                            <mat-select matNativeControl required formControlName="intensita">
+                                <mat-option *ngFor="let intensita of listaIntensita" [value]="intensita.id">
+                                    {{ intensita.intensita }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Livello</mat-label>
+                            <mat-select matNativeControl formControlName="livelloSport">
+                                <mat-option *ngFor="let livello of listaLivelloSport" [value]="livello.id">
+                                    {{ livello.sportLivello }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px"
+        fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

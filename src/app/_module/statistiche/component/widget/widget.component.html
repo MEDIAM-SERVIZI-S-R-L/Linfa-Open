@@ -1,0 +1,29 @@
+<mat-card style="margin:20px" class="box_bianco">
+    <mat-card-title>
+        <span class="box_bianco_titolo">{{widget.titolo}}
+            <mat-icon (click)="openHelp(widget.descrizione)">help</mat-icon>
+        </span>
+
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="widget.sottotitolo">
+        <span>{{widget.sottotitolo}}</span>
+    </mat-card-subtitle>
+    <mat-card-content *ngIf="showChart && widget.widgetType!= ChartTypeName.Label">
+
+        <div style="height: 300px;width: 300px;" [style]="widget.widgetType== ChartTypeName.Line || widget.widgetType== ChartTypeName.Bar? 'width: 500px;':''">
+
+            <canvas baseChart class="chart" [data]="widget.chart" [type]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins">
+                <!-- <canvas baseChart class="chart" [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"> Funziona -->
+                <!-- this.widget.chartData -->
+        </canvas>
+
+        </div>
+
+    </mat-card-content>
+
+    <mat-card-content *ngIf="showChart && widget.widgetType== ChartTypeName.Label">
+
+        <div class="box_bianco_numero">{{count}}</div>
+    </mat-card-content>
+
+</mat-card>

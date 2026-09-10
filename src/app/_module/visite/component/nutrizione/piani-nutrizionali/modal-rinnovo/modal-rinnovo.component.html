@@ -1,0 +1,71 @@
+<h1 mat-dialog-title>
+  Rinnovo piano nutrizionale
+</h1>
+
+<div mat-dialog-content>
+  <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+    <mat-form-field class="full-width" fxFlex="30" class="nomePaziente">
+      <mat-label>Paziente</mat-label>
+      <input type="text" matInput disabled autocomplete="off" [value]="dataPiano.paziente">
+    </mat-form-field>
+    <mat-form-field class="full-width" fxFlex="30">
+      <mat-label>Codice fiscale</mat-label>
+      <input type="text" matInput disabled autocomplete="off" [value]="dataPiano.cf  |
+      uppercase">
+    </mat-form-field>
+    <mat-form-field class="full-width" fxFlex="30">
+      <mat-label>Tipo nutrizione</mat-label>
+      <input type="text" matInput disabled autocomplete="off" [value]="dataPiano.tipoAlimentazione">
+    </mat-form-field>
+
+  </div>
+  <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+    <mat-form-field class="full-width" fxFlex="30">
+      <mat-label>Data inizio validità attuale</mat-label>
+      <input type="text" matInput disabled autocomplete="off"
+        [value]="dataPiano.dataInizioValidita | date: 'dd/MM/yyyy'">
+    </mat-form-field>
+    <mat-form-field class="full-width" fxFlex="30">
+      <mat-label>Data fine validità attuale</mat-label>
+      <input type="text" matInput disabled autocomplete="off" [value]="dataPiano.dataFineValidita | date: 'dd/MM/yyyy'">
+    </mat-form-field>
+  </div>
+  <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+
+    <mat-form-field class="full-width" fxFlex>
+      <mat-label>Validità piano nutrizionale</mat-label>
+      <mat-select matNativeControl required [(ngModel)]="validitaPiano">
+        <mat-option *ngFor="let durata of appGen.DurataPianoNutrizionale" [value]="durata">
+          {{ durata }} giorni
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="input-row" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="30px" fxLayoutGap.lt-md="10px">
+    <mat-hint>Il piano nutrizionale viene rinnovato dalla data odierna con aggiunta dei giorni selezionati.
+    </mat-hint>
+  </div>
+  <!--   
+  <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+    <mat-form-field class="full-width" fxFlex="30">
+      <mat-label>Data inizio validità nuova</mat-label>
+      <input type="text" matInput disabled autocomplete="off"
+        [value]="dataInizio | date: 'dd/MM/yyyy HH:mm'">
+    </mat-form-field>
+    <mat-form-field class="full-width" fxFlex="30">
+      <mat-label>Data fine validità nuova</mat-label>
+      <input type="text" matInput disabled autocomplete="off"
+        [value]="dataFine | date: 'dd/MM/yyyy HH:mm'">
+    </mat-form-field>
+  </div> -->
+</div>
+
+<div mat-dialog-actions id="btnModal">
+  <button mat-raised-button class="cancelBtn" (click)="onDismiss()">Annulla</button>
+  <button mat-raised-button color="primary" (click)="confirm()">Conferma</button>
+</div>

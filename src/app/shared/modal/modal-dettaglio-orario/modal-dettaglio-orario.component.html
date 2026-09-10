@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>
+  Attenzione!
+</h1>
+
+<div mat-dialog-content>
+  <p> Vuoi selezionare <strong> l'orario corrente </strong> oppure entrare nel <strong>dettaglio della
+      richiesta</strong>?</p>
+
+</div>
+
+<div class="input-row cntrBtnRow" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="end" fxLayoutGap="2%"
+  fxLayoutGap.lt-md="10px">
+
+  <button mat-raised-button color="accent" (click)="confirm(1)">Seleziona orario corrente</button>
+  <button mat-raised-button color="primary" (click)="confirm(2)">Dettaglio richiesta</button>
+</div>

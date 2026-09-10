@@ -1,0 +1,72 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+        <h3 class="title">
+            <ng-container *ngIf="!isRiepilogo">Nuova terapia</ng-container>
+            <ng-container *ngIf="isRiepilogo">Terapia</ng-container>
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div class="container">
+            <form [formGroup]="formFarmaco" autocomplete="off">
+                <div class="container" fxflexfill>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <mat-label>Farmaco</mat-label>
+                            <input type="text" matInput required formControlName="farmaco" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex>
+                            <mat-label>Posologia</mat-label>
+                            <input type="text" matInput formControlName="posologia" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Dal</mat-label>
+                            <input matInput type="text" [matDatepicker]="DalPicker" formControlName="dal"
+                                (dateChange)="changeFinalDate()" autocomplete="off" (focus)="DalPicker.open()">
+                            <mat-datepicker-toggle matSuffix [for]="DalPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #DalPicker></mat-datepicker>
+
+                            <mat-datepicker-toggle matSuffix (click)="clearDateDal($event)">
+                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                            </mat-datepicker-toggle>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width" fxFlex="30">
+                            <mat-label>Al</mat-label>
+                            <input matInput type="text" [matDatepicker]="AlPicker" [min]="dataFinale"
+                                formControlName="al" autocomplete="off" (focus)="AlPicker.open()">
+                            <mat-datepicker-toggle matSuffix [for]="AlPicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #AlPicker></mat-datepicker>
+
+                            <mat-datepicker-toggle matSuffix (click)="clearDateAl($event)">
+                                <mat-icon matDatepickerToggleIcon>clear</mat-icon>
+                            </mat-datepicker-toggle>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+    <div class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="25px"
+        fxLayoutGap.lt-md="10px">
+
+        <button mat-raised-button color="accent" class="btnFooterCard" (click)="onSubmit(false)" *ngIf="!isRiepilogo">
+            <mat-icon>save</mat-icon>
+            Salva ed aggiungi
+        </button>
+        <button mat-raised-button color="primary" class="btnFooterCard" (click)="onSubmit(true)">
+            <mat-icon>save</mat-icon>
+            Salva ed esci
+        </button>
+    </div>
+</mat-card>

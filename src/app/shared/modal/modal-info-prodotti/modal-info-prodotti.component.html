@@ -1,0 +1,204 @@
+<h1 mat-dialog-title>
+    {{prodotto.prodotto}}
+</h1>
+
+<div mat-dialog-content>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="20px"
+        fxLayoutAlign="space-around start" fxLayoutAlign.lt-sm="none">
+
+        <div class="tableOverflow" fxFlex="100">
+            <table>
+                <tr>
+                    <th>Tipo prodotto</th>
+                    <td>{{appGen.isNullOrUndefined(prodotto.tipoProdotto) ?
+                        prodotto.idTipoProdottoNavigation.tipoProdotto :
+                        prodotto.tipoProdotto}}</td>
+                </tr>
+                <tr>
+                    <th>Categoria alimentare</th>
+                    <td>{{prodotto.categoriaAlimentare === null ? '-' : prodotto.categoriaAlimentare}}</td>
+                </tr>
+                <tr>
+                    <th>Codice prodotto</th>
+                    <td>{{prodotto.codiceProdotto === null ? '-' : prodotto.codiceProdotto}}</td>
+                </tr>
+                <tr>
+                    <th style="background-color: gray;">Valori nutrizionali</th>
+                </tr>
+                <tr>
+                    <th>Quantità base</th>
+                    <td>{{prodotto.quantita}} {{prodotto.unitaMisura}}</td>
+                </tr>
+                <tr>
+                    <th>Kcal</th>
+                    <td>{{prodotto.kcal}}</td>
+                </tr>
+                <tr>
+                    <th>Proteine</th>
+                    <td>{{prodotto.proteineTotali=== null ? '-':prodotto.proteineTotali + ' g'}} </td>
+                </tr>
+                <tr>
+                    <th>Azoto</th>
+                    <td>{{prodotto.azoto === null ? '-': prodotto.azoto + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Lipidi</th>
+                    <td>{{prodotto.lipidiTotali === null ? '-': prodotto.lipidiTotali + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Glucidi</th>
+                    <td>{{prodotto.glucidiDispon === null ? '-': prodotto.glucidiDispon + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Acqua</th>
+                    <td>{{prodotto.acqua===null ? '-' : prodotto.acqua + ' ml'}}</td>
+                </tr>
+
+                <tr>
+                    <th style="background-color: gray;">Elementi</th>
+                </tr>
+                <tr>
+                    <th>Ferro (Fe)</th>
+                    <td>{{prodotto.fe===null? '-':prodotto.fe + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>Calcio (Ca)</th>
+                    <td>{{prodotto.ca===null? '-':prodotto.ca + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>Sodio (Na)</th>
+                    <td>{{prodotto.na===null? '-':prodotto.na + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>Potassio (K)</th>
+                    <td>{{prodotto.k===null? '-':prodotto.k + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>Fosforo (P)</th>
+                    <td>{{prodotto.p===null? '-':prodotto.p + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>Zinco (Zn)</th>
+                    <td>{{prodotto.zn===null? '-':prodotto.zn + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th style="background-color: gray;">Vitamine</th>
+                </tr>
+                <tr>
+                    <th>B1 (Tiamina)</th>
+                    <td>{{prodotto.b1===null? '-':prodotto.b1 + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>B2 (Riboflavina)</th>
+                    <td>{{prodotto.b2===null? '-':prodotto.b2 + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>B6 (Piridossina)</th>
+                    <td>{{prodotto.vitB6===null? '-':prodotto.vitB6 + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>A</th>
+                    <td>{{prodotto.vitA===null? '-':prodotto.vitA + ' mcg'}}</td>
+                </tr>
+                <tr>
+                    <th>C (Acido ascorbico)</th>
+                    <td>{{prodotto.vitC===null? '-':prodotto.vitC + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>D (Calciferolo)</th>
+                    <td>{{prodotto.vitD===null? '-':prodotto.vitD + ' mcg'}}</td>
+                </tr>
+                <tr>
+                    <th>E (Alfa-Tocoferolo)</th>
+                    <td>{{prodotto.vitE===null? '-':prodotto.vitE + ' mg'}}</td>
+                </tr>
+
+                <tr>
+                    <th style="background-color: gray;">Altro</th>
+                </tr>
+                <tr>
+                    <th>Acido oleico</th>
+                    <td>{{prodotto.acidoOleico=== null ? '-':prodotto.acidoOleico + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Acido linoleico</th>
+                    <td>{{prodotto.acidoLinoleico=== null ? '-':prodotto.acidoLinoleico + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Acido folico</th>
+                    <td>{{prodotto.acidoFolico===null? '-':prodotto.acidoFolico + ' mcg'}}</td>
+                </tr>
+
+                <tr>
+                    <th>Altri polinsaturi</th>
+                    <td>{{prodotto.altriPolinsaturi=== null ? '-':prodotto.altriPolinsaturi + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Polinsaturi totali</th>
+                    <td>{{prodotto.polinsaturiTotali===null? '-':prodotto.polinsaturiTotali + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Monoinsaturi totali</th>
+                    <td>{{prodotto.monoinsaturiTotali=== null ? '-':prodotto.monoinsaturiTotali + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Amido</th>
+                    <td>{{prodotto.amido===null? '-':prodotto.amido + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Fibra alimentare</th>
+                    <td>{{prodotto.fibraAlimentare===null? '-':prodotto.fibraAlimentare + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Alcool</th>
+                    <td>{{prodotto.alcool===null? '-':prodotto.alcool + ' g'}}</td>
+                </tr>
+                <tr>
+                    <th>Niacina</th>
+                    <td>{{prodotto.niacina===null? '-':prodotto.niacina + ' mg'}}</td>
+                </tr>
+                <tr>
+                    <th>Retinolo equivalenti</th>
+                    <td>{{prodotto.retinoloEquivalenti===null? '-':prodotto.retinoloEquivalenti + ' mcg'}}</td>
+                </tr>
+
+                <tr>
+                    <th>Beta carotene</th>
+                    <td>{{prodotto.betaCarotene===null? '-':prodotto.betaCarotene + ' mcg'}}</td>
+                </tr>
+                <tr>
+                    <th>Colesterolo</th>
+                    <td>{{prodotto.colesterolo===null? '-':prodotto.colesterolo + ' mg'}}</td>
+                </tr>
+
+                <tr>
+                    <th style="vertical-align: text-top;">
+                        Confezionamenti: 
+                    </th>
+                    <td style="vertical-align: text-top;">
+                        <ul *ngFor="let confezionamento of prodotto.listaConfezionamenti" class="lista">
+                            <li>
+                                {{confezionamento.quantita}} {{confezionamento.unitaMisura}}
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="cntrImg">
+
+            <img defaultImage="./assets/img/logo/logo-linfa.png" alt="logo linfa" [lazyLoad]="imageBase64" width="250"
+                height="250" />
+            <div class="input-row btnProd" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%"
+                fxLayoutGap.lt-md="0px">
+
+                <mat-hint *ngIf="!imageBase64">Immagine prodotto non disponibile</mat-hint>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">Chiudi</button>
+</div>

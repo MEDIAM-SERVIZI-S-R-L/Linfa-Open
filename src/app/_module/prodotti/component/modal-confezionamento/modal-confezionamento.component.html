@@ -1,0 +1,63 @@
+<div mat-dialog-content>
+
+    <mat-icon (click)="closeDialog()" color="primary" class="exit-button">close</mat-icon>
+
+    <h3 class="title">{{title}}</h3>
+
+    <form [formGroup]="formConfezionamento">
+
+        <span>
+            <mat-form-field class="full-width" fxFlex>
+                <mat-label>Quantità</mat-label>
+                <input type="text" matInput formControlName="quantita" required class="inpt" DecimalFormatter [style]="elementoEditabile == false? 'cursor: not-allowed' : 'cursor : pointer'">
+                <mat-error>Il campo non può essere vuoto</mat-error>
+            </mat-form-field>
+        </span>
+
+        <span>
+            <mat-form-field class="full-width" fxFlex [style]="elementoEditabile == false? 'cursor: not-allowed' : 'cursor : pointer'">
+                <mat-label>Unità di misura</mat-label>
+                <mat-select formControlName="unitaMisura" [style]="elementoEditabile == false? 'cursor: not-allowed' : 'cursor : pointer'">
+                    <mat-option>--</mat-option>
+                    <mat-option *ngFor="let misura of arrayUnitaMisura"
+                        [value]="misura.id">{{misura.unitaMisura}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </span>
+
+        <span>
+            <mat-form-field class="full-width" fxFlex>
+                <mat-label>Prezzo unitario</mat-label>
+                <input type="text" matInput formControlName="prezzo" required class="inpt" DecimalFormatter [style]="editabile == false? 'cursor: not-allowed' : 'cursor : pointer'">
+                <button mat-icon-button matSuffix (click)="changeEditStatus()" *ngIf="data.id">
+                    <mat-icon class="material-icons-outlined" [matTooltip]="editabile? 'Disabilita modifica' : 'Abilita modifica'">{{!editabile ? 'edit_off' : 'edit'}}</mat-icon>
+                  </button>
+                <mat-error>Il campo non può essere vuoto</mat-error>
+            </mat-form-field>
+        </span>
+
+        <span class="check-span">
+            <mat-checkbox formControlName="disponibile" color="primary" fxFlex="30">Disponibile</mat-checkbox>
+        </span>
+
+        <span>
+            <mat-form-field class="full-width" fxFlex>
+                <mat-label>Gare</mat-label>
+                <mat-select formControlName="gare" multiple>
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="filtroGara" placeholderLabel="Ricerca gara"
+                          noEntriesFoundLabel="Nessuna gara trovata"></ngx-mat-select-search>
+                      </mat-option>
+                    <mat-option *ngFor="let gara of listaGareFiltrata | async" [value]="gara.idGara">{{gara.gara}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </span>
+
+
+    </form>
+    <button mat-raised-button class="save-button" color="primary" (click)="preSaveConfezionameto()"
+        [disabled]="!formConfezionamento.valid">
+        <mat-icon>save</mat-icon>
+        Salva
+    </button>
+</div>

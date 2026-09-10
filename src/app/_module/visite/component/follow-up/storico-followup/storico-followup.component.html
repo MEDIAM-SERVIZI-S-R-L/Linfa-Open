@@ -1,0 +1,116 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title nomePaziente">Storico Follow up
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+
+
+        <mat-accordion>
+            <mat-expansion-panel class="accordionFiltri">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="accordionFiltriTitle">
+                        <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                        Filtri ricerca
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="filtri">
+                    <form [formGroup]="formFiltriStorico" autocomplete="off">
+
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5%" fxLayoutGap.lt-md="0px">
+
+                            <mat-form-field class="full-width" fxFlex="30">
+                                <mat-label>Data</mat-label>
+                                <input matInput type="text" [matDatepicker]="dataVisitaPicker" readonly (focus)="dataVisitaPicker.open()" [max]="appGen.today" formControlName="dataFollowup" autocomplete="off">
+                                <mat-datepicker-toggle matSuffix [for]="dataVisitaPicker"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi #dataVisitaPicker></mat-datepicker>
+                            </mat-form-field>
+
+
+
+                            <div class="btnFiltri">
+                                <button mat-raised-button color="primary" matTooltipPosition="after" (click)="search()">
+                                    <mat-icon>search</mat-icon>
+                                    Cerca
+                                </button>
+                                <button mat-raised-button color="warn" matTooltipPosition="after" (click)="clearSearch()">
+                                    <mat-icon>remove_circle_outline</mat-icon>
+                                    Resetta
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div id="table">
+            <mat-table [dataSource]="storicoDataSource">
+
+                <ng-container matColumnDef="data">
+                    <mat-header-cell *matHeaderCellDef>Data</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Data">
+                        {{storico.date| date: 'dd/MM/yyyy' }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="kcal">
+                    <mat-header-cell *matHeaderCellDef>Kcal</mat-header-cell>
+                    <mat-cell *matCellDef="let storico" data-label="Kcal">{{storico.kcal}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="proteine">
+                    <mat-header-cell *matHeaderCellDef>Proteine</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Proteine">{{storico.proteine}}g/die
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="azoto">
+                    <mat-header-cell *matHeaderCellDef>Azoto</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Azoto">{{storico.azoto}}g/die
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="apportoIdrico">
+                    <mat-header-cell *matHeaderCellDef>Apporto Idrico</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Apporto Idrico">{{storico.apportoIdrico}} ml
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="pesoAttuale">
+                    <mat-header-cell *matHeaderCellDef>Peso</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Peso">{{storico.peso}} kg
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="velocitaSomministrazione">
+                    <mat-header-cell *matHeaderCellDef>Velocità somministrazione</mat-header-cell>
+
+                    <mat-cell *matCellDef="let storico" data-label="Velocità somministrazione">
+                        {{storico.velocitaSomministrazione}} ml/h
+                    </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="pulsanti">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let storico" class="pulsantiTab" style="justify-content:flex-end">
+
+                        <mat-icon class="material-icons-outlined" (click)="showProdotti(storico.id)" matTooltip="Visualizza Prodotti" color="primary">remove_red_eye
+                        </mat-icon>
+
+
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="storicoViewsColumns"></mat-header-row>
+                <mat-row *matRowDef="let row;columns:storicoViewsColumns"></mat-row>
+            </mat-table>
+            <mat-paginator [length]="elementiTotali" [pageIndex]="pageSelected" showFirstLastButtons [pageSize]="10" (page)="onChangePage($event)">
+            </mat-paginator>
+            <!-- </mat-card-content>
+        </mat-card> -->
+        </div>
+
+    </mat-card-content>
+</mat-card>

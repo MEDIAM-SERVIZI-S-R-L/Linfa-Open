@@ -1,0 +1,102 @@
+<mat-card class="linfaCard">
+    <mat-card-title>
+
+        <h3 class="title nomePaziente">Dettaglio analisi
+        </h3>
+
+    </mat-card-title>
+    <mat-card-content>
+        <div style="margin:10px">
+            <span>
+
+
+
+
+</span>
+
+        </div>
+
+        <!-- Lista analisi per Paziente-->
+
+        <mat-table id="table" [dataSource]="dettaglioAnalisi" style="max-height: 400px;overflow-y: auto;">
+
+            <ng-container matColumnDef="No">
+                <mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
+
+                    <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxLayoutGap="3%" fxLayoutGap.lt-md="0px">
+
+
+                        <mat-form-field class="full-width" fxFlex="45">
+
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Cerca per il nome" [(ngModel)]="filtro">
+                        </mat-form-field>
+
+                        <mat-checkbox style="margin-top:20px;" (change)="soloConAlert($event)" labelPosition="after" fxFlex="45">Mostra solo i valori atterrati</mat-checkbox>
+                    </div>
+
+                </mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="analisi">
+                <mat-header-cell *matHeaderCellDef>
+                    <mat-icon style="margin-right: 10px;" (click)="hideSearch=(!hideSearch)" matTooltip="Apri i filtri">search</mat-icon>Analisi
+
+
+
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let analisi" data-label="Data" [ngClass]="analisi.alert?'alert':''">{{analisi.descrizione}}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="valore">
+                <mat-header-cell *matHeaderCellDef>Valore attuale
+                    <br>
+
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let analisi" data-label="Valore ">
+                    <span class="truncate-text" [ngClass]="analisi.alert?'alert':''">{{analisi.valore}} &nbsp; &nbsp;{{analisi.valore == null || !(analisi.tipoValore==TipoCampo.Boolean) ?analisi.unitaMisura: ''}}</span>
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="riferimento">
+                <mat-header-cell *matHeaderCellDef>Valore di riferimento (min - max)</mat-header-cell>
+
+                <mat-cell *matCellDef="let analisi" data-label="Data analisi">
+                    <span class="truncate-text" [ngClass]="analisi.alert?'alert':''">{{analisi.min}} - {{analisi.max}}</span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="alert">
+                <mat-header-cell *matHeaderCellDef style="justify-content: flex-end;">
+
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let analisi" data-label="Data analisi" style="justify-content: flex-end;">
+                    <span class="truncate-text">
+                    <mat-icon *ngIf="analisi.alert" style="color:red" [matTooltip]="'Il valore non rientra nel range'">error</mat-icon>
+                  </span>
+                </mat-cell>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="search">
+                <mat-header-cell *matHeaderCellDef>
+                    <mat-icon>search</mat-icon>
+                </mat-header-cell>
+                <mat-cell></mat-cell>
+            </ng-container> -->
+
+            <mat-header-row *matHeaderRowDef="columnsToDisplay;sticky: true " class="headerColor"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="['No'],sticky: true" [ngClass]="hideSearch?'hide':''" class="searchBox"></mat-header-row>
+
+            <mat-row *matRowDef="let row;columns:columnsToDisplay" [ngClass]="row.alert?'alert':''"></mat-row>
+
+
+        </mat-table>
+
+
+
+    </mat-card-content>
+</mat-card>

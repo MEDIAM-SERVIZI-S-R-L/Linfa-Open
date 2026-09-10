@@ -1,0 +1,70 @@
+<mat-icon (click)="closeDialog()" color="primary" class="exit-button">close</mat-icon>
+  
+  <h3 class="title">
+    {{title}}
+  </h3>
+  
+  <div class="container">
+    <form [formGroup]="rangeForm">
+      <span class="note-span">
+        <mat-form-field class="full-width" fxFlex>
+          <mat-label>Descrizione</mat-label>
+          <input type="text" matInput required formControlName="descrizione">
+          <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+      </span>
+  
+      <span class="note-span">
+        <mat-form-field>
+          <mat-label>Valore minimo</mat-label>
+          <input type="number" matInput required formControlName="valoreMin" class="inpt">
+          <span matSuffix>{{data.unitaMisura}}</span>
+          <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+      </span>
+  
+      <span class="note-span">
+        <mat-form-field>
+          <mat-label>Valore massimo</mat-label>
+          <input type="number" matInput required formControlName="valoreMax">
+          <span matSuffix>{{data.unitaMisura}}</span>
+          <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+      </span>
+  
+      <span class="note-span">
+        <mat-form-field>
+          <mat-label>Età minima</mat-label>
+          <input type="number" matInput required formControlName="etaMin">
+          <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+      </span>
+  
+      <span class="note-span">
+        <mat-form-field>
+          <mat-label>Età massima</mat-label>
+          <input type="number" matInput required formControlName="etaMax">
+          <mat-error>Il campo non può essere vuoto</mat-error>
+        </mat-form-field>
+      </span>
+  
+      <span class="note-span">
+        <mat-form-field>
+          <mat-label>Sesso</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="F">Femmina</mat-option>
+            <mat-option value="M">Maschio</mat-option>
+            <mat-option value="A">Altro</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </span>
+      </form>
+  
+  <div >
+    <button mat-raised-button class="save-button" color="primary" (click)="saveRange()" [disabled]="!rangeForm.valid">
+      <mat-icon>save</mat-icon>
+      save
+    </button>
+  </div>
+  
+  </div>

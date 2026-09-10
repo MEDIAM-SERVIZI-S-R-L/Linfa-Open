@@ -1,0 +1,10 @@
+<!-- Tolto download e scaricamento 12.09.2022 xk da problemi nel referti da firmare - sposta anterrprima sotto la lista quando faccio click su stampa-->
+<ngx-extended-pdf-viewer *ngIf="!isBase64" [src]="pdfFile" [height]="'100%'" [showToolbar]="true" [delayFirstView]="1000" [showSidebarButton]="true" [showPagingButtons]="true" [showZoomButtons]="true" [showPresentationModeButton]="true" [showOpenFileButton]="false"
+    [showPrintButton]="false" [showDownloadButton]="false" [showBookmarkButton]="false" [showSecondaryToolbarButton]="false" [filenameForDownload]="nomeDocumento" [showRotateButton]="true" [showSpreadButton]="false" [showPropertiesButton]="false" [sidebarVisible]="false"
+    [enablePinchOnMobile]="true" [showUnverifiedSignatures]="true" [mobileFriendlyZoom]="'120%'" [zoom]="'100%'" [showBorders]="true" [theme]="'dark'" [textLayer]="true">
+</ngx-extended-pdf-viewer>
+
+<ngx-extended-pdf-viewer *ngIf="isBase64" [base64Src]="this.pdfFile" [height]="'100%'" [showToolbar]="true" [delayFirstView]="1000" [showSidebarButton]="true" [showPagingButtons]="true" [showZoomButtons]="true" [showPresentationModeButton]="true" [showOpenFileButton]="false"
+    [showPrintButton]="false" [showDownloadButton]="false" [showBookmarkButton]="false" [showSecondaryToolbarButton]="false" [filenameForDownload]="nomeDocumento" [showRotateButton]="true" [showSpreadButton]="false" [showPropertiesButton]="false" [sidebarVisible]="false"
+    [enablePinchOnMobile]="true" [showUnverifiedSignatures]="true" [mobileFriendlyZoom]="'120%'" [zoom]="'100%'" [showBorders]="true" [theme]="'dark'" [textLayer]="true">
+</ngx-extended-pdf-viewer>

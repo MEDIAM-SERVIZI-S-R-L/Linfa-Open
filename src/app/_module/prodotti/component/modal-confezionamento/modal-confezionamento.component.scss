@@ -1,0 +1,37 @@
+.check-span {
+    padding-top: 12px;
+    padding-bottom: 20px;
+}
+
+.save-button {
+    position: relative;
+    bottom: 0;
+    left: 80%;
+    box-shadow: none;
+}
+
+.title {
+    font-weight: bold;
+    color: #00afa6;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {
+    width: 23px !important;
+    height: 23px !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.exit-button{
+    position: relative;
+    top: 0;
+    left: 96%;
+    background-color: transparent;
+    box-shadow: none;
+  }

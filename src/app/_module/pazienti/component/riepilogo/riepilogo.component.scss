@@ -1,0 +1,32 @@
+.btnSave {
+    float: right;
+}
+
+mat-divider {
+    margin: 25px 0;
+}
+
+.boxArea{
+    padding-bottom:5px;
+}
+
+.mat-accordion .mat-expansion-panel:first-of-type{
+    border-top-right-radius: 12px !important;
+    border-top-left-radius: 12px !important;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type {
+    border-bottom-right-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+}
+
+
+
+.mat-expansion-panel-header.mat-expanded {
+    
+    border-radius:  12px !important;
+}
+
+button mat-icon{
+    margin-right: unset !important;
+}

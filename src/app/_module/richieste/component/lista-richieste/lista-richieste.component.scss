@@ -1,0 +1,62 @@
+.gender {
+    margin-right: 5px;
+}
+
+.mat-column-paziente {
+   // cursor: pointer;
+    text-transform: capitalize;
+}
+
+.mat-column-priorita {
+    cursor: pointer;
+}
+
+.mat-column-cf {
+    text-transform: uppercase;
+}
+
+.mat-column-pulsanti {
+    flex: 0 0 5% !important;
+}
+
+.mat-column-priorita {
+    flex: 0 0 8% !important;
+}
+
+mat-cell:last-of-type,
+mat-header-cell:last-of-type,
+mat-footer-cell:last-of-type {
+    padding-right: unset !important;
+}
+
+@media screen and (min-width: 1101px) {
+    .mat-column-paziente {
+        padding-right: 20px;
+    }
+    .mat-column-prestazione {
+        padding-right: 30px;
+    }
+    .mat-column-tipo {
+        padding-right: 15px;
+    }
+    .mat-column-stato {
+        padding-right: 10px;
+    }
+    .mat-column-cf {
+        padding-right: 80px;
+    }
+    .mat-column-dataPrestazione {
+        padding-right: 20px;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1300px) {
+    .gender {
+        display: none !important;
+    }
+}
+
+
+/*CODICE PER LA TABELLA E RESPONSIVITA DELLA TABELLA*/
+
+@import "/src/theme/table-responsive.scss";

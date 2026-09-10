@@ -1,0 +1,99 @@
+<!-- <app-cruscotto-paziente *ngIf="!isRiepilogoVisita"></app-cruscotto-paziente> -->
+
+<app-stepper [stepCorrente]="step" *ngIf="!isRiepilogoVisita"></app-stepper>
+
+<div class="backBtn" *ngIf="!isRiepilogoVisita">
+    <button (click)="backToPrevious()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <span>Step precedente</span>
+  </button>
+</div>
+
+
+<mat-accordion>
+
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                <ng-container>Mna</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <div class="boxArea">
+
+                <app-form-mna [isRiepilogoVisita]="isRiepilogoVisita"></app-form-mna>
+            </div>
+
+        </ng-template>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                <ng-container>Nutritional Risk Screening 2002 (NRS-2002)</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <div class="boxArea">
+
+                <app-nutritional-risk-screening [isRiepilogoVisita]="isRiepilogoVisita"></app-nutritional-risk-screening>
+            </div>
+
+        </ng-template>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel>
+        <!--expanded-->
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                <ng-container>Karnofsky</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <div class="boxArea">
+
+                <app-form-karnofsky [isRiepilogoVisita]="isRiepilogoVisita"></app-form-karnofsky>
+            </div>
+
+        </ng-template>
+    </mat-expansion-panel>
+
+
+
+
+
+    <mat-expansion-panel>
+        <!--expanded-->
+        <mat-expansion-panel-header>
+            <mat-panel-title color="primary" class="title">
+                <ng-container>Must</ng-container>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+
+            <div class="boxArea">
+
+                <app-must [isRiepilogoVisita]="isRiepilogoVisita"></app-must>
+            </div>
+
+        </ng-template>
+    </mat-expansion-panel>
+
+
+
+</mat-accordion>
+<mat-divider *ngIf="!isRiepilogoVisita"></mat-divider>
+
+
+<div *ngIf="!isRiepilogoVisita" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-sm="10px">
+    <button mat-raised-button color="primary" (click)="prosegui()">
+    Prosegui
+    <mat-icon style="margin:unset !important">keyboard_arrow_right</mat-icon>
+  </button>
+</div>

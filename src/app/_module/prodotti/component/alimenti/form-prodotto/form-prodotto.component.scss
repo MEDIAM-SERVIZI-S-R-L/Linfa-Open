@@ -1,0 +1,36 @@
+
+
+.cntrBtnUpload {
+    padding-top: 10px;
+
+}
+
+
+.btnFooter{
+    top:50px;
+    margin-bottom: 64px;
+  }
+
+
+
+.descriptionBox{
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .cntrBtnUpload {
+       margin:15px 0;
+        input,button{
+            width: 100%;
+        }
+    }
+}
+
+
+mat-error {
+    padding-top: 10px;
+    font-size: 18px;
+    strong {
+        font-size: 18px;
+    }
+}

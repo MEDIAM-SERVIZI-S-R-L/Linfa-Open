@@ -1,0 +1,158 @@
+<!-- <div *ngIf="isDietaXpaziente">
+    <app-cruscotto-paziente></app-cruscotto-paziente>
+</div> -->
+
+<div class="backBtn" *ngIf="isDietaXpaziente">
+    <button (click)="backToPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Torna alla valutazione nutrizionale</span>
+    </button>
+</div>
+
+<div class="cntrCruscotto" *ngIf="isDietaXpaziente">
+    <app-form-valori [isRiepilogoVisita]="false" [editProdotti]="false"></app-form-valori>
+</div>
+
+
+<mat-card class="linfaCard">
+    <div fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="30px" fxLayoutGap.lt-md="10px" class="cntrBtnRow">
+
+        <!-- <button mat-raised-button color="accent" class="btnTopCard" *ngIf="isDietaXpaziente && anamnesiExist"
+            matTooltipPosition="after" (click)="importaAnamnesi()">
+            <mat-icon>get_app</mat-icon>
+            Riporta anamnesi
+        </button> -->
+
+        <button mat-raised-button
+        *ngIf="isDietaXpaziente && anamnesiExist"
+        color="primary" class="btnTopCard"
+        matTooltipPosition="after"
+        (click)="importaAnamnesi()">
+        <mat-icon>get_app</mat-icon>
+            Importa da anamnesi
+        </button>
+
+        <button mat-raised-button color="primary" class="btnTopCard" matTooltipPosition="after" (click)="nuovaDieta()">
+            <mat-icon>add_circle_outline</mat-icon>
+            Nuova dieta
+        </button>
+    </div>
+
+    <mat-card-title>
+
+        <h3 class="title">Diete predefinite</h3>
+
+    </mat-card-title>
+
+    <mat-card-content>
+        <ng-container *ngIf="isDietaXpaziente">
+            <h4 class="description"><span>Seleziona una dieta apportando eventuali modifiche, altrimenti creane una
+                    nuova.
+                </span></h4>
+
+            <mat-divider></mat-divider>
+        </ng-container>
+        <ng-container *ngIf="!isDietaXpaziente">
+            <h4 class="description"><span>Crea delle diete predefinite che puoi utilizzare in una visita.
+                </span></h4>
+            <mat-hint>I valori nutrizionali si riferiscono al fabbisogno giornaliero. </mat-hint>
+        </ng-container>
+        <ng-container>
+            <mat-expansion-panel class="accordionFiltri"
+            style="margin-top: 8px;">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="accordionFiltriTitle">
+                    <mat-icon class="material-icons-outlined searchIcon">search</mat-icon>
+                    Filtri ricerca
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-form-field class="full-width" fxFlex="100">
+                    <mat-label>Cerca</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" #input>
+                  </mat-form-field>
+                </mat-expansion-panel>
+            <mat-divider></mat-divider>
+        </ng-container>
+
+
+
+        <mat-table id="table" [dataSource]="dietaDataSource" matSortActive="dieta" matSortDirection="asc" (matSortChange)="sortData($event)" matSort matSortDisableClear>
+
+            <ng-container matColumnDef="dieta">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Dieta</mat-header-cell>
+                <mat-cell *matCellDef="let dieta" data-label="Dieta" (click)="dettaglioDieta(dieta.idDieta)" [matTooltip]="isDietaXpaziente ? 'Seleziona dieta': 'Visualizza dieta'">{{dieta.dieta}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="kcal">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Kcal </mat-header-cell>
+
+                <mat-cell *matCellDef="let dieta" data-label="Kcal">{{dieta.kcal}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="proteine">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Proteine </mat-header-cell>
+
+                <mat-cell *matCellDef="let dieta" data-label="Proteine">{{dieta.proteine}} g</mat-cell>
+            </ng-container>
+            <!-- <ng-container matColumnDef="azoto">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Azoto </mat-header-cell>
+
+                <mat-cell *matCellDef="let dieta" data-label="Azoto">{{dieta.azoto}} g</mat-cell>
+            </ng-container> -->
+            <ng-container matColumnDef="lipidi">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Lipidi </mat-header-cell>
+
+                <mat-cell *matCellDef="let dieta" data-label="Lipidi">{{dieta.lipidi}} g</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="carboidrati">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Carboidrati </mat-header-cell>
+
+                <mat-cell *matCellDef="let dieta" data-label="Carboidrati">{{dieta.carboidrati}} g</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="creato">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Creato da </mat-header-cell>
+
+                <mat-cell *matCellDef="let dieta" data-label="Creato da">{{dieta.creato}}</mat-cell>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="pulsanti">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let dieta" class="pulsantiTab" style="justify-content:flex-end">
+
+                    <mat-icon matTooltip="Elimina dieta" (click)="delete(dieta.idDieta, dieta.dieta)" *ngIf="!isDietaXpaziente && (dieta.creatoDaUtenteLoggato || authGuard.canRole(appGen.ruolo.Administrator) || authGuard.canRole(appGen.ruolo.Amministrativo))" color="warn">
+                        delete
+                    </mat-icon>
+
+                    <mat-icon (click)="download(dieta.idDieta)" color="primary" *ngIf="!isDietaXpaziente" matTooltip="Stampa dieta">
+                        print
+                    </mat-icon>
+
+                    <mat-icon (click)="dettaglioDieta(dieta.idDieta)" [matTooltip]="isDietaXpaziente ? 'Seleziona dieta': 'Visualizza dieta'" class="editIco">
+                        edit
+                    </mat-icon>
+
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="dietaViewsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row;columns:dietaViewsColumns"></mat-row>
+        </mat-table>
+        <mat-paginator showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 50]" [pageSize]="10">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>
+
+
+
+<div *ngIf="nutrizioneExist" class="cntrBtnRow" fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutGap="2%" fxLayoutGap.lt-md="10px">
+
+    <mat-divider></mat-divider>
+
+    <button mat-raised-button color="primary" (click)="continuaDieta()">
+        Riprendi piano
+        <mat-icon>navigate_next</mat-icon>
+    </button>
+</div>

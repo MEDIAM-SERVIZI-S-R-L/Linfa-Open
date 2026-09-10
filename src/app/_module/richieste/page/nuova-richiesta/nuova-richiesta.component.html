@@ -1,0 +1,10 @@
+<div class="backBtn">
+    <button routerLink="../">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>Indietro</span>
+    </button>
+</div>
+
+<div class="cntrCalendar">
+    <app-calendario-disponibilita [calendarioRichieste]="calendarioRichieste" (emitRichiestaControllo)="backToPrevious()"></app-calendario-disponibilita>
+</div>

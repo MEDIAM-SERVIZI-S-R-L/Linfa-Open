@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>
+    <div class="appLogo">
+        <img src="./assets/img/logo/logo-linfa-a@2x.webp" width="150" height="120" alt="logo linfa" />
+
+    </div>
+</h1>
+<div mat-dialog-content>
+
+    <!-- <h6>{{versionApp.description}}</h6> -->
+
+    <!-- <p><img src="./assets/icons/dispositivo-medico/date-manufacture.png" style="width: 30px;" /> <span>01/2020</span>
+</p> -->
+    <p id="companyName"><img src="./assets/icons/dispositivo-medico/manufacturer.png" style="width: 30px;" />
+        <b><span><br>{{versionApp.company}}</span><span [innerHTML]="versionApp.companyAddress"></span></b>
+    </p>
+    <!-- <p><img src="./assets/icons/dispositivo-medico/catalogue.png" style="width: 30px;" />
+  <span>PATH1003, PATH1005, PATH1006, PATH1007</span>
+</p> -->
+    <p>
+        <!-- <img src="./assets/icons/dispositivo-medico/attention.png" style="width: 30px;" /> -->
+        <img src="./assets/icons/dispositivo-medico/ce.png" style="width: 30px;" />
+        <img src="./assets/icons/dispositivo-medico/md.png" style="width: 40px;" />
+        <img src="./assets/icons/dispositivo-medico/readmanual.png" style="width: 37px;" />
+
+    </p>
+    <p>
+        <img src="./assets/icons/dispositivo-medico/serialnumber.png" style="width: 39px;" />
+        <span id="serialnumber">S\N: {{versionApp.serialnumber}}</span>
+    </p>
+    <p>Ver. {{versionApp.version}}</p>
+    <p>Destinato solo a personale medico specializzato</p>
+</div>
+
+<div mat-dialog-actions id="btnModal">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">Chiudi</button>
+</div>
