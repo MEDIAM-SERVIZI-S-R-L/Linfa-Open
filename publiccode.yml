@@ -1,16 +1,23 @@
 publiccodeYmlVersion: 0.7.0
 name: Linfa Open
 applicationSuite: Linfa
-url: http://google.it
+url: https://github.com/MEDIAM-SERVIZI-S-R-L/Linfa-Open
 softwareVersion: 1.8.0.3
 releaseDate: 2024-10-10
+logo: https://mediamsolutions.it/wp-content/uploads/2025/03/linfa-product-icona-mediam-solutions.png
 platforms:
   - web
 categories:
   - other
+  - design
 organisation:
   uri: https://mediamsolutions.it/
   name: MEDIAM SERVIZI S.R.L.
+usedBy:
+  - IRCCS Policlinico San Matteo
+  - Azienda Ospedaliera San Giovanni Addolorata
+  - ASST Lecco
+  - ASST Rhodense
 developmentStatus: development
 softwareType: standalone/web
 intendedAudience:
@@ -18,6 +25,7 @@ intendedAudience:
     - IT
   scope:
     - healthcare
+    - society
 description:
   it:
     localisedName: Linfa Open
@@ -31,13 +39,16 @@ description:
       visite da eseguire, la pianificazione degli appuntamenti e la gestione
       dettagliata della visita nutrizionale (anamnesi, parametri clinici, piano
       alimentare e note).
-    documentation: http://google.com
+    documentation: https://github.com/MEDIAM-SERVIZI-S-R-L/Linfa-Open
     features:
-      - "1"
-      - "2"
-      - "3"
-      - "4"
-      - "5"
+      - PNRR
+      - PNRR/Beneficiari/ASL
+      - Realizzazione di interfacce responsive e accessibili
+      - Sviluppato utilizzando Angular Material UI
+    screenshots:
+      - printscreen/1.Login.png
+      - printscreen/2.Dashboard.png
+      - printscreen/3.ListaPazienti.png
 legal:
   license: EUPL-1.0
 maintenance:
