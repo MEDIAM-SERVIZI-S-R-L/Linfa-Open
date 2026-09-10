@@ -1,0 +1,60 @@
+publiccodeYmlVersion: 0.7.0
+name: Linfa Open
+applicationSuite: Linfa
+url: http://google.it
+softwareVersion: 1.8.0.3
+releaseDate: 2024-10-10
+platforms:
+  - web
+categories:
+  - other
+organisation:
+  uri: https://mediamsolutions.it/
+  name: MEDIAM SERVIZI S.R.L.
+developmentStatus: development
+softwareType: standalone/web
+intendedAudience:
+  countries:
+    - IT
+  scope:
+    - healthcare
+description:
+  it:
+    localisedName: Linfa Open
+    shortDescription: Frontend applicativo per i reparti ospedalieri di nutrizione,
+      realizzato in Angular 12 + Material.
+    longDescription: >-
+      Frontend applicativo per i reparti ospedalieri di nutrizione, realizzato
+      in Angular 12 + Material.
+
+      L’interfaccia mette a disposizione dashboard operative con l’elenco delle
+      visite da eseguire, la pianificazione degli appuntamenti e la gestione
+      dettagliata della visita nutrizionale (anamnesi, parametri clinici, piano
+      alimentare e note).
+    documentation: http://google.com
+    features:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+legal:
+  license: EUPL-1.0
+maintenance:
+  type: none
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - it
+dependsOn:
+  open:
+    - name: Angular
+      versionMin: "12"
+      versionMax: "12"
+      version: "12"
+      optional: false
+    - name: Node
+      versionMin: "16"
+      versionMax: "16"
+      version: "16"
+      optional: false
