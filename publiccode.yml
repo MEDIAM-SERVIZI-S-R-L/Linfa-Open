@@ -14,10 +14,9 @@ organisation:
   uri: https://mediamsolutions.it/
   name: MEDIAM SERVIZI S.R.L.
 usedBy:
-  - IRCCS Policlinico San Matteo
-  - Azienda Ospedaliera San Giovanni Addolorata
-  - ASST Lecco
-  - ASST Rhodense
+  - strutture ospedaliere pubbliche e/o private
+  - ASL
+  - ASST
 developmentStatus: development
 softwareType: standalone/web
 intendedAudience:

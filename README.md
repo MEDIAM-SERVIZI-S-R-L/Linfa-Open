@@ -31,10 +31,9 @@ Il progetto è sviluppato da **MEDIAM SERVIZI S.R.L.** ed è destinato all’amb
 
 ### Organizzazioni utilizzatrici
 
-- IRCCS Policlinico San Matteo.
-- Azienda Ospedaliera San Giovanni Addolorata.
-- ASST Lecco.
-- ASST Rhodense.
+- strutture ospedaliere pubbliche e/o private
+- ASL
+- ASST
 
 ## Screenshots
 
