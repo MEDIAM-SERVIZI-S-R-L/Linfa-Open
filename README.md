@@ -1,4 +1,4 @@
-# [!Linfa Open](https://mediamsolutions.it/wp-content/uploads/2025/03/linfa-product-icona-mediam-solutions.png =100x) Linfa Open 
+# Linfa Open 
 
 ![Logo Linfa Open](https://mediamsolutions.it/wp-content/uploads/2025/03/linfa-product-icona-mediam-solutions.png)
 
@@ -50,7 +50,6 @@ Il progetto è sviluppato da **MEDIAM SERVIZI S.R.L.** ed è destinato all’amb
 
 ![Lista pazienti](printscreen/3.ListaPazienti.png)
 
-> Verificare che le immagini siano presenti nel percorso `printscreen/` del repository. I nomi dei file devono corrispondere a quelli indicati sopra.
 
 ## Tecnologie usate
 
