@@ -3,7 +3,7 @@ name: Linfa Open
 applicationSuite: Linfa
 url: https://github.com/MEDIAM-SERVIZI-S-R-L/Linfa-Open
 softwareVersion: 1.8.0.3
-releaseDate: 2024-10-10
+releaseDate: 2026-08-10
 logo: https://mediamsolutions.it/wp-content/uploads/2025/03/linfa-product-icona-mediam-solutions.png
 platforms:
   - web

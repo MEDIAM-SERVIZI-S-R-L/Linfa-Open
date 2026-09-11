@@ -147,7 +147,7 @@ Per consultare il testo della licenza, visitare la [pagina ufficiale EUPL](https
 - Nome: Linfa Open.
 - Suite applicativa: Linfa.
 - Versione software: 1.8.0.3.
-- Data di rilascio: 10 ottobre 2024.
+- Data di rilascio: 10 Agosto 2026.
 - Stato di sviluppo: development.
 - Tipo: applicazione web standalone.
 - Organizzazione: [MEDIAM SERVIZI S.R.L.](https://mediamsolutions.it/).
